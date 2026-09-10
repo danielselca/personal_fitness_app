@@ -78,7 +78,7 @@ Weitere Informationen aus den Screenshots: Plan „Oberkörper Fokus Schulter“
 - A-2 Die **Plan-Vorgaben aus 2.1/2.2 werden als Startvorschläge** in den Katalog übernommen (klar als „Vorgabe aus Fit7.11-Plan“ gekennzeichnet). Sie erzeugen **keine Trainingshistorie** und erscheinen nirgends in Statistiken. Sätze, Wdh. und Gewicht der Vorgabe sind je Übung editierbar. **Bestätigt.**
 - A-3 Die 8 Plan-Übungen werden zusätzlich als **Vorlage „Oberkörper Fokus Schulter“** angelegt, damit das erste Training mit einem Tipp startet.
 - A-4 „Homescreen“: Eine PWA legt **nur ein App-Symbol** auf den Homescreen, alles andere passiert in der App. Das Symbol ist optional; die App läuft auch im Browser. Auf dem iPhone ist der Homescreen-Weg allerdings **empfohlen**, weil Safari Website-Daten nach 7 Tagen ohne Nutzung löschen darf, installierte Web-Apps davon ausgenommen sind und beide Wege getrennte Speicher haben (Daten im Safari-Tab tauchen nicht in der Homescreen-App auf). Die App zeigt diesen Hinweis einmalig an.
-- A-5 Hosting: statische Dateien über HTTPS (Voraussetzung für Offline-Funktion). GitHub Pages, Repo `personal_fitness_app` – kleingeschrieben, App-Adresse https://danielselca.github.io/personal_fitness_app/ (Account vorhanden). **Bestätigt.** Da GitHub Pages im kostenlosen Tarif ein öffentliches Repo braucht, wird der Ordner `Input/` (private Screenshots) nicht eingecheckt.
+- A-5 Hosting: statische Dateien über HTTPS (Voraussetzung für Offline-Funktion). GitHub Pages, Repo `personal_fitness_app` – kleingeschrieben, App-Adresse https://danielselca.github.io/personal_fitness_app/ (Account vorhanden). **Bestätigt.** Da GitHub Pages im kostenlosen Tarif ein öffentliches Repo braucht, wird der Ordner `Input/` (private Screenshots) nicht eingecheckt. Übungsnamen und Plan-Vorgaben dürfen im öffentlichen Code stehen (bestätigt 2026-09-10). Nach jedem Umsetzungsschritt wird auf `main` gepusht.
 - A-6 Wochenzählung: ISO-Woche, Montag bis Sonntag, lokale Zeit.
 - A-7 **Datenhaltung und Gerätewechsel:** Die Daten liegen ausschließlich im Browser des jeweiligen Geräts; es gibt keine Serverkopie und keine Synchronisation zwischen Geräten. Ein Gerätewechsel erfolgt über Export und Import (F12, F13, AK28). Die App fordert dauerhaften Speicher an (N7), was aber weder vor dem Löschen der App noch vor Geräteverlust schützt. Eine spätere automatische Sicherung (z. B. in einen privaten GitHub-Gist) oder echte Synchronisation mit Konto bleibt nachrüstbar, weil der Export bereits die vollständige Datenstruktur erzeugt.
 
@@ -99,7 +99,7 @@ Weitere Informationen aus den Screenshots: Plan „Oberkörper Fokus Schulter“
 - Links in jeder Satzzeile steht „Letztes Mal: 10 × 45 kg“ (Werte des gleichen Satzes im letzten abgeschlossenen Training mit dieser Übung).
 - Vorschlagswerte werden vorbefüllt, sind editierbar und gelten erst nach dem **Abhaken** als absolviert. Abhaken lässt sich rückgängig machen.
 - „Satz hinzufügen“ übernimmt die Werte des vorherigen Satzes. Löschen über Papierkorb mit 5 s „Rückgängig“.
-- Übungen hinzufügen (Suche, Mehrfachauswahl), entfernen, mit Pfeilen umsortieren. Notizfeld je Übung (eingeklappt).
+- Übungen hinzufügen (Suche, Mehrfachauswahl), entfernen, mit Pfeilen umsortieren. Notizfeld je Übung (eingeklappt). **Neue Übung direkt aus der Auswahl anlegen:** Findet die Suche nichts, bietet die Liste „‚<Suchtext>‘ als neue Übung anlegen“ an; die Übung wird sofort ins Training übernommen, ohne den Bildschirm zu verlassen. Details (Gerätenummer, Pause, Schrittweite) können später im Katalog ergänzt werden.
 - Timer-Leiste bleibt unten sichtbar: Restzeit groß, Buttons „+30 s“, „Neu“, „Überspringen“. Presets 60/90/120 s und eigene Dauer.
 - „Training abschließen“ zeigt Zusammenfassung (Dauer, Sätze, Volumen); bei 0 absolvierten Sätzen wird gefragt, ob verworfen werden soll.
 
@@ -127,7 +127,7 @@ Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punk
 
 ### F – Funktional
 
-- **F1 Katalog:** Seed mit den 18 Notiz-Übungen + 3 Plan-Übungen (Abschnitt 2). Suche über Name, Alias und Gerätenummer. Anlegen, Bearbeiten, Archivieren (nicht Löschen, damit Verlauf erhalten bleibt).
+- **F1 Katalog:** Seed mit den 18 Notiz-Übungen + 3 Plan-Übungen (Abschnitt 2). Suche über Name, Alias und Gerätenummer. Anlegen, Bearbeiten, Archivieren (nicht Löschen, damit Verlauf erhalten bleibt). Anlegen ist an zwei Stellen möglich: im Tab „Übungen“ (vollständiges Formular) und direkt aus der Übungsauswahl im aktiven Training (nur Name, Rest optional später). Pflichtfeld ist allein der Name; doppelte Namen werden mit Hinweis abgelehnt.
 - **F2 Training starten:** leer, aus Vorlage oder als Wiederholung des letzten Trainings. Genau ein aktives Training gleichzeitig.
 - **F3 Sätze:** Gewicht (optional, Dezimal) + Wdh. je Satz; hinzufügen, ändern, löschen; Abhaken/Rückgängig; Vorschlag aus letztem Training, sonst Plan-Vorgabe, sonst leer.
 - **F4 Letzte Werte:** je Satz sichtbar neben der Eingabe; zusätzlich Datum des letzten Trainings dieser Übung.
@@ -172,7 +172,8 @@ Konsequenz: v1 hält den Bildschirm während des Trainings per Wake Lock an (Sta
 - [ ] **AK1 Offline:** App einmal online laden, Flugmodus an, App neu laden → startet und funktioniert vollständig.
 - [ ] **AK2 Installation:** „Zum Home-Bildschirm“ zeigt Icon und Namen; App öffnet ohne Browserleiste.
 - [ ] **AK3 Katalog:** Nach Erstinstallation sind genau die 21 Übungen aus Abschnitt 2 vorhanden, Namen wörtlich wie in den Notizen; Suche „28“ findet „Lat-Zug“, Suche „butterfly“ findet beide Butterfly-Übungen.
-- [ ] **AK4 Übung anlegen:** Neue Übung „Test“ anlegen, umbenennen, archivieren → verschwindet aus Auswahl, bleibt im Verlauf.
+- [ ] **AK4 Übung anlegen:** Neue Übung „Test“ im Tab „Übungen“ anlegen, umbenennen, archivieren → verschwindet aus Auswahl, bleibt im Verlauf. Name ist Pflicht, Name „Lat-Zug“ (bereits vorhanden) wird mit Hinweis abgelehnt.
+- [ ] **AK4b Übung im Training anlegen:** Im aktiven Training „Beinpresse“ suchen (nicht vorhanden) → Angebot „als neue Übung anlegen“ → Übung erscheint sofort im Training und danach im Katalog; die Eingabe auf dem Handy erfordert nur den Namen.
 - [ ] **AK5 Kernablauf ohne Historie:** Training starten, „Lat-Zug“ hinzufügen → 4 Sätze mit „Vorgabe: 10 × 45 kg“ vorbefüllt, keine „Letztes Mal“-Angabe. Satz 1 abhaken → Timer startet automatisch mit 90 s (Übungspause).
 - [ ] **AK6 Kernablauf mit Historie:** Nach einem abgeschlossenen Training mit Lat-Zug (z. B. 3 Sätze 10 × 45, 10 × 45, 8 × 47,5) zeigt das nächste Training je Satz „Letztes Mal“ mit genau diesen Werten und befüllt die Eingabe damit; Satz 3 zeigt 47,5 kg.
 - [ ] **AK7 Nur Abgehaktes zählt:** Vorbefüllte, nicht abgehakte Sätze erscheinen nicht im Volumen und nicht im Verlauf; Abschluss mit 0 abgehakten Sätzen fragt „Verwerfen?“.
@@ -202,7 +203,7 @@ Konsequenz: v1 hält den Bildschirm während des Trainings per Wake Lock an (Sta
 
 ## 8. Technische Lösung
 
-**Gewählt:** Vite + React + TypeScript, `vite-plugin-pwa` (Workbox), Zustand für den Zustand, IndexedDB über `idb-keyval` als Persistenz (gesamter Datenbestand als ein Dokument, Autosave bei jeder Änderung), Diagramme als handgeschriebenes SVG, Vitest für Tests. Keine UI-Bibliothek, eigenes kleines CSS mit Design-Tokens.
+**Gewählt:** Vite + React + TypeScript, `vite-plugin-pwa` (Workbox), Zustand für den Zustand, IndexedDB über `idb-keyval` als Persistenz (gesamter Datenbestand als ein Dokument, Autosave bei jeder Änderung), Diagramme als handgeschriebenes SVG, Vitest für Logik- und Komponententests, **Playwright** für Ende-zu-Ende-Prüfungen im echten Browser (mobile Ansicht 375 px, Offline-Betrieb, Neuladen, Sichtbarkeitswechsel). Keine UI-Bibliothek, eigenes kleines CSS mit Design-Tokens.
 
 **Warum:** Es gibt kein bestehendes Projekt. Der Stack ist etabliert, klein, ohne Backend und in Jahren noch wartbar. Ein Service Worker macht die App nach dem ersten Laden offline nutzbar; IndexedDB bietet auf dem iPhone mehr Platz und Beständigkeit als localStorage. Ein Dokument statt Tabellen hält Export/Import trivial (Datenmenge nach Jahren < 1 MB). Diagramme brauchen keine Bibliothek: drei einfache Balken-/Liniendiagramme.
 
