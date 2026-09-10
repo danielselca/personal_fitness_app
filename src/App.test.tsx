@@ -40,7 +40,7 @@ describe('App-Gerüst', () => {
 
     fireEvent.click(tab('Übungen'))
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Übungen')
-    expect(screen.getByText(/Übungskatalog/)).toBeTruthy()
+    expect(screen.getByLabelText('Übungen suchen')).toBeTruthy()
 
     fireEvent.click(tab('Verlauf'))
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Verlauf')

@@ -7,7 +7,7 @@ Stand je Umsetzungsschritt aus SPEC.md Abschnitt 9. Wird nach jedem Schritt fort
 | 1 Projekt-Setup | erledigt | live unter https://danielselca.github.io/personal_fitness_app/ |
 | 2 Datenmodell, Store, Persistenz, Seed | erledigt | `src/domain/*`, `src/store/*`; 53 Tests |
 | 3 Export/Import, Sicherungserinnerung | erledigt | Tab „Mehr“: Export, Import mit Vorschau/Zusammenführen/Ersetzen, Erinnerung ab 3 Trainings; Einstellungen und Hinweise; 59 Tests |
-| 4 Übungen | offen | |
+| 4 Übungen | erledigt | Liste mit Suche, Anlegen (auch aus Suchtext), Bearbeiten inkl. Vorgabe, Archivieren, Detail mit Verlauf/Diagramm; 64 Tests |
 | 5 Aktives Training | offen | |
 | 6 Pausentimer | offen | |
 | 7 Verlauf | offen | |
@@ -19,8 +19,9 @@ Stand je Umsetzungsschritt aus SPEC.md Abschnitt 9. Wird nach jedem Schritt fort
 
 | AK | Nachweis | Status |
 |---|---|---|
-| AK3 Katalog | `seed.test.ts` | Test grün |
-| AK4 Übung anlegen (Logik) | `appStore.test.ts` | Test grün, UI offen |
+| AK3 Katalog | `seed.test.ts`, `ExercisesScreen.test.tsx` | Test grün (UI) |
+| AK4 Übung anlegen | `appStore.test.ts`, `ExercisesScreen.test.tsx` | Test grün (UI) |
+| AK4b Übung im Training anlegen | – | offen (Schritt 5) |
 | AK5/AK6 Vorschläge | `suggestions.test.ts`, `appStore.test.ts` | Test grün, UI offen |
 | AK7 Nur Abgehaktes zählt | `appStore.test.ts`, `stats.test.ts` | Test grün, UI offen |
 | AK9 Sätze bearbeiten (Logik) | `appStore.test.ts` | Test grün, UI offen |

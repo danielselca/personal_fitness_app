@@ -218,3 +218,23 @@ body {
 @media (prefers-color-scheme: dark) { .banner-warn { background: #3a2f0c; } }
 .banner .btn { flex: none; }
 .banner-text { flex: 1; font-size: 15px; }
+
+/* Schlüssel-Wert-Liste, Tabelle, Diagramm */
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 10px 0 0; font-size: 15px; }
+.kv dt { color: var(--text-2); }
+.kv dd { margin: 0; }
+.table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.table th { text-align: left; color: var(--text-2); font-weight: 600; font-size: 13px; padding: 4px 6px 6px 0; border-bottom: 1px solid var(--border); }
+.table td { padding: 8px 6px 8px 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+.table tr:last-child td { border-bottom: 0; }
+.table-wrap { overflow-x: auto; }
+.chart { margin: 0; }
+.chart svg { display: block; }
+.chart-grid { stroke: var(--border); stroke-width: 1; }
+.chart-tick { fill: var(--text-2); font-size: 10px; font-family: var(--font); }
+.chart-label { fill: var(--text-2); font-size: 10px; font-family: var(--font); font-weight: 600; }
+.chart-line { fill: none; stroke: var(--focus); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.chart-dot { fill: var(--surface); stroke: var(--focus); stroke-width: 2.5; }
+.chart-bar { fill: var(--focus); }
+.chart-bar-zero { fill: var(--border); }
+.chart-bar-label { fill: var(--text); font-size: 11px; font-weight: 700; font-family: var(--font); }
