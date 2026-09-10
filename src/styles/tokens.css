@@ -1,0 +1,56 @@
+/* Design-Tokens – angelehnt an die Fit7.11-App: dunkler Kopf, hellgrauer Grund, weiße Karten. */
+:root {
+  --bg: #f2f2f7;
+  --surface: #ffffff;
+  --surface-2: #e9e9ee;
+  --text: #111114;
+  --text-2: #6e6e73;
+  --border: #d9d9de;
+  --header-bg: #151517;
+  --header-text: #ffffff;
+  --accent: #151517;
+  --accent-text: #ffffff;
+  --success: #1f9d55;
+  --success-soft: #dff5e8;
+  --danger: #d2352b;
+  --warning: #c98a00;
+  --focus: #2f6fed;
+
+  --radius: 14px;
+  --radius-sm: 10px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --touch: 44px;
+  --tabbar-h: 56px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --surface: #1c1c1e;
+    --surface-2: #2c2c2e;
+    --text: #f5f5f7;
+    --text-2: #a1a1a6;
+    --border: #3a3a3c;
+    --header-bg: #000000;
+    --header-text: #ffffff;
+    --accent: #f5f5f7;
+    --accent-text: #111114;
+    --success: #30d158;
+    --success-soft: #12351f;
+    --danger: #ff453a;
+    --warning: #ffd60a;
+    --shadow: none;
+  }
+}
