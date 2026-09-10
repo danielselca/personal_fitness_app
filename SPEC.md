@@ -1,6 +1,6 @@
 # SPEC – Persönliche Fitness-App (Version 1)
 
-Stand: 2026-09-09 · Status: Entwurf abgestimmt (Hosting: GitHub Pages; Plan-Werte als editierbare Startvorschläge; Haken in den Notizen werden ignoriert). Schritt 1 erledigt und live unter https://danielselca.github.io/personal_fitness_app/. Export/Import auf Schritt 3 vorgezogen.
+Stand: 2026-09-09 · Status: Entwurf abgestimmt (Hosting: GitHub Pages; Plan-Werte als editierbare Startvorschläge; Haken in den Notizen werden ignoriert). Schritte 1–10 umgesetzt (2026-09-10), live unter https://danielselca.github.io/personal_fitness_app/. Nachweise je Abnahmekriterium in PROGRESS.md; AK2, AK14, AK15 nur am Gerät prüfbar und offen.
 Referenzen: `Input/Übungen/IMG_0141` (Notizen), `Input/Fit711App/*` (13 Screenshots der Fit7.11-App). Die Originaldateien werden nicht verändert.
 
 ---
@@ -218,15 +218,15 @@ Konsequenz: v1 hält den Bildschirm während des Trainings per Wake Lock an (Sta
 | Schritt | Inhalt | Ergebnis | Status |
 |---|---|---|---|
 | 1 | Projekt-Setup: Vite/React/TS, PWA-Plugin, Vitest, Design-Tokens, App-Shell mit 4 Tabs, Safe-Area, Deployment | Leere App läuft auf dem Handy, installierbar | **erledigt** (2026-09-10, live) |
-| 2 | Datenmodell, Store, Persistenz, Seed (21 Übungen, 1 Vorlage), Migrations-Gerüst (`schemaVersion`) | Daten überleben Neuladen | offen |
-| 3 | **Export/Import mit Validierung, Sicherungserinnerung** | F12, F13, F15 | offen |
-| 4 | Übungen: Liste, Suche, Anlegen/Bearbeiten/Archivieren | F1 | offen |
-| 5 | Aktives Training: Start, Auswahl, Satzzeilen mit Vorschlag/„Letztes Mal“, Abhaken, Notiz, Umsortieren, Abschluss, Resume | F2–F7 (Kern) | offen |
-| 6 | Pausentimer mit Endzeitpunkt, Auto-Start, Signal, Wake Lock | F9, F10 | offen |
-| 7 | Verlauf mit Korrektur | F8 | offen |
-| 8 | Statistik mit Leerzuständen | F11 | offen |
-| 9 | Vorlagen, „Letztes Training wiederholen“ | F14 | offen |
-| 10 | Feinschliff: Hinweise (Installation, Speicher, Signalgrenzen), Tests, Handy-Durchlauf aller AK | AK1–AK28 | offen |
+| 2 | Datenmodell, Store, Persistenz, Seed (21 Übungen, 1 Vorlage), Migrations-Gerüst (`schemaVersion`) | Daten überleben Neuladen | **erledigt** |
+| 3 | **Export/Import mit Validierung, Sicherungserinnerung** | F12, F13, F15 | **erledigt** |
+| 4 | Übungen: Liste, Suche, Anlegen/Bearbeiten/Archivieren | F1 | **erledigt** |
+| 5 | Aktives Training: Start, Auswahl, Satzzeilen mit Vorschlag/„Letztes Mal“, Abhaken, Notiz, Umsortieren, Abschluss, Resume | F2–F7 (Kern) | **erledigt** |
+| 6 | Pausentimer mit Endzeitpunkt, Auto-Start, Signal, Wake Lock | F9, F10 | **erledigt** |
+| 7 | Verlauf mit Korrektur | F8 | **erledigt** |
+| 8 | Statistik mit Leerzuständen | F11 | **erledigt** |
+| 9 | Vorlagen, „Letztes Training wiederholen“ | F14 | **erledigt** |
+| 10 | Feinschliff: Hinweise (Installation, Speicher, Signalgrenzen), Tests, Handy-Durchlauf aller AK | AK1–AK28 | **erledigt** |
 
 **Warum Export/Import so früh (Schritt 3 statt 8):** Die Trainingsdaten liegen ausschließlich im Browser des Geräts. Ohne Sicherungsweg gäbe es eine Phase, in der echte Trainings erfasst werden, die bei Geräteverlust, App-Löschung oder Gerätewechsel unwiederbringlich wären. Ab Schritt 3 existiert für jeden erfassten Datensatz ein Weg, ihn zu sichern und auf ein neues Gerät zu übertragen.
 

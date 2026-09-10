@@ -1,43 +1,60 @@
 # Fortschritt
 
-Stand je Umsetzungsschritt aus SPEC.md Abschnitt 9. Wird nach jedem Schritt fortgeschrieben.
+Stand je Umsetzungsschritt aus SPEC.md Abschnitt 9.
 
-| Schritt | Status | Commit / Hinweis |
+| Schritt | Status | Hinweis |
 |---|---|---|
 | 1 Projekt-Setup | erledigt | live unter https://danielselca.github.io/personal_fitness_app/ |
-| 2 Datenmodell, Store, Persistenz, Seed | erledigt | `src/domain/*`, `src/store/*`; 53 Tests |
-| 3 Export/Import, Sicherungserinnerung | erledigt | Tab „Mehr“: Export, Import mit Vorschau/Zusammenführen/Ersetzen, Erinnerung ab 3 Trainings; Einstellungen und Hinweise; 59 Tests |
-| 4 Übungen | erledigt | Liste mit Suche, Anlegen (auch aus Suchtext), Bearbeiten inkl. Vorgabe, Archivieren, Detail mit Verlauf/Diagramm; 64 Tests |
-| 5 Aktives Training | erledigt | Start (leer, Vorlage, Wiederholen), Übungsauswahl mit Neuanlage, Satzzeilen mit „Letztes Mal“, Stepper, Abhaken, Notiz, Umsortieren, Löschen mit Rückgängig, Abschluss/Verwerfen, Zusammenfassung |
-| 6 Pausentimer | erledigt | Timer-Leiste mit Presets 60/90/120, eigene Dauer, +30 s, Neu, Überspringen; Endzeitpunkt gespeichert; Ton (Web Audio), Vibration (wo verfügbar), Wake Lock |
-| 7 Verlauf | erledigt | Liste (neueste zuerst, Volumen/Dauer), Detail mit Korrektur von Gewicht/Wdh., Satz/Übung löschen, Datum verschieben, Training löschen mit Bestätigung |
-| 8 Statistik | erledigt | Segment „Statistik“: Trainings/Woche (12 Wochen, Nullwochen), Volumen je Training, Gewichtsverlauf je Übung mit Tabelle; Leerzustände |
-| 9 Vorlagen | erledigt | Bearbeiten (Name, Reihenfolge, Sätze, Entfernen, Löschen), Speichern aus Abschluss und Verlauf; 83 Tests |
-| 10 Feinschliff, Playwright, Handy-Durchlauf | offen | |
+| 2 Datenmodell, Store, Persistenz, Seed | erledigt | `src/domain/*`, `src/store/*` |
+| 3 Export/Import, Sicherungserinnerung | erledigt | Tab „Mehr“, Erinnerung ab 3 Trainings |
+| 4 Übungen | erledigt | Suche, Anlegen, Bearbeiten inkl. Vorgabe, Archivieren, Detail mit Verlauf |
+| 5 Aktives Training | erledigt | Start, Auswahl mit Neuanlage, Satzzeilen, Stepper, Abhaken, Notiz, Umsortieren, Bearbeiten-Modus, Abschluss |
+| 6 Pausentimer | erledigt | Presets, eigene Dauer, +30 s, Neu, Skip, Endzeitpunkt, Ton, Vibration, Wake Lock |
+| 7 Verlauf | erledigt | Liste, Detail mit Korrektur, Datum, Löschen |
+| 8 Statistik | erledigt | Trainings/Woche, Volumen, Gewichtsverlauf, Leerzustände |
+| 9 Vorlagen | erledigt | Bearbeiten, Löschen, Speichern aus Abschluss und Verlauf |
+| 10 Feinschliff, Playwright, CI | erledigt | 85 Unit-/Komponententests, 7 E2E-Tests im Chromium (375 px), Installationshinweis, CI mit E2E |
 
 ## Abnahmekriterien – Nachweis
 
+Legende: **Unit** = Vitest (Logik/Komponenten in jsdom), **E2E** = Playwright gegen den Produktionsbuild inkl. Service Worker, mobile Ansicht 375 px, Chromium. **Gerät** = nur am echten iPhone prüfbar.
+
 | AK | Nachweis | Status |
 |---|---|---|
-| AK3 Katalog | `seed.test.ts`, `ExercisesScreen.test.tsx` | Test grün (UI) |
-| AK4 Übung anlegen | `appStore.test.ts`, `ExercisesScreen.test.tsx` | Test grün (UI) |
-| AK4b Übung im Training anlegen | `TrainingScreen.test.tsx` | Test grün (UI) |
-| AK5/AK6 Vorschläge, Letztes Mal | `suggestions.test.ts`, `appStore.test.ts`, `TrainingScreen.test.tsx` | Test grün (UI) |
-| AK7 Nur Abgehaktes zählt | `appStore.test.ts`, `stats.test.ts`, `TrainingScreen.test.tsx` | Test grün (UI) |
-| AK8 Dezimal + Stepper | `format.test.ts`, `TrainingScreen.test.tsx` | Test grün (UI) |
-| AK9 Sätze bearbeiten | `appStore.test.ts`, `TrainingScreen.test.tsx` | Test grün (UI, inkl. Rückgängig 5 s) |
-| AK10 Umsortieren | `appStore.test.ts`, `TrainingScreen.test.tsx` | Test grün (UI); Persistenz über Neuladen: E2E offen |
-| AK11 Autosave/Wiederaufnahme | `appStore.test.ts`, `TrainingScreen.test.tsx` | Test grün, E2E offen |
-| AK12 Timer-Endzeit | `TrainingScreen.test.tsx` (Zeitsprung + Sichtbarkeitswechsel) | Test grün, E2E offen |
-| AK13 Timer-Bedienung | `appStore.test.ts`, `TrainingScreen.test.tsx` | Test grün (UI) |
-| AK24 Vorlage/Wiederholen | `appStore.test.ts`, `TrainingScreen.test.tsx`, `TemplateEditor.test.tsx` | Test grün (UI) |
-| AK16 Verlauf korrigieren | `HistoryScreen.test.tsx` | Test grün (UI) |
-| AK17 Statistik leer | `HistoryScreen.test.tsx` | Test grün (UI) |
-| AK18/AK19/AK20 Statistik | `stats.test.ts`, `HistoryScreen.test.tsx` | Test grün (UI) |
-| AK21–AK23 Sicherung | `backup.test.ts`, `MoreScreen.test.tsx` | Test grün (UI), E2E offen |
-| AK28 Gerätewechsel (Logik) | `backup.test.ts` | Test grün, E2E offen |
-| AK27 Sicherungserinnerung | `appStore.test.ts`, `MoreScreen.test.tsx` | Test grün (UI) |
+| AK1 Offline nach erstem Laden | E2E `persistence.spec.ts` (Netz aus, Neuladen, Katalog offline) | belegt (Chromium) · iPhone offen |
+| AK2 Installation auf dem Homescreen | Manifest/Icons/Standalone im Build geprüft | **offen, nur am Gerät** |
+| AK3 Katalog, Suche | Unit `seed.test.ts`, `ExercisesScreen.test.tsx`; E2E `flow.spec.ts` | belegt |
+| AK4 Übung anlegen/umbenennen/archivieren | Unit `ExercisesScreen.test.tsx`, `appStore.test.ts` | belegt |
+| AK4b Übung im Training anlegen | Unit `TrainingScreen.test.tsx`; E2E `flow.spec.ts` | belegt |
+| AK5 Kernablauf ohne Historie (Plan-Vorgabe, Auto-Timer 90 s) | Unit `TrainingScreen.test.tsx`; E2E `flow.spec.ts` | belegt |
+| AK6 Kernablauf mit Historie („Letztes Mal“ je Satz) | Unit `suggestions.test.ts`, `TrainingScreen.test.tsx`; E2E `flow.spec.ts` | belegt |
+| AK7 Nur Abgehaktes zählt, Verwerfen-Rückfrage | Unit `TrainingScreen.test.tsx`, `stats.test.ts`; E2E `flow.spec.ts` | belegt |
+| AK8 Dezimal (Komma/Punkt), Schrittweite | Unit `format.test.ts`, `TrainingScreen.test.tsx`; E2E `flow.spec.ts` | belegt |
+| AK9 Satz hinzufügen/ändern/löschen mit Rückgängig | Unit `TrainingScreen.test.tsx`, `appStore.test.ts` | belegt |
+| AK10 Umsortieren bleibt nach Neuladen | Unit `appStore.test.ts`; E2E `persistence.spec.ts` | belegt |
+| AK11 Autosave, Fortsetzen nach Neuladen inkl. Timer | Unit `appStore.test.ts`; E2E `persistence.spec.ts` | belegt |
+| AK12 Timer-Restzeit nach Zeitsprung, „Pause vorbei“ | Unit `TrainingScreen.test.tsx`; E2E `persistence.spec.ts` (Uhr-Emulation) | belegt |
+| AK13 Presets, eigene Dauer, +30 s, Neu, Überspringen | Unit `TrainingScreen.test.tsx`, `appStore.test.ts`; E2E `flow.spec.ts` | belegt |
+| AK14 Signal (Ton/Vibration) | Logik in `TimerBar.tsx` (Flag `signalled`, Einstellungen); Vibrations-Option nur bei Unterstützung, sonst Hinweis | Ton unter iOS **offen, nur am Gerät** |
+| AK15 Wake Lock | `useWakeLock.ts`, Einstellung in „Mehr“ | **offen, nur am Gerät** |
+| AK16 Verlauf korrigieren wirkt auf Statistik | Unit `HistoryScreen.test.tsx` | belegt |
+| AK17 Statistik-Leerzustände | Unit `HistoryScreen.test.tsx` | belegt |
+| AK18 Trainings/Woche mit Nullwochen | Unit `stats.test.ts`, `HistoryScreen.test.tsx`; E2E `flow.spec.ts` | belegt |
+| AK19 Gewichtsverlauf mit Wdh. und Tabelle | Unit `stats.test.ts`, `HistoryScreen.test.tsx`; E2E `flow.spec.ts` | belegt |
+| AK20 Volumen 1 280 kg, Satz ohne Gewicht | Unit `stats.test.ts` | belegt |
+| AK21 Export-Datei | Unit `backup.test.ts`, `MoreScreen.test.tsx`; E2E `backup.spec.ts` (echter Download) | belegt |
+| AK22 Import ungültig | Unit `backup.test.ts`, `MoreScreen.test.tsx`; E2E `backup.spec.ts` | belegt |
+| AK23 Import gültig: Vorschau, Zusammenführen, Ersetzen mit Vorab-Sicherung | Unit `MoreScreen.test.tsx`; E2E `backup.spec.ts` | belegt |
+| AK24 Vorlage startet 8 Übungen, Wiederholen | Unit `TrainingScreen.test.tsx`, `TemplateEditor.test.tsx` | belegt |
+| AK25 Touchflächen ≥ 44 px, kein horizontales Scrollen, kein Zoom | E2E `flow.spec.ts` (Maße gemessen) | belegt (Chromium) |
+| AK26 Tests grün, PWA installierbar | `npm test`, `npm run test:e2e`, Manifest + SW im Build | belegt; Lighthouse-Lauf offen |
+| AK27 Sicherungserinnerung ab 3 Trainings | Unit `appStore.test.ts`, `MoreScreen.test.tsx` | belegt |
+| AK28 Gerätewechsel per Export/Import | Unit `backup.test.ts`; E2E `backup.spec.ts` (zweiter Browserkontext) | belegt |
 
-## Nur am Gerät prüfbar (offen, nicht behauptet)
+## Offen, nur am echten iPhone prüfbar
 
-AK2 Installation auf dem iPhone-Homescreen, AK14 Ton unter iOS, AK15 Bildschirm anlassen (Wake Lock).
+- **AK2** Installation über Teilen → „Zum Home-Bildschirm“, Start ohne Browserleiste.
+- **AK14** Ton am Ende der Pause unter iOS (Web Audio nach erstem Tipp freigeschaltet).
+- **AK15** Bildschirm bleibt während des Trainings an (Wake Lock, iOS ≥ 16.4).
+- **AK1 am Gerät**: Flugmodus nach dem ersten Laden (im Chromium belegt, Safari-Verhalten nicht getestet).
+- Lighthouse-PWA-Prüfung wurde nicht ausgeführt.

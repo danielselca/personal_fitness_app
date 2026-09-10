@@ -32,6 +32,7 @@ export function WorkoutExerciseCard({
   const move = useAppStore((s) => s.moveWorkoutEntry)
   const remove = useAppStore((s) => s.removeExerciseFromWorkout)
   const [noteOpen, setNoteOpen] = useState(!!entry.note)
+  const [editing, setEditing] = useState(false)
   const last = useMemo(() => lastValuesFor(workouts, exercise.id, workoutId), [workouts, exercise.id, workoutId])
   const currentIndex = entry.sets.findIndex((s) => !s.done)
   const weightStep = exercise.weightStep ?? settings.weightStep
@@ -60,7 +61,7 @@ export function WorkoutExerciseCard({
       <div className="setrows">
         <div className="setrow-header muted">
           <span className="set-no">#</span>
-          <span className="set-last">Letztes Mal</span>
+          <span className="set-last">Zuletzt</span>
           <span>kg × Wdh.</span>
         </div>
         {entry.sets.map((s, i) => (
@@ -70,6 +71,7 @@ export function WorkoutExerciseCard({
             set={s}
             last={last ? (last.sets[i] ?? null) : null}
             current={i === currentIndex}
+            editing={editing}
             weightStep={weightStep}
             onChange={(patch) => updateSet(exercise.id, s.id, patch)}
             onToggleDone={() => {
@@ -88,6 +90,9 @@ export function WorkoutExerciseCard({
         <button type="button" className="btn btn-sm" onClick={() => addSet(exercise.id)}>+ Satz</button>
         <button type="button" className="btn btn-sm" aria-expanded={noteOpen} onClick={() => setNoteOpen(!noteOpen)}>
           {entry.note ? 'Notiz ✎' : 'Notiz'}
+        </button>
+        <button type="button" className="btn btn-sm" aria-pressed={editing} aria-label={editing ? `${exercise.name}: Bearbeiten beenden` : `${exercise.name}: Sätze bearbeiten`} onClick={() => setEditing(!editing)}>
+          {editing ? 'Fertig' : 'Bearbeiten'}
         </button>
       </div>
       {noteOpen && (

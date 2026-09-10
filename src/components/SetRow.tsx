@@ -7,6 +7,8 @@ export interface SetRowProps {
   set: WorkoutSet
   last?: { weightKg: number | null; reps: number } | null
   current: boolean
+  /** Bearbeiten-Modus der Karte: Haken wird zum Löschen-Button, Stepper ausgeblendet. */
+  editing: boolean
   weightStep: number
   onChange: (patch: Partial<Pick<WorkoutSet, 'weightKg' | 'reps'>>) => void
   onToggleDone: () => void
@@ -17,7 +19,7 @@ export interface SetRowProps {
  * Eine Satzzeile: Nr. · Letztes Mal · Gewicht · Wdh. · Haken. Der aktuelle Satz zeigt
  * zusätzlich große +/−-Tasten, damit im Training keine Tastatur nötig ist.
  */
-export function SetRow({ index, set, last, current, weightStep, onChange, onToggleDone, onDelete }: SetRowProps) {
+export function SetRow({ index, set, last, current, editing, weightStep, onChange, onToggleDone, onDelete }: SetRowProps) {
   const canDone = set.reps !== null && set.reps >= 1
   const lastText = last ? `${last.reps} × ${last.weightKg === null ? '–' : formatNumber(last.weightKg)}` : '–'
   const stepWeight = (dir: -1 | 1) => {
@@ -47,18 +49,24 @@ export function SetRow({ index, set, last, current, weightStep, onChange, onTogg
             <NumberField kind="reps" value={set.reps} onChange={(v) => onChange({ reps: v })} label={`Satz ${index} Wiederholungen`} placeholder="Wdh." />
           </span>
         )}
-        <button
-          type="button"
-          className={`btn check-btn ${set.done ? 'check-btn-done' : ''}`}
-          aria-label={set.done ? `Satz ${index} zurücksetzen` : `Satz ${index} abhaken`}
-          aria-pressed={set.done}
-          disabled={!set.done && !canDone}
-          onClick={onToggleDone}
-        >
-          ✓
-        </button>
+        {editing ? (
+          <button type="button" className="btn check-btn check-btn-delete" aria-label={`Satz ${index} löschen`} onClick={onDelete}>
+            ✕
+          </button>
+        ) : (
+          <button
+            type="button"
+            className={`btn check-btn ${set.done ? 'check-btn-done' : ''}`}
+            aria-label={set.done ? `Satz ${index} zurücksetzen` : `Satz ${index} abhaken`}
+            aria-pressed={set.done}
+            disabled={!set.done && !canDone}
+            onClick={onToggleDone}
+          >
+            ✓
+          </button>
+        )}
       </div>
-      {current && !set.done && (
+      {current && !set.done && !editing && (
         <div className="setrow-steppers">
           <div className="stepper">
             <button type="button" className="btn" aria-label={`Gewicht minus ${formatNumber(weightStep)} kg`} onClick={() => stepWeight(-1)}>−{formatNumber(weightStep)}</button>
@@ -70,9 +78,6 @@ export function SetRow({ index, set, last, current, weightStep, onChange, onTogg
           </div>
           <button type="button" className="btn btn-icon set-delete" aria-label={`Satz ${index} löschen`} onClick={onDelete}>🗑</button>
         </div>
-      )}
-      {!current && (
-        <button type="button" className="set-delete-mini" aria-label={`Satz ${index} löschen`} onClick={onDelete}>✕</button>
       )}
     </div>
   )

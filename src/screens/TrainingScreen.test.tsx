@@ -86,6 +86,14 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     fireEvent.click(within(c).getByRole('button', { name: 'Satz 1 löschen' }))
     act(() => vi.advanceTimersByTime(5100))
     expect(screen.queryByRole('button', { name: 'Rückgängig' })).toBeNull()
+
+    // Bearbeiten-Modus: nicht aktuelle Sätze löschen, Haken ausgeblendet
+    fireEvent.click(within(c).getByRole('button', { name: 'Lat-Zug: Sätze bearbeiten' }))
+    expect(within(c).queryByRole('button', { name: 'Satz 1 abhaken' })).toBeNull()
+    fireEvent.click(within(c).getByRole('button', { name: 'Satz 3 löschen' }))
+    expect(active().entries[0].sets).toHaveLength(3)
+    fireEvent.click(within(c).getByRole('button', { name: 'Lat-Zug: Bearbeiten beenden' }))
+    expect(within(c).getByRole('button', { name: 'Satz 1 abhaken' })).toBeTruthy()
   })
 
   it('Umsortieren, Entfernen, Notiz, Übung im Training anlegen (AK10, AK4b, F5)', () => {

@@ -2,28 +2,61 @@
 
 Persönliche Fitness-App als PWA fürs Training im Studio: Übungen, Sätze mit Gewicht und Wiederholungen, Pausentimer, Verlauf, Statistik. Alle Daten bleiben lokal auf dem Gerät, Sicherung per JSON-Export. Kein Konto, kein Backend.
 
-Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md).
+Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [PROGRESS.md](PROGRESS.md)
+
+**Live:** https://danielselca.github.io/personal_fitness_app/
+
+## Auf dem iPhone starten und benutzen
+
+1. Die Adresse oben in **Safari** öffnen (nicht in Chrome oder einem In-App-Browser).
+2. **Teilen-Symbol** tippen, dann **„Zum Home-Bildschirm“**. Das Symbol heißt „Fitness“.
+3. Ab jetzt immer über dieses Symbol öffnen. Die installierte App und der Safari-Tab haben getrennte Speicher; wer beides mischt, sieht zwei verschiedene Datenstände.
+4. Einmal online geöffnet, funktioniert die App danach auch ohne Netz (Flugmodus).
+
+**Training erfassen**
+
+- Tab **Training** → „Training starten“ oder eine Vorlage tippen („Oberkörper Fokus Schulter“ ist vorbereitet) oder „Letztes Training wiederholen“.
+- Je Übung stehen die Sätze vorbefüllt: aus dem letzten Training, sonst aus der Plan-Vorgabe. Links steht „Zuletzt“ mit den Werten des gleichen Satzes beim letzten Mal.
+- Beim aktuellen Satz gibt es große **+/−-Tasten** für Gewicht und Wiederholungen. Tippen ins Feld öffnet die Zahlentastatur, Komma ist erlaubt (12,5).
+- **Haken** tippen = Satz gespeichert. Der Pausentimer startet automatisch mit der Pause der Übung (Standard 90 s). Unten: **+30 s**, **Neu**, **Skip**. Ohne laufenden Timer stehen dort 1:00 / 1:30 / 2:00 und eine eigene Dauer.
+- **+ Satz**, **Notiz**, **Bearbeiten** (Sätze löschen), Pfeile zum Umsortieren, ✕ entfernt die Übung. **+ Übung** öffnet die Suche; steht die Übung nicht im Katalog, legt „… als neue Übung anlegen“ sie sofort an.
+- **Abschließen** speichert nur abgehakte Sätze. Ohne abgehakten Satz wird gefragt, ob verworfen werden soll.
+- Die App speichert jede Eingabe sofort. Wird sie unterbrochen, geht es beim nächsten Öffnen an derselben Stelle weiter, der Timer läuft korrekt weiter.
+
+**Sicherung, wichtig**
+
+- Tab **Mehr → Exportieren** erzeugt eine Datei `fitness-backup-JJJJ-MM-TT.json`. Auf dem iPhone im Teilen-Dialog **„In Dateien sichern“** wählen, am besten in iCloud Drive.
+- Auf einem neuen Gerät: App installieren, **Mehr → Importieren**, Datei wählen, **„Alles ersetzen“**. Zum Zusammenführen zweier Stände „Zusammenführen“.
+- Nach drei Trainings ohne Sicherung erinnert die App daran.
+
+**Grenzen auf dem iPhone:** Ton am Ende der Pause gibt es nur, solange die App im Vordergrund ist und der Bildschirm an ist. Vibration bietet Safari nicht. Deshalb bleibt der Bildschirm während des Trainings standardmäßig an (Einstellung „Bildschirm anlassen“).
 
 ## Entwicklung
 
 ```bash
 npm install
 npm run dev        # Dev-Server, auch im WLAN erreichbar (--host)
-npm test           # Vitest
+npm test           # Vitest: Logik- und Komponententests
+npm run test:e2e   # Playwright: Ende-zu-Ende gegen den Produktionsbuild, mobile Ansicht 375 px
 npm run lint       # oxlint
 npm run build      # tsc + vite build → dist/
 npm run preview    # gebauten Stand lokal ansehen (inkl. Service Worker)
 npm run icons      # PNG-Icons aus scripts/make-icons.mjs neu erzeugen
 ```
 
-Der Basis-Pfad ist auf `/personal_fitness_app/` eingestellt (GitHub Pages). Lokal ist die App also unter `http://localhost:5173/personal_fitness_app/` erreichbar.
+Einmalig für die E2E-Tests: `npx playwright install chromium`.
+
+Der Basis-Pfad ist auf `/personal_fitness_app/` eingestellt (GitHub Pages). Lokal ist die App unter `http://localhost:5173/personal_fitness_app/` erreichbar.
+
+## Aufbau
+
+- `src/domain/` reine Logik: Typen, Seed-Katalog, Vorschläge, Statistik, ISO-Wochen, Sicherung, Migration
+- `src/store/` Zustand-Store und Persistenz (IndexedDB, Fallback localStorage)
+- `src/screens/` die vier Tabs, `src/components/` Bausteine, `src/hooks/` Wake Lock und Takt
+- `e2e/` Playwright-Tests, `scripts/` Icon-Generator
 
 ## Deployment
 
-Jeder Push auf `main` baut und veröffentlicht die App über GitHub Actions auf GitHub Pages. Voraussetzung: In den Repo-Einstellungen unter *Pages* ist als Quelle **GitHub Actions** gewählt.
-
-## Hinweis für das iPhone
-
-Die App über Safari öffnen und mit *Teilen → Zum Home-Bildschirm* installieren. Die installierte App und der Safari-Tab haben getrennte Speicher; für die Trainingsdaten sollte deshalb immer derselbe Weg genutzt werden. Regelmäßig unter *Mehr → Sicherung* exportieren.
+Jeder Push auf `main` läuft durch Lint, Unit-Tests, Build und E2E-Tests und wird dann auf GitHub Pages veröffentlicht. Voraussetzung: In den Repo-Einstellungen unter *Pages* ist als Quelle **GitHub Actions** gewählt.
 
 Der Ordner `Input/` enthält private Referenzbilder und wird nicht eingecheckt.

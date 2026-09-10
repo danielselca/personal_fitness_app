@@ -20,6 +20,7 @@ export function BarChart({
   const max = Math.max(1, ...bars.map((b) => b.value))
   const slot = (W - padL - padR) / Math.max(1, n)
   const barW = Math.max(6, Math.min(28, slot * 0.62))
+  const labelStep = n <= 8 ? 1 : Math.ceil(n / 6)
   const y = (v: number) => padT + ((max - v) * (H - padT - padB)) / max
   return (
     <figure className="chart">
@@ -35,7 +36,7 @@ export function BarChart({
               {(n <= 14 || b.value > 0) && (
                 <text x={x + barW / 2} y={(b.value === 0 ? H - padB - 2 : top) - 4} textAnchor="middle" className="chart-bar-label">{formatValue(b.value)}</text>
               )}
-              {(n <= 8 || i % Math.ceil(n / 6) === 0 || i === n - 1) && (
+              {(n - 1 - i) % labelStep === 0 && (
                 <text x={x + barW / 2} y={H - 6} textAnchor="middle" className="chart-tick">{b.label}</text>
               )}
             </g>

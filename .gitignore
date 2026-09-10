@@ -28,3 +28,7 @@ Input/
 
 # PWA dev artefacts
 dev-dist
+
+# Playwright
+test-results/
+playwright-report/

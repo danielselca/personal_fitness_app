@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { BackupReminder } from '../components/BackupReminder.tsx'
 import { ExercisePicker } from '../components/ExercisePicker.tsx'
+import { InstallHint } from '../components/InstallHint.tsx'
 import { ConfirmDialog, Sheet } from '../components/Sheet.tsx'
 import { SaveTemplateSheet, TemplateEditor } from '../components/TemplateEditor.tsx'
 import { TimerBar } from '../components/TimerBar.tsx'
@@ -44,6 +45,7 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
 
   return (
     <>
+      <InstallHint />
       {justFinished && (
         <div className="card" role="status" data-testid="finished-summary">
           <div className="row">
