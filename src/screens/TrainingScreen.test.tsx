@@ -144,7 +144,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
 
   it('Vorlage startet 8 Übungen in Planreihenfolge (AK24)', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: /Oberkörper Fokus Schulter/ }))
+    fireEvent.click(screen.getByRole('button', { name: 'Vorlage Oberkörper Fokus Schulter starten' }))
     expect(active().entries).toHaveLength(8)
     const names = screen.getAllByRole('region').map((r) => r.getAttribute('aria-label'))
     expect(names).toEqual(['Lat-Zug', 'Butterfly Maschine', 'Reverse Butterfly', 'Facepulls', 'Rudern', 'Schrägbank Kurzhantel', 'Seitheben Kurzhantel', 'Adduktion'])

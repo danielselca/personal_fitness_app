@@ -2,11 +2,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { BackupReminder } from '../components/BackupReminder.tsx'
 import { ExercisePicker } from '../components/ExercisePicker.tsx'
 import { ConfirmDialog, Sheet } from '../components/Sheet.tsx'
+import { SaveTemplateSheet, TemplateEditor } from '../components/TemplateEditor.tsx'
 import { TimerBar } from '../components/TimerBar.tsx'
 import { WorkoutExerciseCard } from '../components/WorkoutExerciseCard.tsx'
 import { backupFileName, buildBackup } from '../domain/backup.ts'
 import { doneSetCount, finishedWorkouts, workoutDurationMin, workoutVolume, workoutsPerWeek } from '../domain/stats.ts'
-import type { Workout, WorkoutSet } from '../domain/types.ts'
+import type { Template, Workout, WorkoutSet } from '../domain/types.ts'
 import { useNow } from '../hooks/useNow.ts'
 import { useWakeLock } from '../hooks/useWakeLock.ts'
 import { unlockAudio } from '../lib/audio.ts'
@@ -28,6 +29,9 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
   const startWorkout = useAppStore((s) => s.startWorkout)
   const markBackupDone = useAppStore((s) => s.markBackupDone)
   const [reminderDismissed, setReminderDismissed] = useState(false)
+  const [editTemplate, setEditTemplate] = useState<Template | null>(null)
+  const [saveTemplate, setSaveTemplate] = useState(false)
+  const [savedName, setSavedName] = useState<string | null>(null)
   const finished = useMemo(() => finishedWorkouts(data.workouts), [data.workouts])
   const thisWeek = workoutsPerWeek(data.workouts, new Date(), 1)[0].count
   const lastWorkout = finished[0] ?? null
@@ -47,8 +51,24 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
             <button type="button" className="btn btn-sm" onClick={onDismissSummary}>OK</button>
           </div>
           <WorkoutSummary workout={justFinished} exerciseName={exerciseName} />
+          {savedName ? (
+            <p className="ok" style={{ margin: '8px 0 0' }}>Vorlage „{savedName}“ gespeichert.</p>
+          ) : (
+            <button type="button" className="btn btn-sm" style={{ marginTop: 8 }} onClick={() => setSaveTemplate(true)}>Als Vorlage speichern</button>
+          )}
         </div>
       )}
+      {saveTemplate && justFinished && (
+        <SaveTemplateSheet
+          suggestedName={justFinished.templateId ? (data.templates.find((t) => t.id === justFinished.templateId)?.name ?? 'Mein Training') : 'Mein Training'}
+          entries={justFinished.entries.map((e) => ({ exerciseId: e.exerciseId, sets: e.sets.length }))}
+          onClose={(n) => {
+            setSaveTemplate(false)
+            if (n) setSavedName(n)
+          }}
+        />
+      )}
+      {editTemplate && <TemplateEditor template={editTemplate} onClose={() => setEditTemplate(null)} />}
       {!reminderDismissed && (
         <BackupReminder
           onExport={() => {
@@ -73,14 +93,15 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
           <h2 className="section-title">Vorlagen</h2>
           <ul className="list">
             {data.templates.map((t) => (
-              <li key={t.id}>
-                <button type="button" className="card card-tap row" onClick={() => start({ templateId: t.id })}>
+              <li key={t.id} className="template-row">
+                <button type="button" className="card card-tap row" style={{ flex: 1 }} aria-label={`Vorlage ${t.name} starten`} onClick={() => start({ templateId: t.id })}>
                   <span className="row-main">
                     <span className="row-title ellipsis" style={{ display: 'block' }}>{t.name}</span>
                     <span className="row-sub">{t.entries.length} Übungen · {t.entries.map((e) => exerciseName(e.exerciseId)).slice(0, 3).join(', ')}{t.entries.length > 3 ? ' …' : ''}</span>
                   </span>
                   <span className="muted" aria-hidden="true">›</span>
                 </button>
+                <button type="button" className="btn btn-icon" aria-label={`${t.name} bearbeiten`} onClick={() => setEditTemplate(t)}>✎</button>
               </li>
             ))}
           </ul>

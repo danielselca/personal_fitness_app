@@ -10,9 +10,9 @@ Stand je Umsetzungsschritt aus SPEC.md Abschnitt 9. Wird nach jedem Schritt fort
 | 4 Übungen | erledigt | Liste mit Suche, Anlegen (auch aus Suchtext), Bearbeiten inkl. Vorgabe, Archivieren, Detail mit Verlauf/Diagramm; 64 Tests |
 | 5 Aktives Training | erledigt | Start (leer, Vorlage, Wiederholen), Übungsauswahl mit Neuanlage, Satzzeilen mit „Letztes Mal“, Stepper, Abhaken, Notiz, Umsortieren, Löschen mit Rückgängig, Abschluss/Verwerfen, Zusammenfassung |
 | 6 Pausentimer | erledigt | Timer-Leiste mit Presets 60/90/120, eigene Dauer, +30 s, Neu, Überspringen; Endzeitpunkt gespeichert; Ton (Web Audio), Vibration (wo verfügbar), Wake Lock |
-| 7 Verlauf | offen | |
-| 8 Statistik | offen | |
-| 9 Vorlagen | offen | |
+| 7 Verlauf | erledigt | Liste (neueste zuerst, Volumen/Dauer), Detail mit Korrektur von Gewicht/Wdh., Satz/Übung löschen, Datum verschieben, Training löschen mit Bestätigung |
+| 8 Statistik | erledigt | Segment „Statistik“: Trainings/Woche (12 Wochen, Nullwochen), Volumen je Training, Gewichtsverlauf je Übung mit Tabelle; Leerzustände |
+| 9 Vorlagen | erledigt | Bearbeiten (Name, Reihenfolge, Sätze, Entfernen, Löschen), Speichern aus Abschluss und Verlauf; 83 Tests |
 | 10 Feinschliff, Playwright, Handy-Durchlauf | offen | |
 
 ## Abnahmekriterien – Nachweis
@@ -30,8 +30,10 @@ Stand je Umsetzungsschritt aus SPEC.md Abschnitt 9. Wird nach jedem Schritt fort
 | AK11 Autosave/Wiederaufnahme | `appStore.test.ts`, `TrainingScreen.test.tsx` | Test grün, E2E offen |
 | AK12 Timer-Endzeit | `TrainingScreen.test.tsx` (Zeitsprung + Sichtbarkeitswechsel) | Test grün, E2E offen |
 | AK13 Timer-Bedienung | `appStore.test.ts`, `TrainingScreen.test.tsx` | Test grün (UI) |
-| AK24 Vorlage/Wiederholen | `appStore.test.ts`, `TrainingScreen.test.tsx` | Test grün (UI) |
-| AK18/AK19/AK20 Statistik-Logik | `stats.test.ts` | Test grün, UI offen |
+| AK24 Vorlage/Wiederholen | `appStore.test.ts`, `TrainingScreen.test.tsx`, `TemplateEditor.test.tsx` | Test grün (UI) |
+| AK16 Verlauf korrigieren | `HistoryScreen.test.tsx` | Test grün (UI) |
+| AK17 Statistik leer | `HistoryScreen.test.tsx` | Test grün (UI) |
+| AK18/AK19/AK20 Statistik | `stats.test.ts`, `HistoryScreen.test.tsx` | Test grün (UI) |
 | AK21–AK23 Sicherung | `backup.test.ts`, `MoreScreen.test.tsx` | Test grün (UI), E2E offen |
 | AK28 Gerätewechsel (Logik) | `backup.test.ts` | Test grün, E2E offen |
 | AK27 Sicherungserinnerung | `appStore.test.ts`, `MoreScreen.test.tsx` | Test grün (UI) |
