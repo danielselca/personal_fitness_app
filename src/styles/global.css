@@ -143,3 +143,78 @@ body {
   z-index: 20;
 }
 .toast .btn { min-height: 40px; background: var(--accent-text); color: var(--accent); border-color: transparent; }
+
+/* Listen und Zeilen */
+.list { display: flex; flex-direction: column; gap: var(--space-2); }
+.row {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+  min-height: var(--touch);
+}
+.row-main { flex: 1; min-width: 0; }
+.row-title { font-weight: 600; }
+.row-sub { color: var(--text-2); font-size: 14px; }
+.ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-tap { cursor: pointer; text-align: left; width: 100%; border: 0; font: inherit; color: inherit; }
+.card-tap:active { filter: brightness(0.96); }
+
+/* Formulare */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: var(--space-4); }
+.field > span { font-size: 14px; color: var(--text-2); font-weight: 600; }
+.input, select.input, textarea.input {
+  width: 100%;
+  min-height: var(--touch);
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 17px;
+}
+.input:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; }
+.input-num { text-align: center; font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums; }
+.input-inline { display: flex; align-items: center; gap: var(--space-2); }
+.error { color: var(--danger); font-weight: 600; }
+.ok { color: var(--success); font-weight: 600; }
+
+/* Schalter */
+.toggle-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--touch); padding: 6px 0; cursor: pointer; }
+.toggle-row > span:first-child { display: flex; flex-direction: column; }
+.toggle-label { font-weight: 600; }
+.toggle-hint { font-size: 13px; }
+.toggle-row input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switch { flex: none; width: 51px; height: 31px; border-radius: 16px; background: var(--border); position: relative; transition: background 0.15s; }
+.switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.25); transition: transform 0.15s; }
+.toggle-row input:checked + .switch { background: var(--success); }
+.toggle-row input:checked + .switch::after { transform: translateX(20px); }
+.toggle-row input:focus-visible + .switch { outline: 3px solid var(--focus); }
+.toggle-row input:disabled + .switch { opacity: 0.4; }
+
+/* Sheet und Dialog */
+.sheet-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 30; display: flex; align-items: flex-end; justify-content: center; }
+.sheet {
+  width: 100%; max-width: 640px; max-height: 92dvh;
+  background: var(--bg); border-radius: 18px 18px 0 0;
+  display: flex; flex-direction: column;
+  padding-bottom: var(--safe-bottom);
+}
+.sheet-head { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border); }
+.sheet-head h2 { margin: 0; font-size: 20px; }
+.sheet-body { overflow-y: auto; padding: var(--space-4); -webkit-overflow-scrolling: touch; }
+.sheet-foot { padding: var(--space-3) var(--space-4); border-top: 1px solid var(--border); background: var(--surface); }
+.dialog { margin: auto; width: calc(100% - 32px); max-width: 420px; background: var(--surface); border-radius: var(--radius); padding: var(--space-4); }
+.dialog h2 { margin: 0 0 var(--space-2); font-size: 20px; }
+.dialog-actions { display: flex; gap: var(--space-2); margin-top: var(--space-4); }
+.dialog-actions .btn { flex: 1; }
+.btn-danger { background: var(--danger); color: #fff; border-color: var(--danger); }
+.btn-icon { min-width: var(--touch); padding: 0; }
+.btn-row { display: flex; gap: var(--space-2); }
+.btn-row .btn { flex: 1; }
+.btn-sm { min-height: 36px; padding: 0 12px; font-size: 15px; }
+
+/* Hinweisbanner */
+.banner { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius); background: var(--success-soft); color: var(--text); margin-bottom: var(--space-3); }
+.banner-warn { background: #fff4d6; }
+@media (prefers-color-scheme: dark) { .banner-warn { background: #3a2f0c; } }
+.banner .btn { flex: none; }
+.banner-text { flex: 1; font-size: 15px; }

@@ -33,3 +33,45 @@ export function parseReps(input: string): number | null {
   const n = Number(cleaned)
   return n >= 1 ? n : Number.NaN
 }
+
+const dateFormatter = new Intl.DateTimeFormat('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })
+const dateTimeFormatter = new Intl.DateTimeFormat('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+const timeFormatter = new Intl.DateTimeFormat('de-DE', { hour: '2-digit', minute: '2-digit' })
+
+/** "Do., 10.09.2026" */
+export function formatDate(iso: string): string {
+  return dateFormatter.format(new Date(iso))
+}
+
+/** "10.09.2026, 18:32" */
+export function formatDateTime(iso: string): string {
+  return dateTimeFormatter.format(new Date(iso))
+}
+
+/** "18:32" */
+export function formatTime(iso: string): string {
+  return timeFormatter.format(new Date(iso))
+}
+
+/** 95 → "1:35" (Minuten:Sekunden) */
+export function formatMmSs(totalSec: number): string {
+  const s = Math.max(0, Math.round(totalSec))
+  const m = Math.floor(s / 60)
+  return `${m}:${String(s % 60).padStart(2, '0')}`
+}
+
+/** "heute", "gestern", "vor 3 Tagen" oder Datum */
+export function formatRelativeDay(iso: string, now = new Date()): string {
+  const d = new Date(iso)
+  const day = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime()
+  const diff = Math.round((day(now) - day(d)) / 86400000)
+  if (diff === 0) return 'heute'
+  if (diff === 1) return 'gestern'
+  if (diff > 1 && diff < 7) return `vor ${diff} Tagen`
+  return formatDate(iso)
+}
+
+/** "1.280 kg" als Volumen */
+export function formatVolume(kg: number): string {
+  return `${new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 }).format(kg)} kg`
+}
