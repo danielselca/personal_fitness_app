@@ -1,8 +1,11 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { App } from './App.tsx'
+import { createSeedData } from './domain/seed.ts'
+import { appStore } from './store/appStore.ts'
 
+beforeEach(() => appStore.setState({ data: createSeedData(), hydrated: true, loadError: null }))
 afterEach(cleanup)
 
 function tab(name: string) {
@@ -13,6 +16,12 @@ function tab(name: string) {
 }
 
 describe('App-Gerüst', () => {
+  it('zeigt Ladezustand vor der Hydration', () => {
+    appStore.setState({ hydrated: false })
+    render(<App />)
+    expect(screen.getByRole('status').textContent).toMatch(/Lade/)
+  })
+
   it('startet auf dem Tab Training', () => {
     render(<App />)
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Training')
