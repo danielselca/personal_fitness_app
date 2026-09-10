@@ -16,7 +16,7 @@ npm run preview    # gebauten Stand lokal ansehen (inkl. Service Worker)
 npm run icons      # PNG-Icons aus scripts/make-icons.mjs neu erzeugen
 ```
 
-Der Basis-Pfad ist auf `/Personal_Fitness_App/` eingestellt (GitHub Pages). Lokal ist die App also unter `http://localhost:5173/Personal_Fitness_App/` erreichbar.
+Der Basis-Pfad ist auf `/personal_fitness_app/` eingestellt (GitHub Pages). Lokal ist die App also unter `http://localhost:5173/personal_fitness_app/` erreichbar.
 
 ## Deployment
 

@@ -6,9 +6,9 @@ import { readFileSync } from 'node:fs'
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')) as { version: string }
 
-// Basis-Pfad für GitHub Pages: https://<user>.github.io/Personal_Fitness_App/
+// Basis-Pfad für GitHub Pages: https://danielselca.github.io/personal_fitness_app/
 // Lokal (dev/preview) bleibt der Pfad gleich, damit sich beides identisch verhält.
-const BASE = '/Personal_Fitness_App/'
+const BASE = '/personal_fitness_app/'
 
 export default defineConfig({
   base: BASE,
