@@ -1,6 +1,6 @@
 # SPEC – Persönliche Fitness-App (Version 1)
 
-Stand: 2026-09-09 · Status: Entwurf abgestimmt (Hosting: GitHub Pages; Plan-Werte als editierbare Startvorschläge; Haken in den Notizen werden ignoriert). Umsetzung startet auf Zuruf.
+Stand: 2026-09-09 · Status: Entwurf abgestimmt (Hosting: GitHub Pages; Plan-Werte als editierbare Startvorschläge; Haken in den Notizen werden ignoriert). Schritt 1 erledigt und live unter https://danielselca.github.io/personal_fitness_app/. Export/Import auf Schritt 3 vorgezogen.
 Referenzen: `Input/Übungen/IMG_0141` (Notizen), `Input/Fit711App/*` (13 Screenshots der Fit7.11-App). Die Originaldateien werden nicht verändert.
 
 ---
@@ -78,8 +78,9 @@ Weitere Informationen aus den Screenshots: Plan „Oberkörper Fokus Schulter“
 - A-2 Die **Plan-Vorgaben aus 2.1/2.2 werden als Startvorschläge** in den Katalog übernommen (klar als „Vorgabe aus Fit7.11-Plan“ gekennzeichnet). Sie erzeugen **keine Trainingshistorie** und erscheinen nirgends in Statistiken. Sätze, Wdh. und Gewicht der Vorgabe sind je Übung editierbar. **Bestätigt.**
 - A-3 Die 8 Plan-Übungen werden zusätzlich als **Vorlage „Oberkörper Fokus Schulter“** angelegt, damit das erste Training mit einem Tipp startet.
 - A-4 „Homescreen“: Eine PWA legt **nur ein App-Symbol** auf den Homescreen, alles andere passiert in der App. Das Symbol ist optional; die App läuft auch im Browser. Auf dem iPhone ist der Homescreen-Weg allerdings **empfohlen**, weil Safari Website-Daten nach 7 Tagen ohne Nutzung löschen darf, installierte Web-Apps davon ausgenommen sind und beide Wege getrennte Speicher haben (Daten im Safari-Tab tauchen nicht in der Homescreen-App auf). Die App zeigt diesen Hinweis einmalig an.
-- A-5 Hosting: statische Dateien über HTTPS (Voraussetzung für Offline-Funktion). GitHub Pages, Repo `Personal_Fitness_App` (Account vorhanden). **Bestätigt.** Da GitHub Pages im kostenlosen Tarif ein öffentliches Repo braucht, wird der Ordner `Input/` (private Screenshots) nicht eingecheckt.
+- A-5 Hosting: statische Dateien über HTTPS (Voraussetzung für Offline-Funktion). GitHub Pages, Repo `personal_fitness_app` – kleingeschrieben, App-Adresse https://danielselca.github.io/personal_fitness_app/ (Account vorhanden). **Bestätigt.** Da GitHub Pages im kostenlosen Tarif ein öffentliches Repo braucht, wird der Ordner `Input/` (private Screenshots) nicht eingecheckt.
 - A-6 Wochenzählung: ISO-Woche, Montag bis Sonntag, lokale Zeit.
+- A-7 **Datenhaltung und Gerätewechsel:** Die Daten liegen ausschließlich im Browser des jeweiligen Geräts; es gibt keine Serverkopie und keine Synchronisation zwischen Geräten. Ein Gerätewechsel erfolgt über Export und Import (F12, F13, AK28). Die App fordert dauerhaften Speicher an (N7), was aber weder vor dem Löschen der App noch vor Geräteverlust schützt. Eine spätere automatische Sicherung (z. B. in einen privaten GitHub-Gist) oder echte Synchronisation mit Konto bleibt nachrüstbar, weil der Export bereits die vollständige Datenstruktur erzeugt.
 
 ---
 
@@ -140,6 +141,7 @@ Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punk
 - **F12 Export:** JSON-Datei mit allen Daten und `schemaVersion`; Dateiname mit Datum.
 - **F13 Import:** Datei wählen → validieren (Struktur, Typen, Version) → Vorschau (Anzahl Übungen/Trainings/Vorlagen) → Wahl „Zusammenführen“ (neue IDs ergänzen, gleiche IDs: neuerer `updatedAt` gewinnt) oder „Alles ersetzen“ (nur nach ausdrücklicher Bestätigung, vorher automatische Sicherung des aktuellen Stands). Ungültige Dateien ändern nichts.
 - **F14 Vorlagen:** aus aktuellem/abgeschlossenem Training speichern, umbenennen, löschen, Übungen umsortieren. Seed: „Oberkörper Fokus Schulter“.
+- **F15 Sicherungserinnerung:** Die App merkt sich Datum und Datenstand der letzten Sicherung. Sind seither **3 oder mehr Trainings** abgeschlossen worden, erscheint im Tab „Mehr“ und einmalig nach dem Abschluss eines Trainings ein dezenter Hinweis mit direktem Weg zum Export. Der Hinweis lässt sich schließen und blockiert nichts.
 
 ### N – Nicht-funktional
 
@@ -193,6 +195,8 @@ Konsequenz: v1 hält den Bildschirm während des Trainings per Wake Lock an (Sta
 - [ ] **AK24 Vorlage:** „Oberkörper Fokus Schulter“ startet ein Training mit den 8 Plan-Übungen in Planreihenfolge; „Letztes Training wiederholen“ übernimmt die Übungsliste des letzten Trainings.
 - [ ] **AK25 Bedienung:** Alle Buttons ≥ 44 px; keine horizontale Scrollleiste bei 375 px; Fokus auf Zahlenfeld zoomt nicht; Tab-Leiste über der Home-Geste.
 - [ ] **AK26 Tests:** `npm test` läuft grün; Lighthouse-Kategorie „PWA“ meldet installierbar.
+- [ ] **AK27 Sicherungserinnerung:** Nach dem dritten abgeschlossenen Training seit der letzten Sicherung erscheint der Hinweis; nach einem Export verschwindet er und der Zähler beginnt neu.
+- [ ] **AK28 Gerätewechsel:** Export auf Gerät A, Import auf Gerät B (oder in einem frisch geleerten Browserprofil) stellt Übungen, Vorlagen, Trainings und Einstellungen vollständig wieder her; „Letztes Mal“-Werte und Statistiken stimmen danach mit Gerät A überein.
 
 ---
 
@@ -210,20 +214,22 @@ Konsequenz: v1 hält den Bildschirm während des Trainings per Wake Lock an (Sta
 
 ## 9. Umsetzungsplan
 
-| Schritt | Inhalt | Ergebnis |
-|---|---|---|
-| 1 | Projekt-Setup: Vite/React/TS, PWA-Plugin, Vitest, Design-Tokens, App-Shell mit 4 Tabs, Safe-Area | Leere App läuft auf dem Handy, installierbar |
-| 2 | Datenmodell, Store, Persistenz, Seed (21 Übungen, 1 Vorlage), Migrations-Gerüst (`schemaVersion`) | Daten überleben Neuladen |
-| 3 | Übungen: Liste, Suche, Anlegen/Bearbeiten/Archivieren | F1 |
-| 4 | Aktives Training: Start, Auswahl, Satzzeilen mit Vorschlag/„Letztes Mal“, Abhaken, Notiz, Umsortieren, Abschluss, Resume | F2–F7 (Kern) |
-| 5 | Pausentimer mit Endzeitpunkt, Auto-Start, Signal, Wake Lock | F9, F10 |
-| 6 | Verlauf mit Korrektur | F8 |
-| 7 | Statistik mit Leerzuständen | F11 |
-| 8 | Export/Import mit Validierung | F12, F13 |
-| 9 | Vorlagen, „Letztes Training wiederholen“ | F14 |
-| 10 | Feinschliff: Hinweise (Installation, Speicher, Signalgrenzen), Tests, Handy-Durchlauf aller AK, Deployment | AK1–AK26 |
+| Schritt | Inhalt | Ergebnis | Status |
+|---|---|---|---|
+| 1 | Projekt-Setup: Vite/React/TS, PWA-Plugin, Vitest, Design-Tokens, App-Shell mit 4 Tabs, Safe-Area, Deployment | Leere App läuft auf dem Handy, installierbar | **erledigt** (2026-09-10, live) |
+| 2 | Datenmodell, Store, Persistenz, Seed (21 Übungen, 1 Vorlage), Migrations-Gerüst (`schemaVersion`) | Daten überleben Neuladen | offen |
+| 3 | **Export/Import mit Validierung, Sicherungserinnerung** | F12, F13, F15 | offen |
+| 4 | Übungen: Liste, Suche, Anlegen/Bearbeiten/Archivieren | F1 | offen |
+| 5 | Aktives Training: Start, Auswahl, Satzzeilen mit Vorschlag/„Letztes Mal“, Abhaken, Notiz, Umsortieren, Abschluss, Resume | F2–F7 (Kern) | offen |
+| 6 | Pausentimer mit Endzeitpunkt, Auto-Start, Signal, Wake Lock | F9, F10 | offen |
+| 7 | Verlauf mit Korrektur | F8 | offen |
+| 8 | Statistik mit Leerzuständen | F11 | offen |
+| 9 | Vorlagen, „Letztes Training wiederholen“ | F14 | offen |
+| 10 | Feinschliff: Hinweise (Installation, Speicher, Signalgrenzen), Tests, Handy-Durchlauf aller AK | AK1–AK28 | offen |
 
-Reihenfolge ist so gewählt, dass nach Schritt 5 der Kernablauf im Studio benutzbar ist.
+**Warum Export/Import so früh (Schritt 3 statt 8):** Die Trainingsdaten liegen ausschließlich im Browser des Geräts. Ohne Sicherungsweg gäbe es eine Phase, in der echte Trainings erfasst werden, die bei Geräteverlust, App-Löschung oder Gerätewechsel unwiederbringlich wären. Ab Schritt 3 existiert für jeden erfassten Datensatz ein Weg, ihn zu sichern und auf ein neues Gerät zu übertragen.
+
+Nach Schritt 6 ist der Kernablauf im Studio benutzbar.
 
 ---
 
