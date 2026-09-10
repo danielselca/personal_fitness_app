@@ -9,18 +9,44 @@ export interface DataStorage {
 
 const KEY = 'personal-fitness-app:data'
 
-/** IndexedDB über idb-keyval (N7). */
-export const idbStorage: DataStorage = {
+/** IndexedDB über idb-keyval (N7); ohne IndexedDB Rückfall auf localStorage, sonst nur Speicher. */
+const hasIdb = typeof indexedDB !== 'undefined'
+const hasLocal = (() => {
+  try {
+    return typeof localStorage !== 'undefined'
+  } catch {
+    return false
+  }
+})()
+
+const localStorageStorage: DataStorage = {
   async load() {
-    return (await get(KEY)) ?? null
+    const raw = localStorage.getItem(KEY)
+    return raw ? (JSON.parse(raw) as unknown) : null
   },
   async save(data) {
-    await set(KEY, data)
+    localStorage.setItem(KEY, JSON.stringify(data))
   },
   async clear() {
-    await del(KEY)
+    localStorage.removeItem(KEY)
   },
 }
+
+export const idbStorage: DataStorage = hasIdb
+  ? {
+      async load() {
+        return (await get(KEY)) ?? null
+      },
+      async save(data) {
+        await set(KEY, data)
+      },
+      async clear() {
+        await del(KEY)
+      },
+    }
+  : hasLocal
+    ? localStorageStorage
+    : memoryStorage()
 
 /** Für Tests: alles im Speicher. */
 export function memoryStorage(initial: unknown | null = null): DataStorage & { current: unknown | null; saves: number } {

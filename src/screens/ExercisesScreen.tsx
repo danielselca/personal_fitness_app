@@ -56,20 +56,22 @@ function ExerciseList({ onSelect }: { onSelect: (id: string) => void }) {
           )}
         </div>
       )}
-      <div className="list" role="list">
+      <ul className="list">
         {list.map((e) => (
-          <button type="button" key={e.id} className="card card-tap row" role="listitem" onClick={() => onSelect(e.id)}>
-            <span className="row-main">
-              <span className="row-title ellipsis" style={{ display: 'block' }}>{e.name}</span>
-              <span className="row-sub">
-                {e.machineNo && `Gerät ${e.machineNo} · `}
-                {e.planTarget ? `Vorgabe ${e.planTarget.sets} × ${e.planTarget.reps} × ${formatKg(e.planTarget.weightKg)}` : 'keine Vorgabe'}
+          <li key={e.id}>
+            <button type="button" className="card card-tap row" onClick={() => onSelect(e.id)}>
+              <span className="row-main">
+                <span className="row-title ellipsis" style={{ display: 'block' }}>{e.name}</span>
+                <span className="row-sub">
+                  {e.machineNo && `Gerät ${e.machineNo} · `}
+                  {e.planTarget ? `Vorgabe ${e.planTarget.sets} × ${e.planTarget.reps} × ${formatKg(e.planTarget.weightKg)}` : 'keine Vorgabe'}
+                </span>
               </span>
-            </span>
-            <span className="muted" aria-hidden="true">›</span>
-          </button>
+              <span className="muted" aria-hidden="true">›</span>
+            </button>
+          </li>
         ))}
-      </div>
+      </ul>
       {archivedCount > 0 && (
         <button type="button" className="btn" style={{ marginTop: 16, width: '100%' }} onClick={() => setShowArchived(!showArchived)}>
           {showArchived ? 'Aktive Übungen anzeigen' : `Archivierte anzeigen (${archivedCount})`}
