@@ -35,6 +35,16 @@ function SettingsSection() {
     <>
       <h2 className="section-title">Einstellungen</h2>
       <div className="card">
+        <div className="field" style={{ marginBottom: 12 }}>
+          <span>Erscheinungsbild</span>
+          <div className="segment theme-segment" role="radiogroup" aria-label="Erscheinungsbild">
+            {([['system', 'System'], ['light', 'Hell'], ['dark', 'Dunkel']] as const).map(([v, label]) => (
+              <button key={v} type="button" role="radio" aria-checked={settings.theme === v} className={settings.theme === v ? 'on' : ''} onClick={() => updateSettings({ theme: v })}>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
         <label className="field">
           <span>Standardpause (Sekunden)</span>
           <input
@@ -141,7 +151,7 @@ export function BackupSection() {
       <h2 className="section-title">Sicherung</h2>
       <div className="card">
         <p className="muted" style={{ marginTop: 0 }}>
-          Alle Daten liegen nur auf diesem Gerät. Exportiere regelmäßig eine Datei, zum Beispiel nach iCloud Drive. Beim Gerätewechsel importierst du sie auf dem neuen Gerät.
+          Alle Daten liegen nur auf diesem Gerät. Regelmäßig exportieren, zum Beispiel nach iCloud Drive.
         </p>
         <p className="muted" style={{ fontSize: 14 }}>
           Letzte Sicherung: {data.meta.lastBackupAt ? formatDateTime(data.meta.lastBackupAt) : 'noch nie'}

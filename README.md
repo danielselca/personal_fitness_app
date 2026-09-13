@@ -26,6 +26,8 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 - **Abschließen** speichert nur abgehakte Sätze. Ohne abgehakten Satz wird gefragt, ob verworfen werden soll.
 - Die App speichert jede Eingabe sofort. Wird sie unterbrochen, geht es beim nächsten Öffnen an derselben Stelle weiter, der Timer läuft korrekt weiter.
 
+**Hell oder dunkel:** Sonne/Mond oben rechts schaltet um. Unter **Mehr → Erscheinungsbild** lässt sich auch „System“ wählen, dann folgt die App dem iPhone.
+
 **Sicherung, wichtig**
 
 - Tab **Mehr → Exportieren** erzeugt eine Datei `fitness-backup-JJJJ-MM-TT.json`. Auf dem iPhone im Teilen-Dialog **„In Dateien sichern“** wählen, am besten in iCloud Drive.

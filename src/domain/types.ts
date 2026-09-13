@@ -84,6 +84,8 @@ export interface TimerState {
   signalled: boolean
 }
 
+export type ThemeSetting = 'system' | 'light' | 'dark'
+
 export interface Settings {
   defaultRestSec: number
   autoStartTimer: boolean
@@ -91,6 +93,8 @@ export interface Settings {
   vibration: boolean
   keepScreenOn: boolean
   weightStep: number
+  /** Erscheinungsbild; 'system' folgt dem Gerät. */
+  theme: ThemeSetting
 }
 
 export interface Meta {
@@ -130,6 +134,7 @@ export const DEFAULT_SETTINGS: Settings = {
   vibration: false,
   keepScreenOn: true,
   weightStep: 2.5,
+  theme: 'system',
 }
 
 export const BACKUP_APP_ID = 'personal-fitness-app'

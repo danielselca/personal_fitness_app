@@ -1,26 +1,47 @@
-/* Design-Tokens – angelehnt an die Fit7.11-App: dunkler Kopf, hellgrauer Grund, weiße Karten. */
+/*
+ * Design-Tokens. Vorbild: WHOOP (fast schwarzer Grund, Kacheln, große Kennzahlen mit kleinen
+ * Beschriftungen, enge Farbsprache) und die FitFusion-Referenzen (Anthrazit/Off-White, Orange
+ * als einziger Akzent, große Radien). Umsetzung mit Apple-Systemschrift und Hairline-Rändern.
+ *
+ * Drei Zustände: `data-theme="light"` / `data-theme="dark"` (Schalter in der App) oder
+ * kein Attribut (folgt dem System).
+ */
 :root {
-  --bg: #f2f2f7;
+  /* Hell */
+  --bg: #f3f2ef;
   --surface: #ffffff;
-  --surface-2: #e9e9ee;
-  --text: #111114;
-  --text-2: #6e6e73;
-  --border: #d9d9de;
-  --header-bg: #151517;
-  --header-text: #ffffff;
-  --primary: #2f6fed;
-  --primary-soft: #e4ecfd;
-  --primary-text: #ffffff;
-  --accent: #2f6fed;
-  --accent-text: #ffffff;
-  --success: #1f9d55;
-  --success-soft: #dff5e8;
-  --danger: #d2352b;
-  --warning: #c98a00;
-  --focus: #2f6fed;
+  --surface-2: #f1f0ec;
+  --surface-3: #e7e6e1;
+  --text: #141414;
+  --text-2: #7c7b78;
+  --text-3: #a9a8a4;
+  --border: rgba(20, 20, 20, 0.07);
+  --border-strong: rgba(20, 20, 20, 0.14);
 
-  --radius: 14px;
-  --radius-sm: 10px;
+  --primary: #f0582a;
+  --primary-hover: #dc4d22;
+  --primary-soft: #fde9e1;
+  --primary-text: #ffffff;
+  --accent: var(--primary);
+  --accent-text: var(--primary-text);
+
+  --success: #1fa65a;
+  --success-soft: #e2f5e9;
+  --danger: #d9362b;
+  --danger-soft: #fce7e4;
+  --warning: #d38a00;
+  --warning-soft: #fff1d6;
+  --focus: #f0582a;
+
+  --tabbar-bg: #161616;
+  --tabbar-text: #8e8e8e;
+  --tabbar-active: #ff7a4d;
+  --tabbar-border: transparent;
+
+  --radius-xl: 24px;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-xs: 9px;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -28,35 +49,86 @@
   --space-5: 24px;
   --space-6: 32px;
   --touch: 44px;
-  --tabbar-h: 56px;
+  --tabbar-h: 64px;
+  --tabbar-gap: 10px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px -12px rgba(0, 0, 0, 0.12);
+  --shadow-float: 0 12px 32px -8px rgba(0, 0, 0, 0.35);
 
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
+/* Dunkel: Systemwahl */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #000000;
-    --surface: #1c1c1e;
-    --surface-2: #2c2c2e;
-    --text: #f5f5f7;
-    --text-2: #a1a1a6;
-    --border: #3a3a3c;
-    --header-bg: #000000;
-    --header-text: #ffffff;
-    --primary: #5b93ff;
-    --primary-soft: #17274a;
+  :root:not([data-theme="light"]) {
+    --bg: #101010;
+    --surface: #1a1a1a;
+    --surface-2: #242424;
+    --surface-3: #2f2f2f;
+    --text: #f3f3f1;
+    --text-2: #9b9a97;
+    --text-3: #6d6c69;
+    --border: rgba(255, 255, 255, 0.07);
+    --border-strong: rgba(255, 255, 255, 0.14);
+
+    --primary: #ff6a3d;
+    --primary-hover: #ff7f58;
+    --primary-soft: #3a2118;
     --primary-text: #ffffff;
-    --accent: #5b93ff;
-    --accent-text: #ffffff;
-    --success: #30d158;
-    --success-soft: #12351f;
-    --danger: #ff453a;
-    --warning: #ffd60a;
+
+    --success: #34c759;
+    --success-soft: #15301f;
+    --danger: #ff5a4f;
+    --danger-soft: #3d1a17;
+    --warning: #ffb340;
+    --warning-soft: #3a2a0c;
+    --focus: #ff6a3d;
+
+    --tabbar-bg: #1c1c1c;
+    --tabbar-text: #8a8a8a;
+    --tabbar-active: #ff7a4d;
+    --tabbar-border: rgba(255, 255, 255, 0.08);
+
     --shadow: none;
+    --shadow-float: 0 12px 32px -8px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
   }
+}
+
+/* Dunkel: ausdrücklich gewählt */
+:root[data-theme="dark"] {
+  --bg: #101010;
+  --surface: #1a1a1a;
+  --surface-2: #242424;
+  --surface-3: #2f2f2f;
+  --text: #f3f3f1;
+  --text-2: #9b9a97;
+  --text-3: #6d6c69;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  --primary: #ff6a3d;
+  --primary-hover: #ff7f58;
+  --primary-soft: #3a2118;
+  --primary-text: #ffffff;
+
+  --success: #34c759;
+  --success-soft: #15301f;
+  --danger: #ff5a4f;
+  --danger-soft: #3d1a17;
+  --warning: #ffb340;
+  --warning-soft: #3a2a0c;
+  --focus: #ff6a3d;
+
+  --tabbar-bg: #1c1c1c;
+  --tabbar-text: #8a8a8a;
+  --tabbar-active: #ff7a4d;
+  --tabbar-border: rgba(255, 255, 255, 0.08);
+
+  --shadow: none;
+  --shadow-float: 0 12px 32px -8px rgba(0, 0, 0, 0.7);
+  color-scheme: dark;
 }

@@ -62,11 +62,15 @@ function ExerciseList({ onSelect }: { onSelect: (id: string) => void }) {
             <button type="button" className="card card-tap row" onClick={() => onSelect(e.id)}>
               <span className="row-main">
                 <span className="row-title ellipsis" style={{ display: 'block' }}>{e.name}</span>
-                <span className="row-sub">
-                  {e.machineNo && `Gerät ${e.machineNo} · `}
-                  {e.noWeight && 'ohne Gewicht · '}
-                  {e.planTarget ? `Vorgabe ${e.planTarget.sets} × ${e.planTarget.reps}${e.noWeight ? '' : ` × ${formatKg(e.planTarget.weightKg)}`}` : 'keine Vorgabe'}
-                </span>
+                {(e.machineNo || e.noWeight || e.planTarget) && (
+                  <span className="row-sub">
+                    {[
+                      e.machineNo && `Gerät ${e.machineNo}`,
+                      e.noWeight && 'ohne Gewicht',
+                      e.planTarget && `${e.planTarget.sets} × ${e.planTarget.reps}${e.noWeight ? '' : ` × ${formatKg(e.planTarget.weightKg)}`}`,
+                    ].filter(Boolean).join(' · ')}
+                  </span>
+                )}
               </span>
               <span className="muted" aria-hidden="true">›</span>
             </button>

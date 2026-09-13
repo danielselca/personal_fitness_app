@@ -41,3 +41,16 @@ test('Screenshot: Übungsauswahl mit Gruppen', async ({ page }) => {
   await page.getByRole('dialog', { name: 'Übungen hinzufügen' }).waitFor()
   await page.screenshot({ path: `${OUT}/15-picker.png` })
 })
+
+test('Screenshots: Übungen, Verlauf, Mehr (dunkel)', async ({ page }) => {
+  await openApp(page)
+  await page.getByRole('button', { name: 'Dunklen Modus einschalten' }).click()
+  await page.getByRole('button', { name: 'Übungen' }).click()
+  await page.screenshot({ path: `${OUT}/16-exercises-dark.png` })
+  await page.getByRole('button', { name: 'Lat-Zug' }).click()
+  await page.screenshot({ path: `${OUT}/17-exercise-detail-dark.png` })
+  await page.getByRole('button', { name: 'Mehr' }).click()
+  await page.screenshot({ path: `${OUT}/18-more-dark.png` })
+  await page.getByRole('button', { name: 'Hellen Modus einschalten' }).click()
+  await page.screenshot({ path: `${OUT}/19-more-light.png` })
+})

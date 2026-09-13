@@ -147,7 +147,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     expect(lat.getAttribute('data-state')).toBe('pending')
     expect(within(lat).queryByLabelText('Satz 1 Gewicht')).toBeNull() // eingeklappt
     expect(within(lat).getByTestId('progress-line').textContent).toBe('0/4 Sätze')
-    expect(screen.getByTestId('exercise-pos').textContent).toMatch(/Übung 1\/2/)
+    expect(screen.getByTestId('exercise-pos').textContent).toMatch(/1\/2$/)
 
     // Satz 1 aktuell (farbig), Satz 2 offen
     expect(within(rudern).getByTestId('set-1').getAttribute('data-state')).toBe('current')
@@ -166,7 +166,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     expect(within(card('Rudern')).getByTestId('progress-line').textContent).toBe('3 Sätze erledigt · 12 × 50 kg')
     expect(card('Lat-Zug').getAttribute('data-state')).toBe('current')
     expect(within(card('Lat-Zug')).getByLabelText('Satz 1 Gewicht')).toBeTruthy()
-    expect(screen.getByTestId('exercise-pos').textContent).toMatch(/Übung 2\/2/)
+    expect(screen.getByTestId('exercise-pos').textContent).toMatch(/2\/2$/)
     expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe(String(Math.round((3 / 7) * 100)))
   })
 

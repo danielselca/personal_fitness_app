@@ -14,7 +14,8 @@ Stand je Umsetzungsschritt aus SPEC.md Abschnitt 9.
 | 8 Statistik | erledigt | Trainings/Woche, Volumen, Gewichtsverlauf, Leerzustände |
 | 9 Vorlagen | erledigt | Bearbeiten, Löschen, Speichern aus Abschluss und Verlauf |
 | 10 Feinschliff, Playwright, CI | erledigt | 85 Unit-/Komponententests, 7 E2E-Tests im Chromium (375 px), Installationshinweis, CI mit E2E |
-| 11 Übersichtlichkeit (Feedback 2026-09-13) | erledigt | Nur aktuelle Übung ausgeklappt, blaue/grüne Markierung für aktuell/erledigt, Fortschrittsbalken, Sortiermodus, Übungen ohne Gewicht (`noWeight`, Schema 4), Vorsortierung ohne Gewicht zuerst, Sortiermodus mit ganz nach oben/unten, Standard-Vorlage „Oberkörper“ (12 Übungen), kleinere Zahlen, Hinweise gekürzt; 96 Unit-, 9 E2E-Tests |
+| 11 Übersichtlichkeit (Feedback 2026-09-13) | erledigt | Nur aktuelle Übung ausgeklappt, blaue/grüne Markierung für aktuell/erledigt, Fortschrittsbalken, Sortiermodus, Übungen ohne Gewicht (`noWeight`, Schema 4), Vorsortierung ohne Gewicht zuerst, Sortiermodus mit ganz nach oben/unten, Standard-Vorlage „Oberkörper“ (12 Übungen), kleinere Zahlen, Hinweise gekürzt |
+| 12 Erscheinungsbild (Feedback 2026-09-13) | erledigt | Tokens neu (Orange-Akzent, Anthrazit/Off-White), Kopf mit Datum, Tab-Pille, Kacheln im Trainingskopf, Timer als schwebende Karte, Hell/Dunkel/System-Schalter (`settings.theme`); 97 Unit-, 10 E2E-Tests |
 
 ## Abnahmekriterien – Nachweis
 

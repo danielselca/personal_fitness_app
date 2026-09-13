@@ -62,3 +62,28 @@ describe('App-Gerüst', () => {
     expect(tab('Training').getAttribute('aria-current')).toBeNull()
   })
 })
+
+describe('Erscheinungsbild (Hell/Dunkel)', () => {
+  afterEach(() => {
+    delete document.documentElement.dataset.theme
+  })
+
+  it('Schalter im Kopf setzt Dunkel/Hell ausdrücklich; Einstellung „System“ entfernt das Attribut', () => {
+    render(<App />)
+    expect(document.documentElement.dataset.theme).toBeUndefined() // Standard: System
+    fireEvent.click(screen.getByRole('button', { name: 'Dunklen Modus einschalten' }))
+    expect(appStore.getState().data.settings.theme).toBe('dark')
+    expect(document.documentElement.dataset.theme).toBe('dark')
+    expect(document.querySelector('meta[name="theme-color"]')?.getAttribute('content') ?? '#101010').toBe('#101010')
+    fireEvent.click(screen.getByRole('button', { name: 'Hellen Modus einschalten' }))
+    expect(appStore.getState().data.settings.theme).toBe('light')
+    expect(document.documentElement.dataset.theme).toBe('light')
+
+    fireEvent.click(tab('Mehr'))
+    const group = screen.getByRole('radiogroup', { name: 'Erscheinungsbild' })
+    expect(group.querySelector('[aria-checked="true"]')?.textContent).toBe('Hell')
+    fireEvent.click(screen.getByRole('radio', { name: 'System' }))
+    expect(appStore.getState().data.settings.theme).toBe('system')
+    expect(document.documentElement.dataset.theme).toBeUndefined()
+  })
+})

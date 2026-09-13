@@ -25,7 +25,7 @@ export function InstallHint() {
   return (
     <div className="banner" role="note" data-testid="install-hint">
       <span className="banner-text">
-        <strong>Tipp:</strong> Über Teilen → „Zum Home-Bildschirm“ installieren. Dann bleiben deine Daten sicher, auch wenn Safari länger nicht genutzt wird. Installierte App und Safari-Tab speichern getrennt, also einen Weg wählen.
+        <strong>Tipp:</strong> Über Teilen → „Zum Home-Bildschirm“ installieren, dann bleiben die Daten dauerhaft erhalten.
       </span>
       <button type="button" className="btn btn-sm" onClick={() => markHintSeen(INSTALL_HINT_ID)} aria-label="Hinweis verstanden">
         OK

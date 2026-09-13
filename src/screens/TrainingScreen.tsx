@@ -201,22 +201,30 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
   return (
     <div className="content-with-timer">
       <div className="workout-head card">
-        <div className="workout-head-row">
-          <div className="workout-stats">
-            {workout.entries.length > 0 && (
-              <span data-testid="exercise-pos">Übung <strong>{currentPos}</strong>/{workout.entries.length}</span>
-            )}
-            <span><strong data-testid="done-count">{done}</strong>/{total} Sätze</span>
-            <span><strong>{elapsedMin}</strong> min</span>
+        <div className="stat-tiles">
+          <div className="stat-tile" data-testid="exercise-pos">
+            <span className="label">Übung</span>
+            <span className="stat-value">{workout.entries.length > 0 ? currentPos : 0}<small>/{workout.entries.length}</small></span>
           </div>
+          <div className="stat-tile">
+            <span className="label">Sätze</span>
+            <span className="stat-value"><span data-testid="done-count">{done}</span><small>/{total}</small></span>
+          </div>
+          <div className="stat-tile">
+            <span className="label">Minuten</span>
+            <span className="stat-value">{elapsedMin}</span>
+          </div>
+        </div>
+        <div className="workout-head-row">
+          <div className="progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-label="Fortschritt">
+            <div className="progress-bar" style={{ width: `${progress}%` }} />
+          </div>
+          <span className="label num">{progress} %</span>
           {workout.entries.length > 1 && (
             <button type="button" className={`btn btn-sm ${sorting ? 'btn-primary' : ''}`} aria-pressed={sorting} onClick={() => setSorting(!sorting)}>
               {sorting ? 'Fertig' : 'Sortieren'}
             </button>
           )}
-        </div>
-        <div className="progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-label="Fortschritt">
-          <div className="progress-bar" style={{ width: `${progress}%` }} />
         </div>
       </div>
 

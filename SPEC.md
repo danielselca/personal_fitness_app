@@ -50,7 +50,11 @@ Nur für eine Person, ohne Login, ohne Backend. Alle Daten bleiben lokal auf dem
 
 Weitere Informationen aus den Screenshots: Plan „Oberkörper Fokus Schulter“, 1× pro Woche, Trainingsziel „General fitness“, Club „FITSEVENELEVEN Niederrad Black“, 5 absolvierte Einheiten (Wochen 1–5), Woche 6 offen. Die Zahl hinter „711 #“ ist offenbar die **Gerätenummer im Studio**.
 
-### 2.3 Bedien- und Designmuster der Fit7.11-App, die übernommen werden
+### 2.3 Gestaltung (seit 2026-09-13: WHOOP/FitFusion-Vorbild)
+
+Nach dem ersten Feedback („kein cooles Design, zu große Schrift“) wurde das Erscheinungsbild neu aufgesetzt, Vorbild WHOOP (fast schwarzer Grund, Kacheln mit großer Kennzahl und kleiner Versalbeschriftung, enge Farbsprache) und die vom Nutzer gelieferten FitFusion-Referenzen (Anthrazit bzw. Off-White, Orange als einziger Akzent, große Radien, schwebende dunkle Tab-Pille). Umsetzung: Apple-Systemschrift, Grundschrift 15 px, Eingaben 16 px (iOS-Zoomgrenze), Karten 18 px Radius mit Hairline-Rand, Tab-Leiste als Pille, Timer als schwebende Karte. Farben: Orange = aktuell/primär, Grün = erledigt, sonst neutral. **Hell/Dunkel:** Einstellung `settings.theme` (System, Hell, Dunkel) unter „Mehr“ plus Sonne/Mond-Schalter im Kopf jeder Ansicht; gesetzt als `data-theme` am `<html>`, Statusleistenfarbe folgt.
+
+### 2.4 Bedien- und Designmuster der Fit7.11-App, die übernommen werden
 
 - Untere Tab-Leiste mit 4 Einträgen, große Titel, dunkler Kopfbereich, hellgrauer Hintergrund, weiße abgerundete Karten.
 - Satzzeile im Format **`1. Satz  10 × 45 kg • 1:30 min Pause`** mit großen, fetten Zahlen; der aktuelle Satz ist hervorgehoben.
@@ -117,7 +121,7 @@ Workout   { id, startedAt, finishedAt?, status: "active" | "done", templateId?, 
             entries[ { exerciseId, note?, sets[ { id, weightKg?, reps, done, doneAt? } ] } ], updatedAt }
 Timer     { endsAt, durationSec, exerciseId? }           // nur während aktivem Training
 Settings  { defaultRestSec: 90, autoStartTimer: true, sound: true, vibration: false,
-            keepScreenOn: true, weightStep: 2.5, hintsSeen[] }
+            keepScreenOn: true, weightStep: 2.5, theme: "system" | "light" | "dark" }
 Backup    { schemaVersion, app, exportedAt, exercises[], templates[], workouts[], settings }
 ```
 
@@ -230,6 +234,7 @@ Konsequenz: v1 hält den Bildschirm während des Trainings per Wake Lock an (Sta
 | 9 | Vorlagen, „Letztes Training wiederholen“ | F14 | **erledigt** |
 | 10 | Feinschliff: Hinweise (Installation, Speicher, Signalgrenzen), Tests, Handy-Durchlauf aller AK | AK1–AK28 | **erledigt** |
 | 11 | Übersichtlichkeit nach erstem Feedback (2026-09-13): einklappbare Karten, Farben für aktuell/erledigt, Fortschritt, Sortiermodus (↑ ↓, ganz nach oben/unten), Übungen ohne Gewicht, Vorsortierung „ohne Gewicht zuerst“, Standard-Vorlage „Oberkörper“, kleinere Schrift, gekürzte Hinweise | Feedback 1–3 | **erledigt** |
+| 12 | Neues Erscheinungsbild nach WHOOP/FitFusion-Vorbild, Hell/Dunkel-Schalter, kleinere Schrift, Texte gekürzt | Feedback 4 | **erledigt** |
 
 **Warum Export/Import so früh (Schritt 3 statt 8):** Die Trainingsdaten liegen ausschließlich im Browser des Geräts. Ohne Sicherungsweg gäbe es eine Phase, in der echte Trainings erfasst werden, die bei Geräteverlust, App-Löschung oder Gerätewechsel unwiederbringlich wären. Ab Schritt 3 existiert für jeden erfassten Datensatz ein Weg, ihn zu sichern und auf ein neues Gerät zu übertragen.
 
