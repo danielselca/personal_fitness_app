@@ -101,6 +101,7 @@ Nach dem ersten Feedback („kein cooles Design, zu große Schrift“) wurde das
 
 - **Übersicht (seit 2026-09-13):** Nur die **aktuelle Übung** (erste mit offenem Satz) ist ausgeklappt und farbig umrandet; alle anderen sind einzeilig eingeklappt (Nummer, Name, „2/4 Sätze“, Satz-Punkte) und lassen sich antippen. Erledigte Übungen sind grün markiert, sobald alle Sätze abgehakt sind, klappt die Karte zu und die nächste öffnet sich. Kopfzeile mit „Übung 2/8 · 5/24 Sätze · Minuten“ und Fortschrittsbalken. **Sortieren** schaltet in eine kompakte Liste (nur Namen mit ↑ ↓ ✕), damit beim Umsortieren kein Platz durch Satzzeilen verloren geht.
 - **Übungen ohne Gewicht** (`noWeight`, z. B. Serratusstütz, Aufdehnen, Therabandübungen): kein kg-Feld, kein kg-Stepper, nur Wiederholungen; Anzeige „12 Wdh.“ statt „12 × – kg“. Umschaltbar im Übungsformular und direkt im Training (Karte → Bearbeiten → „Ohne Gewicht“). Acht Physio-/Dehnübungen des Seeds sind so vorbelegt (Migration Schema 1 → 2 trägt es auf bestehenden Geräten nach, außer es wurde dort schon ein Gewicht abgehakt; Schema 3 und 4 nehmen es bei „Tiefes V“ und „Bear hug“ zurück, die mit Gewicht trainiert werden). **Vorsortierung:** Die Übungsauswahl zeigt die Gruppe „Ohne Gewicht“ vor „Mit Gewicht“ und fügt Mehrfachauswahl in dieser Reihenfolge hinzu; im Sortiermodus ordnet „Ohne Gewicht zuerst“ das laufende Training stabil um; je Übung gibt es ↑ ↓ sowie „ganz nach oben/unten“ und ✕. **Standard-Vorlage „Oberkörper“** (Schema 4, ersetzt „Oberkörper Fokus Schulter“): Aufdehnen seitlich, Bein absenken, Serratusstütz, Stütz auf Step, Adduktion, Tiefes V, Reverse Butterfly, Butterfly Maschine, Incline Frontraise, Schrägbank Kurzhantel, Rudern, Lat-Zug. Die Hinweise „Zuordnung zu Fit7.11 … vermutet“ sind gestrichen; in der Karte steht die Vorgabe ohne Quellenangabe.
+- **Halteübungen** (`Exercise.mode = 'hold'`, z. B. Serratusstütz, Stütz auf Step: 4 × 60 s, 60 s Pause): statt Satzzeilen ein **Donut**. Je Satz ein Arbeitsstück, dazwischen Pausenstücke, Länge proportional zur Dauer; erledigt = grün, aktuell = orange (Arbeit) bzw. grau (Pause) mit Füllstand. In der Mitte läuft die aktuelle Phase rückwärts; Tippen = Start/Pause/Weiter. Arbeit → Pause → nächster Satz laufen automatisch durch, Ton/Vibration je Phasenwechsel wie beim Pausentimer. Endzeitpunkte sind im aktiven Training gespeichert (`WorkoutEntry.hold`), nach App-Wechsel werden abgelaufene Phasen nachgezogen. Knöpfe: „Satz fertig“ / „Pause überspringen“, „Abbrechen“, davor „+ Satz“/„− Satz“. Gehaltene Sekunden landen in `WorkoutSet.reps`; Anzeige „60 s“. Kein zusätzlicher Pausentimer unten. Einstellbar im Übungsformular: Art (Wiederholungen / Halten), Haltedauer, Pause.
 - Jede Übung ist eine Karte mit Satzzeilen. Der **aktuelle Satz** (erster nicht abgehakter) ist hervorgehoben und zeigt große Bedienelemente: Gewicht mit `−`/`+` (Schrittweite je Übung, Standard 2,5 kg), Wdh. mit `−`/`+`, Zahlenfelder für direkte Eingabe, großer Haken rechts.
 - Links in jeder Satzzeile steht „Letztes Mal: 10 × 45 kg“ (Werte des gleichen Satzes im letzten abgeschlossenen Training mit dieser Übung).
 - Vorschlagswerte werden vorbefüllt, sind editierbar und gelten erst nach dem **Abhaken** als absolviert. Abhaken lässt sich rückgängig machen.
@@ -114,18 +115,18 @@ Nach dem ersten Feedback („kein cooles Design, zu große Schrift“) wurde das
 ## 5. Datenmodell (lokal, JSON)
 
 ```
-Exercise  { id, name, aliases[], machineNo?, hint?, defaultRestSec?, weightStep?, noWeight?,
+Exercise  { id, name, aliases[], machineNo?, hint?, defaultRestSec?, weightStep?, noWeight?, mode?: "reps"|"hold", holdSec?,
             planTarget? { sets, reps, weightKg, source: "Fit7.11-Plan" }, archived, createdAt, updatedAt }
 Template  { id, name, entries[ { exerciseId, sets } ], createdAt, updatedAt }
 Workout   { id, startedAt, finishedAt?, status: "active" | "done", templateId?, note?,
-            entries[ { exerciseId, note?, sets[ { id, weightKg?, reps, done, doneAt? } ] } ], updatedAt }
+            entries[ { exerciseId, note?, sets[ { id, weightKg?, reps, done, doneAt? } ], hold? { setIndex, phase, endsAt?, durationSec, pausedRemainingSec? } } ], updatedAt }
 Timer     { endsAt, durationSec, exerciseId? }           // nur während aktivem Training
 Settings  { defaultRestSec: 90, autoStartTimer: true, sound: true, vibration: false,
             keepScreenOn: true, weightStep: 2.5, theme: "system" | "light" | "dark" }
 Backup    { schemaVersion, app, exportedAt, exercises[], templates[], workouts[], settings }
 ```
 
-Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punkt. Wdh. ganzzahlig ≥ 1. `noWeight = true` blendet Gewicht in Training, Verlauf und Katalog aus (Werte bleiben `null`). Aktuelles Schema: 5 (Schema 5: „Aufdehnen seitlich“ mit Vorgabe 2 × 10). Volumen = Σ (Gewicht × Wdh.) über Sätze mit `done = true`; Sätze ohne Gewicht zählen 0 kg.
+Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punkt. Wdh. ganzzahlig ≥ 1. `noWeight = true` blendet Gewicht in Training, Verlauf und Katalog aus (Werte bleiben `null`). Aktuelles Schema: 6 (Schema 5: „Aufdehnen seitlich“ mit Vorgabe 2 × 10; Schema 6: Serratusstütz und Stütz auf Step als Halteübungen 4 × 60 s). Volumen = Σ (Gewicht × Wdh.) über Sätze mit `done = true`; Sätze ohne Gewicht zählen 0 kg.
 
 ---
 
@@ -235,6 +236,7 @@ Konsequenz: v1 hält den Bildschirm während des Trainings per Wake Lock an (Sta
 | 10 | Feinschliff: Hinweise (Installation, Speicher, Signalgrenzen), Tests, Handy-Durchlauf aller AK | AK1–AK28 | **erledigt** |
 | 11 | Übersichtlichkeit nach erstem Feedback (2026-09-13): einklappbare Karten, Farben für aktuell/erledigt, Fortschritt, Sortiermodus (↑ ↓, ganz nach oben/unten), Übungen ohne Gewicht, Vorsortierung „ohne Gewicht zuerst“, Standard-Vorlage „Oberkörper“, kleinere Schrift, gekürzte Hinweise | Feedback 1–3 | **erledigt** |
 | 12 | Neues Erscheinungsbild nach WHOOP/FitFusion-Vorbild, Hell/Dunkel-Schalter, kleinere Schrift, Texte gekürzt | Feedback 4 | **erledigt** |
+| 13 | Halteübungen als Donut mit Phasen-Countdown (Serratusstütz, Stütz auf Step: 4 × 60 s / 60 s Pause) | Feedback 5 | **erledigt** |
 
 **Warum Export/Import so früh (Schritt 3 statt 8):** Die Trainingsdaten liegen ausschließlich im Browser des Geräts. Ohne Sicherungsweg gäbe es eine Phase, in der echte Trainings erfasst werden, die bei Geräteverlust, App-Löschung oder Gerätewechsel unwiederbringlich wären. Ab Schritt 3 existiert für jeden erfassten Datensatz ein Weg, ihn zu sichern und auf ein neues Gerät zu übertragen.
 

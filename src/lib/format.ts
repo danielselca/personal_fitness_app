@@ -34,6 +34,12 @@ export function formatSet(reps: number, weightKg: number | null, withUnit = fals
   return `${reps} × ${formatNumber(weightKg)}${withUnit ? ' kg' : ''}`
 }
 
+/** Satz je nach Übungsart: Halten → "60 s", sonst formatSet. */
+export function formatSetFor(mode: 'reps' | 'hold' | undefined, reps: number, weightKg: number | null, withUnit = false): string {
+  if (mode === 'hold') return `${reps} s`
+  return formatSet(reps, weightKg, withUnit)
+}
+
 /** Wiederholungen: ganze Zahl ≥ 1, sonst NaN. Leer → null. */
 export function parseReps(input: string): number | null {
   const cleaned = input.trim()

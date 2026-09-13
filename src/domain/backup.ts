@@ -136,6 +136,8 @@ function normalizeExercise(e: Record<string, unknown>): Exercise {
     defaultRestSec: isNum(e.defaultRestSec) ? e.defaultRestSec : undefined,
     weightStep: isNum(e.weightStep) ? e.weightStep : undefined,
     noWeight: e.noWeight === true ? true : undefined,
+    mode: e.mode === 'hold' ? 'hold' : undefined,
+    holdSec: isNum(e.holdSec) && e.holdSec > 0 ? e.holdSec : undefined,
     planTarget: isObj(e.planTarget)
       ? {
           sets: e.planTarget.sets as number,

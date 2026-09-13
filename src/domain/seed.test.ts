@@ -33,6 +33,9 @@ describe('Seed-Katalog (AK3)', () => {
     expect(lat.defaultRestSec).toBe(90)
     const rud = data.exercises.find((e) => e.name === 'Rudern')!
     expect(rud.planTarget).toEqual({ sets: 3, reps: 12, weightKg: 50, source: 'Fit7.11-Plan' })
+    const ser = data.exercises.find((e) => e.name === 'Serratusstütz')!
+    expect(ser).toMatchObject({ mode: 'hold', holdSec: 60, defaultRestSec: 60, noWeight: true })
+    expect(ser.planTarget).toEqual({ sets: 4, reps: 60, weightKg: null, source: 'eigene Vorgabe' })
     const auf = data.exercises.find((e) => e.name === 'Aufdehnen seitlich')!
     expect(auf.planTarget).toEqual({ sets: 2, reps: 10, weightKg: null, source: 'eigene Vorgabe' })
     expect(data.workouts).toHaveLength(0)
@@ -46,6 +49,8 @@ describe('Seed-Katalog (AK3)', () => {
     expect(names).toEqual(['Aufdehnen seitlich', 'Bein absenken (unterer Bauch)', 'Serratusstütz', 'Stütz auf Step', 'Adduktion', 'Tiefes V', 'Reverse Butterfly', 'Butterfly Maschine', 'Incline Frontraise', 'Schrägbank Kurzhantel', 'Rudern', 'Lat-Zug'])
     expect(t.entries[0].sets).toBe(2) // Aufdehnen seitlich: 2 × 10
     expect(t.entries[1].sets).toBe(3)
+    expect(t.entries[2].sets).toBe(4) // Serratusstütz: 4 × 60 s halten
+    expect(t.entries[3].sets).toBe(4) // Stütz auf Step
     expect(t.entries[11].sets).toBe(4) // Lat-Zug laut Plan
   })
 

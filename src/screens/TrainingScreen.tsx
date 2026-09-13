@@ -190,6 +190,7 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
     unlockAudio()
     if (!settings.autoStartTimer) return
     const ex = exById.get(exerciseId)
+    if (ex?.mode === 'hold') return
     startTimer(ex?.defaultRestSec ?? settings.defaultRestSec, exerciseId)
   }
 

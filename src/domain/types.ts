@@ -1,6 +1,10 @@
 /** Datenmodell der App (SPEC.md Abschnitt 5). Alle Zeitstempel sind ISO-8601-Strings. */
 
-export const SCHEMA_VERSION = 5 as const
+export const SCHEMA_VERSION = 6 as const
+
+export type ExerciseMode = 'reps' | 'hold'
+
+export const DEFAULT_HOLD_SEC = 60
 
 export interface PlanTarget {
   sets: number
@@ -27,6 +31,14 @@ export interface Exercise {
   planTarget?: PlanTarget
   /** true = Übung ohne Gewichtsangabe (Körpergewicht, Band, Dehnung): kg-Feld wird ausgeblendet. */
   noWeight?: boolean
+  /**
+   * 'hold' = Halteübung: jeder Satz ist eine gehaltene Position über `holdSec` Sekunden,
+   * dargestellt als Donut mit Countdown. `WorkoutSet.reps` speichert dann die gehaltenen Sekunden.
+   * Fehlt → 'reps'.
+   */
+  mode?: ExerciseMode
+  /** Haltedauer je Satz in Sekunden (nur mode 'hold'); fehlt → 60. */
+  holdSec?: number
   archived: boolean
   createdAt: string
   updatedAt: string
@@ -49,16 +61,29 @@ export interface WorkoutSet {
   id: string
   /** null = kein Gewicht (Körpergewicht, Band). */
   weightKg: number | null
-  /** null nur bei noch nicht abgehakten Vorschlägen erlaubt. */
+  /** null nur bei noch nicht abgehakten Vorschlägen erlaubt. Bei Halteübungen: Sekunden. */
   reps: number | null
   done: boolean
   doneAt?: string
+}
+
+/** Laufender Halte-Ablauf einer Übung (nur im aktiven Training). Restzeit aus `endsAt`, daher nach App-Wechsel korrekt. */
+export interface HoldState {
+  /** Index des Satzes, der gerade gehalten wird bzw. auf den die Pause folgt. */
+  setIndex: number
+  phase: 'work' | 'rest'
+  /** Endzeitpunkt der Phase; fehlt, wenn pausiert. */
+  endsAt?: string
+  durationSec: number
+  /** Restsekunden, solange pausiert. */
+  pausedRemainingSec?: number
 }
 
 export interface WorkoutEntry {
   exerciseId: string
   note?: string
   sets: WorkoutSet[]
+  hold?: HoldState
 }
 
 export type WorkoutStatus = 'active' | 'done'

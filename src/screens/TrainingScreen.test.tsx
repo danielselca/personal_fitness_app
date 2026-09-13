@@ -173,8 +173,8 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
   it('Übung ohne Gewicht: nur Wdh.-Feld, kein kg-Stepper; Umschalten im Training; Anzeige „Wdh.“', () => {
     render(<TrainingScreen />)
     fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
-    addFromPicker(['Serratusstütz', 'Lat-Zug'])
-    const ser = card('Serratusstütz')
+    addFromPicker(['Aufdehnen seitlich', 'Lat-Zug'])
+    const ser = card('Aufdehnen seitlich')
     expect(within(ser).queryByLabelText('Satz 1 Gewicht')).toBeNull()
     expect(within(ser).getByLabelText('Satz 1 Wiederholungen')).toBeTruthy()
     expect(within(ser).queryByRole('button', { name: /Gewicht plus/ })).toBeNull()
@@ -274,6 +274,74 @@ describe('Vorsortierung: ohne Gewicht zuerst', () => {
     expect(ids.at(-1)).toBe('ex-lat-zug')
     expect(ids[0]).toBe('ex-aufdehnen-seitlich')
     expect(ids).toHaveLength(13)
+  })
+})
+
+describe('Halteübung als Donut (Serratusstütz: 4 × 60 s, 60 s Pause)', () => {
+  it('Start → 60 s halten → Satz abgehakt → Pause → nächster Satz; Überspringen und Abschluss', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-09-13T10:00:00Z'))
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    addFromPicker(['Serratusstütz'])
+    const c = card('Serratusstütz')
+    const donut = within(c).getByTestId('hold-donut')
+    expect(donut.getAttribute('data-phase')).toBe('idle')
+    expect(within(c).queryByLabelText('Satz 1 Wiederholungen')).toBeNull()
+    expect(within(c).getByTestId('hold-remaining').textContent).toBe('1:00')
+    // 4 Arbeits- und 3 Pausenstücke
+    expect(within(c).getAllByTestId(/^hold-seg-work-/)).toHaveLength(4)
+    expect(within(c).getAllByTestId(/^hold-seg-rest-/)).toHaveLength(3)
+
+    fireEvent.click(within(c).getByRole('button', { name: 'Halten starten' }))
+    expect(donut.getAttribute('data-phase')).toBe('work')
+    act(() => vi.advanceTimersByTime(30_000))
+    expect(within(c).getByTestId('hold-remaining').textContent).toBe('0:30')
+    expect(within(c).getByTestId('hold-seg-work-0').getAttribute('data-state')).toBe('current')
+
+    // Pause per Tipp in die Mitte, dann weiter
+    fireEvent.click(within(c).getByRole('button', { name: 'Pausieren' }))
+    act(() => vi.advanceTimersByTime(10_000))
+    expect(within(c).getByTestId('hold-remaining').textContent).toBe('0:30')
+    fireEvent.click(within(c).getByRole('button', { name: 'Weiter' }))
+
+    act(() => vi.advanceTimersByTime(30_500))
+    expect(active().entries[0].sets[0]).toMatchObject({ done: true, reps: 60, weightKg: null })
+    expect(within(c).getByTestId('hold-donut').getAttribute('data-phase')).toBe('rest')
+    expect(within(c).getByTestId('hold-seg-work-0').getAttribute('data-state')).toBe('done')
+    expect(within(c).getByTestId('hold-seg-rest-0').getAttribute('data-state')).toBe('current')
+    expect(data().timer).toBeNull() // kein zusätzlicher Pausentimer unten
+
+    // Pause überspringen → Satz 2 läuft
+    fireEvent.click(within(c).getByRole('button', { name: 'Pause überspringen' }))
+    expect(within(c).getByTestId('hold-donut').getAttribute('data-phase')).toBe('work')
+    expect(active().entries[0].hold?.setIndex).toBe(1)
+
+    // App-Wechsel: 5 Minuten vergehen auf einmal → Rest läuft komplett durch
+    act(() => {
+      vi.setSystemTime(Date.now() + 5 * 60_000)
+      vi.advanceTimersByTime(300)
+    })
+    expect(active().entries[0].sets.every((s) => s.done)).toBe(true)
+    expect(active().entries[0].hold).toBeUndefined()
+    expect(card('Serratusstütz').getAttribute('data-state')).toBe('done')
+    expect(within(card('Serratusstütz')).getByTestId('progress-line').textContent).toBe('4 Sätze erledigt · 60 s')
+  })
+
+  it('„Satz fertig“ beendet die Haltephase sofort; „− Satz“ entfernt den letzten offenen Satz', () => {
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    addFromPicker(['Stütz auf Step'])
+    const c = card('Stütz auf Step')
+    fireEvent.click(within(c).getByRole('button', { name: 'Letzten offenen Satz entfernen' }))
+    expect(active().entries[0].sets).toHaveLength(3)
+    fireEvent.click(within(c).getByRole('button', { name: 'Halten starten' }))
+    fireEvent.click(within(c).getByRole('button', { name: 'Satz fertig' }))
+    expect(active().entries[0].sets[0].done).toBe(true)
+    expect(active().entries[0].hold?.phase).toBe('rest')
+    fireEvent.click(within(c).getByRole('button', { name: 'Abbrechen' }))
+    expect(active().entries[0].hold).toBeUndefined()
+    expect(active().entries[0].sets[0].done).toBe(true)
   })
 })
 

@@ -22,7 +22,8 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 - Nur die **aktuelle Übung** (blau umrandet) ist aufgeklappt, alle anderen stehen als eine Zeile darunter; antippen klappt sie auf. Erledigte Übungen werden grün. Oben zeigen „Übung 2/8“ und ein Balken den Fortschritt.
 - **Sortieren** (oben rechts) zeigt alle Übungen als kurze Liste mit „ganz nach oben“, ↑, ↓, „ganz nach unten“ und ✕; **Ohne Gewicht zuerst** schiebt die Körpergewichts- und Bandübungen nach vorn, **Fertig** kehrt zurück. Die Übungsauswahl listet „Ohne Gewicht“ vor „Mit Gewicht“ und übernimmt Mehrfachauswahl in dieser Reihenfolge.
 - **+ Satz**, **Notiz**, **Bearbeiten** (Sätze löschen, **Ohne Gewicht** umschalten, Übung entfernen). **+ Übung** öffnet die Suche; steht die Übung nicht im Katalog, legt „… als neue Übung anlegen“ sie sofort an.
-- **Übungen ohne Gewicht** (Serratusstütz, Aufdehnen, Theraband usw.) zeigen nur ein Wdh.-Feld. Die Physio-Übungen sind so vorbelegt; jede andere Übung lässt sich im Katalog oder im Training umstellen.
+- **Halteübungen** (Serratusstütz, Stütz auf Step) zeigen einen Donut: je Satz ein Stück „Halten“, dazwischen „Pause“. Tippen in die Mitte startet, der Countdown läuft rückwärts, Pause und nächster Satz folgen automatisch mit Ton. Nochmal tippen pausiert. „Satz fertig“ beendet die Haltezeit früher.
+- **Übungen ohne Gewicht** (Aufdehnen, Theraband usw.) zeigen nur ein Wdh.-Feld. Die Physio-Übungen sind so vorbelegt; jede andere Übung lässt sich im Katalog oder im Training umstellen.
 - **Abschließen** speichert nur abgehakte Sätze. Ohne abgehakten Satz wird gefragt, ob verworfen werden soll.
 - Die App speichert jede Eingabe sofort. Wird sie unterbrochen, geht es beim nächsten Öffnen an derselben Stelle weiter, der Timer läuft korrekt weiter.
 

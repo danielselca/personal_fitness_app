@@ -72,6 +72,23 @@ describe('Migration Schema 1 → 2 (ohne Gewicht)', () => {
     expect(out.exercises.find((e) => e.id === 'ex-aufdehnen-seitlich')!.planTarget).toMatchObject({ sets: 4, reps: 8 })
   })
 
+  it('Schema 5 → 6: Serratusstütz und Stütz auf Step werden Halteübungen 4 × 60 s / 60 s Pause', () => {
+    const d = v1()
+    d.schemaVersion = 5
+    d.exercises = (d.exercises as Exercise[]).map((e) => {
+      if (e.id === 'ex-serratusstuetz') return { ...e, mode: undefined, holdSec: undefined, defaultRestSec: undefined, planTarget: undefined }
+      if (e.id === 'ex-stuetz-auf-step') return { ...e, mode: 'reps', holdSec: undefined, planTarget: undefined } // vom Nutzer ausdrücklich gesetzt
+      return e
+    })
+    d.templates = [{ id: SEED_TEMPLATE_ID, name: 'Oberkörper', entries: [{ exerciseId: 'ex-serratusstuetz', sets: 3 }, { exerciseId: 'ex-stuetz-auf-step', sets: 2 }], createdAt: 'x', updatedAt: 'x' }]
+    const out = migrateAppData(d)
+    const ser = out.exercises.find((e) => e.id === 'ex-serratusstuetz')!
+    expect(ser).toMatchObject({ mode: 'hold', holdSec: 60, defaultRestSec: 60 })
+    expect(ser.planTarget).toEqual({ sets: 4, reps: 60, weightKg: null, source: 'eigene Vorgabe' })
+    expect(out.exercises.find((e) => e.id === 'ex-stuetz-auf-step')!.mode).toBe('reps')
+    expect(out.templates[0].entries).toEqual([{ exerciseId: 'ex-serratusstuetz', sets: 4 }, { exerciseId: 'ex-stuetz-auf-step', sets: 2 }])
+  })
+
   it('Schema 3 → 4 behält einen vom Nutzer vergebenen Vorlagennamen', () => {
     const d = v1()
     d.schemaVersion = 3

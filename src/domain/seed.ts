@@ -12,6 +12,8 @@ interface SeedExercise {
   defaultRestSec?: number
   /** Ohne Gewichtsangabe (Körpergewicht, Band, Dehnung). */
   noWeight?: boolean
+  /** Halteübung: Sekunden je Satz. */
+  holdSec?: number
   plan?: { sets: number; reps: number; weightKg: number | null; source?: string }
 }
 
@@ -23,8 +25,8 @@ const SEED_EXERCISES: SeedExercise[] = [
   { id: 'ex-aufdehnen-seitlich', name: 'Aufdehnen seitlich', noWeight: true, plan: { sets: 2, reps: 10, weightKg: null, source: OWN_SOURCE } },
   { id: 'ex-ueberzuege', name: 'Überzüge' },
   { id: 'ex-bein-absenken', name: 'Bein absenken (unterer Bauch)', noWeight: true },
-  { id: 'ex-serratusstuetz', name: 'Serratusstütz', noWeight: true },
-  { id: 'ex-stuetz-auf-step', name: 'Stütz auf Step', noWeight: true },
+  { id: 'ex-serratusstuetz', name: 'Serratusstütz', noWeight: true, holdSec: 60, defaultRestSec: 60, plan: { sets: 4, reps: 60, weightKg: null, source: OWN_SOURCE } },
+  { id: 'ex-stuetz-auf-step', name: 'Stütz auf Step', noWeight: true, holdSec: 60, defaultRestSec: 60, plan: { sets: 4, reps: 60, weightKg: null, source: OWN_SOURCE } },
   { id: 'ex-uppercut-theraband', name: 'Uppercut Theraband', noWeight: true },
   { id: 'ex-uppercut-tuch', name: 'Uppercut Tuch', noWeight: true },
   { id: 'ex-bear-hug', name: 'Bear hug' },
@@ -131,6 +133,8 @@ export function buildSeedExercises(at: string): Exercise[] {
     hint: s.hint,
     defaultRestSec: s.defaultRestSec,
     noWeight: s.noWeight,
+    mode: s.holdSec ? 'hold' : undefined,
+    holdSec: s.holdSec,
     planTarget: s.plan ? { sets: s.plan.sets, reps: s.plan.reps, weightKg: s.plan.weightKg, source: s.plan.source ?? SOURCE } : undefined,
     archived: false,
     createdAt: at,
@@ -174,6 +178,11 @@ export const SEED_EXERCISE_COUNT = SEED_EXERCISES.length
 
 /** Vorgabe „Aufdehnen seitlich“ (Nutzerwunsch 2026-09-13): 2 × 10 ohne Gewicht. */
 export const AUFDEHNEN_PLAN = { sets: 2, reps: 10, weightKg: null, source: OWN_SOURCE } as const
+
+/** Halteübungen des Seeds (Nutzerwunsch 2026-09-13): 4 × 60 s halten, 60 s Pause. */
+export const HOLD_SEED: ReadonlyMap<string, { holdSec: number; restSec: number; sets: number }> = new Map(
+  SEED_EXERCISES.filter((e) => e.holdSec).map((e) => [e.id, { holdSec: e.holdSec!, restSec: e.defaultRestSec ?? 60, sets: e.plan?.sets ?? 4 }]),
+)
 
 /** Aktuelle Seed-Hinweise je ID (für die Bereinigung alter Hinweise in der Migration). */
 export const SEED_HINTS: ReadonlyMap<string, string | undefined> = new Map(SEED_EXERCISES.map((s) => [s.id, s.hint]))

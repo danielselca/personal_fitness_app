@@ -28,6 +28,8 @@ export function ExerciseForm({
   const [aliases, setAliases] = useState(initial?.aliases.join(', ') ?? '')
   const [hint, setHint] = useState(initial?.hint ?? '')
   const [noWeight, setNoWeight] = useState(!!initial?.noWeight)
+  const [mode, setMode] = useState<'reps' | 'hold'>(initial?.mode === 'hold' ? 'hold' : 'reps')
+  const [holdSec, setHoldSec] = useState(initial?.holdSec ? String(initial.holdSec) : '60')
   const [rest, setRest] = useState(initial?.defaultRestSec ? String(initial.defaultRestSec) : '')
   const [step, setStep] = useState(initial?.weightStep ? formatNumber(initial.weightStep) : '')
   const [planSets, setPlanSets] = useState(initial?.planTarget ? String(initial.planTarget.sets) : '')
@@ -41,12 +43,15 @@ export function ExerciseForm({
     const stepN = step.trim() ? parseWeight(step) : undefined
     if (stepN !== undefined && (stepN === null || Number.isNaN(stepN) || stepN <= 0)) return setError('Gewichtsschritt: Zahl größer 0, z. B. 2,5.')
 
+    const holdN = mode === 'hold' ? Number(holdSec) : undefined
+    if (holdN !== undefined && (!Number.isInteger(holdN) || holdN < 5 || holdN > 900)) return setError('Haltedauer: ganze Sekunden zwischen 5 und 900.')
+
     let planTarget: Exercise['planTarget'] | undefined
     const anyPlan = planSets.trim() || planReps.trim() || planWeight.trim()
     if (anyPlan) {
       const s = Number(planSets)
       const r = Number(planReps)
-      const w = !noWeight && planWeight.trim() ? parseWeight(planWeight) : null
+      const w = !noWeight && mode !== 'hold' && planWeight.trim() ? parseWeight(planWeight) : null
       if (!Number.isInteger(s) || s < 1 || !Number.isInteger(r) || r < 1) return setError('Vorgabe: Sätze und Wdh. als ganze Zahlen ab 1 angeben.')
       if (w !== null && (Number.isNaN(w) || w < 0)) return setError('Vorgabe: Gewicht ungültig.')
       planTarget = { sets: s, reps: r, weightKg: w, source: initial?.planTarget?.source ?? 'eigene Vorgabe' }
@@ -57,6 +62,8 @@ export function ExerciseForm({
       aliases: aliases.split(',').map((a) => a.trim()).filter(Boolean),
       hint: hint.trim() || undefined,
       noWeight: noWeight || undefined,
+      mode: mode === 'hold' ? 'hold' : undefined,
+      holdSec: holdN,
       defaultRestSec: restN,
       weightStep: stepN ?? undefined,
       planTarget,
@@ -89,9 +96,23 @@ export function ExerciseForm({
             {error}
           </p>
         )}
-        <div className="card" style={{ padding: '4px 12px', marginBottom: 16 }}>
-          <Toggle label="Ohne Gewicht" hint="Körpergewicht, Band, Dehnung: nur Wiederholungen erfassen" checked={noWeight} onChange={setNoWeight} />
+        <div className="field">
+          <span>Art</span>
+          <div className="segment" role="radiogroup" aria-label="Art der Übung" style={{ marginBottom: 0 }}>
+            <button type="button" role="radio" aria-checked={mode === 'reps'} className={mode === 'reps' ? 'on' : ''} onClick={() => setMode('reps')}>Wiederholungen</button>
+            <button type="button" role="radio" aria-checked={mode === 'hold'} className={mode === 'hold' ? 'on' : ''} onClick={() => setMode('hold')}>Halten (Zeit)</button>
+          </div>
         </div>
+        {mode === 'hold' ? (
+          <label className="field">
+            <span>Haltedauer je Satz (s)</span>
+            <input className="input input-num" value={holdSec} onChange={(e) => setHoldSec(e.target.value)} inputMode="numeric" aria-label="Haltedauer" />
+          </label>
+        ) : (
+          <div className="card" style={{ padding: '4px 12px', marginBottom: 16 }}>
+            <Toggle label="Ohne Gewicht" hint="Körpergewicht, Band, Dehnung: nur Wiederholungen erfassen" checked={noWeight} onChange={setNoWeight} />
+          </div>
+        )}
         <div className="btn-row" style={{ gap: 12 }}>
           <label className="field" style={{ flex: 1 }}>
             <span>Gerät-Nr.</span>
@@ -101,7 +122,7 @@ export function ExerciseForm({
             <span>Pause (s)</span>
             <input className="input" value={rest} onChange={(e) => setRest(e.target.value)} inputMode="numeric" placeholder="Standard" />
           </label>
-          {!noWeight && (
+          {!noWeight && mode !== 'hold' && (
             <label className="field" style={{ flex: 1 }}>
               <span>Schritt (kg)</span>
               <input className="input" value={step} onChange={(e) => setStep(e.target.value)} inputMode="decimal" placeholder="Standard" />
@@ -126,10 +147,10 @@ export function ExerciseForm({
               <input className="input input-num" value={planSets} onChange={(e) => setPlanSets(e.target.value)} inputMode="numeric" aria-label="Vorgabe Sätze" />
             </label>
             <label className="field" style={{ flex: 1 }}>
-              <span>Wdh.</span>
+              <span>{mode === 'hold' ? 'Sek.' : 'Wdh.'}</span>
               <input className="input input-num" value={planReps} onChange={(e) => setPlanReps(e.target.value)} inputMode="numeric" aria-label="Vorgabe Wdh." />
             </label>
-            {!noWeight && (
+            {!noWeight && mode !== 'hold' && (
               <label className="field" style={{ flex: 1 }}>
                 <span>kg</span>
                 <input className="input input-num" value={planWeight} onChange={(e) => setPlanWeight(e.target.value)} inputMode="decimal" aria-label="Vorgabe Gewicht" />

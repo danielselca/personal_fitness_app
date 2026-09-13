@@ -1,4 +1,4 @@
-import { AUFDEHNEN_PLAN, buildStandardEntries, LEGACY_TEMPLATE_NAME, SEED_HINTS, SEED_NO_WEIGHT_IDS, SEED_TEMPLATE_ID, SEED_TEMPLATE_NAME } from './seed.ts'
+import { AUFDEHNEN_PLAN, buildStandardEntries, HOLD_SEED, LEGACY_TEMPLATE_NAME, SEED_HINTS, SEED_NO_WEIGHT_IDS, SEED_TEMPLATE_ID, SEED_TEMPLATE_NAME } from './seed.ts'
 import { DEFAULT_SETTINGS, SCHEMA_VERSION, type AppData, type Exercise, type Template, type Workout } from './types.ts'
 
 /**
@@ -64,6 +64,27 @@ const MIGRATIONS: Record<number, (d: Record<string, unknown>) => Record<string, 
         : t,
     )
     return { ...d, schemaVersion: 5, exercises, templates }
+  },
+  // 5 → 6: Serratusstütz und Stütz auf Step werden gehalten (4 × 60 s, 60 s Pause) → Halte-Modus,
+  // sofern der Nutzer die Art nicht schon selbst gesetzt hat. Seed-Vorlage: 3 → 4 Sätze.
+  5: (d) => {
+    const exercises = (Array.isArray(d.exercises) ? (d.exercises as Exercise[]) : []).map((e) => {
+      const h = HOLD_SEED.get(e.id)
+      if (!h || e.mode !== undefined) return e
+      return {
+        ...e,
+        mode: 'hold' as const,
+        holdSec: h.holdSec,
+        defaultRestSec: e.defaultRestSec ?? h.restSec,
+        planTarget: e.planTarget ?? { sets: h.sets, reps: h.holdSec, weightKg: null, source: 'eigene Vorgabe' },
+      }
+    })
+    const templates = (Array.isArray(d.templates) ? (d.templates as Template[]) : []).map((t) =>
+      t.id === SEED_TEMPLATE_ID
+        ? { ...t, entries: t.entries.map((en) => (HOLD_SEED.has(en.exerciseId) && en.sets === 3 ? { ...en, sets: HOLD_SEED.get(en.exerciseId)!.sets } : en)) }
+        : t,
+    )
+    return { ...d, schemaVersion: 6, exercises, templates }
   },
 }
 

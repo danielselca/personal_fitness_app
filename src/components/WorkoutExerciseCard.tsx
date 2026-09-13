@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
+import { holdSecFor, isHold } from '../domain/hold.ts'
 import { entryState } from '../domain/progress.ts'
 import { lastValuesFor } from '../domain/suggestions.ts'
 import type { Exercise, WorkoutEntry, WorkoutSet } from '../domain/types.ts'
-import { formatKg, formatRelativeDay, formatSet } from '../lib/format.ts'
+import { formatKg, formatRelativeDay, formatSetFor } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
+import { HoldDonut } from './HoldDonut.tsx'
 import { SetRow } from './SetRow.tsx'
 
 /**
@@ -47,12 +49,15 @@ export function WorkoutExerciseCard({
   const currentIndex = entry.sets.findIndex((s) => !s.done)
   const weightStep = exercise.weightStep ?? settings.weightStep
   const noWeight = !!exercise.noWeight
+  const hold = isHold(exercise)
   const doneCount = entry.sets.filter((s) => s.done).length
   const state = entryState(entry, isCurrent)
 
   const sourceLine = last
     ? `Letztes Mal: ${formatRelativeDay(last.date)} · ${last.sets.length} Sätze`
-    : exercise.planTarget
+    : hold
+      ? `${entry.sets.length} × ${holdSecFor(exercise)} s halten`
+      : exercise.planTarget
       ? noWeight
         ? `Vorgabe: ${exercise.planTarget.sets} × ${exercise.planTarget.reps}`
         : `Vorgabe: ${exercise.planTarget.sets} × ${exercise.planTarget.reps} × ${formatKg(exercise.planTarget.weightKg)}`
@@ -61,8 +66,8 @@ export function WorkoutExerciseCard({
   const lastDone = [...entry.sets].reverse().find((s) => s.done && s.reps !== null)
   const collapsedLine =
     state === 'done'
-      ? `${doneCount} Sätze erledigt${lastDone ? ` · ${formatSet(lastDone.reps!, noWeight ? null : lastDone.weightKg, true)}` : ''}`
-      : `${doneCount}/${entry.sets.length} Sätze${lastDone ? ` · zuletzt ${formatSet(lastDone.reps!, noWeight ? null : lastDone.weightKg, true)}` : ''}`
+      ? `${doneCount} Sätze erledigt${lastDone ? ` · ${formatSetFor(exercise.mode, lastDone.reps!, noWeight ? null : lastDone.weightKg, true)}` : ''}`
+      : `${doneCount}/${entry.sets.length} Sätze${lastDone ? ` · zuletzt ${formatSetFor(exercise.mode, lastDone.reps!, noWeight ? null : lastDone.weightKg, true)}` : ''}`
 
   return (
     <section className={`card wcard wcard-${state} ${expanded ? 'wcard-open' : ''}`} aria-label={exercise.name} data-state={state}>
@@ -89,6 +94,9 @@ export function WorkoutExerciseCard({
         <div className="wcard-body">
           {exercise.hint && <p className="muted wcard-hint ellipsis" title={exercise.hint}>{exercise.hint}</p>}
 
+          {hold ? (
+            <HoldDonut exercise={exercise} entry={entry} />
+          ) : (
           <div className="setrows">
             <div className="setrow-header muted">
               <span />
@@ -117,9 +125,10 @@ export function WorkoutExerciseCard({
               />
             ))}
           </div>
+          )}
 
           <div className="btn-row" style={{ marginTop: 8 }}>
-            <button type="button" className="btn btn-sm" onClick={() => addSet(exercise.id)}>+ Satz</button>
+            {!hold && <button type="button" className="btn btn-sm" onClick={() => addSet(exercise.id)}>+ Satz</button>}
             <button type="button" className="btn btn-sm" aria-expanded={noteOpen} onClick={() => setNoteOpen(!noteOpen)}>
               {entry.note ? 'Notiz ✎' : 'Notiz'}
             </button>
@@ -129,15 +138,17 @@ export function WorkoutExerciseCard({
           </div>
           {editing && (
             <div className="btn-row" style={{ marginTop: 8 }}>
-              <button
-                type="button"
-                className={`btn btn-sm ${noWeight ? 'btn-on' : ''}`}
-                aria-pressed={noWeight}
-                aria-label={`${exercise.name}: ohne Gewicht`}
-                onClick={() => updateExercise(exercise.id, { noWeight: !noWeight })}
-              >
-                {noWeight ? '✓ Ohne Gewicht' : 'Ohne Gewicht'}
-              </button>
+              {!hold && (
+                <button
+                  type="button"
+                  className={`btn btn-sm ${noWeight ? 'btn-on' : ''}`}
+                  aria-pressed={noWeight}
+                  aria-label={`${exercise.name}: ohne Gewicht`}
+                  onClick={() => updateExercise(exercise.id, { noWeight: !noWeight })}
+                >
+                  {noWeight ? '✓ Ohne Gewicht' : 'Ohne Gewicht'}
+                </button>
+              )}
               <button type="button" className="btn btn-sm btn-danger-text" aria-label={`${exercise.name} entfernen`} onClick={() => remove(exercise.id)}>
                 Übung entfernen
               </button>

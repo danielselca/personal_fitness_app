@@ -70,7 +70,8 @@ function WorkoutDetail({ id, onBack }: { id: string; onBack: () => void }) {
   const [saveTemplate, setSaveTemplate] = useState(false)
   const [savedName, setSavedName] = useState<string | null>(null)
   const nameOf = (eid: string) => exercises.find((e) => e.id === eid)?.name ?? 'Unbekannt'
-  const isNoWeight = (eid: string) => !!exercises.find((e) => e.id === eid)?.noWeight
+  const isNoWeight = (eid: string) => !!exercises.find((e) => e.id === eid)?.noWeight || exercises.find((e) => e.id === eid)?.mode === 'hold'
+  const unitOf = (eid: string) => (exercises.find((e) => e.id === eid)?.mode === 'hold' ? 's' : 'Wdh.')
 
   if (!workout) {
     return (
@@ -129,7 +130,7 @@ function WorkoutDetail({ id, onBack }: { id: string; onBack: () => void }) {
                   )}
                   <NumberField kind="reps" value={s.reps} label={`${nameOf(entry.exerciseId)} Satz ${i + 1} Wiederholungen`} placeholder="Wdh."
                     onChange={(v) => { if (v !== null) edit((w) => ({ ...w, entries: w.entries.map((e) => (e.exerciseId === entry.exerciseId ? { ...e, sets: e.sets.map((x) => (x.id === s.id ? { ...x, reps: v } : x)) } : e)) })) }} />
-                  {isNoWeight(entry.exerciseId) && <span className="muted set-unit" aria-hidden="true">Wdh.</span>}
+                  {isNoWeight(entry.exerciseId) && <span className="muted set-unit" aria-hidden="true">{unitOf(entry.exerciseId)}</span>}
                 </span>
                 <button type="button" className="btn btn-icon btn-sm" aria-label={`${nameOf(entry.exerciseId)} Satz ${i + 1} löschen`}
                   onClick={() => edit((w) => ({ ...w, entries: w.entries.map((e) => (e.exerciseId === entry.exerciseId ? { ...e, sets: e.sets.filter((x) => x.id !== s.id) } : e)).filter((e) => e.sets.length > 0) }))}>✕</button>

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { BarChart } from '../components/BarChart.tsx'
 import { WeightChart } from '../components/WeightChart.tsx'
 import { finishedWorkouts, weightProgression, workoutVolume, workoutsPerWeek } from '../domain/stats.ts'
-import { formatDate, formatKg, formatNumber, formatVolume } from '../lib/format.ts'
+import { formatDate, formatKg, formatNumber, formatSetFor, formatVolume } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
 
 /** Statistik (F11, AK17–AK19): Trainings pro Woche, Volumen je Training, Gewichtsverlauf je Übung. */
@@ -19,6 +19,7 @@ export function StatsView() {
   const [selected, setSelected] = useState<string>('')
   const selectedId = selected || exercisesWithHistory[0]?.id || ''
   const progression = useMemo(() => (selectedId ? weightProgression(workouts, selectedId) : []), [workouts, selectedId])
+  const selectedEx = exercises.find((e) => e.id === selectedId)
 
   if (finished.length === 0) {
     return (
@@ -68,15 +69,15 @@ export function StatsView() {
                 ))}
               </select>
             </label>
-            <WeightChart points={progression} />
+            <WeightChart points={progression} mode={selectedEx?.mode === 'hold' ? 'seconds' : selectedEx?.noWeight ? 'reps' : 'weight'} />
             <table className="table" style={{ marginTop: 8 }}>
               <thead><tr><th>Datum</th><th>Max.</th><th>Sätze</th></tr></thead>
               <tbody>
                 {[...progression].reverse().map((p) => (
                   <tr key={p.workoutId}>
                     <td>{formatDate(p.date)}</td>
-                    <td className="num">{p.maxWeightKg === null ? '–' : `${p.reps} × ${formatKg(p.maxWeightKg)}`}</td>
-                    <td className="num muted">{p.sets.map((s) => `${s.reps}×${s.weightKg === null ? '–' : formatNumber(s.weightKg)}`).join(', ')}</td>
+                    <td className="num">{p.maxWeightKg === null ? (p.reps === null ? '–' : formatSetFor(selectedEx?.mode, p.reps, null)) : `${p.reps} × ${formatKg(p.maxWeightKg)}`}</td>
+                    <td className="num muted">{p.sets.map((s) => formatSetFor(selectedEx?.mode, s.reps, s.weightKg)).join(', ')}</td>
                   </tr>
                 ))}
               </tbody>

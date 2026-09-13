@@ -3,6 +3,7 @@ import { useStore } from 'zustand'
 import { applyImport, type ImportMode, type ImportResult } from '../domain/backup.ts'
 import { newId, nowIso } from '../domain/ids.ts'
 import { migrateAppData } from '../domain/migrate.ts'
+import { advanceHold, holdSecFor, pauseHold, restSecFor, resumeHold, startHold } from '../domain/hold.ts'
 import { noWeightFirst } from '../domain/progress.ts'
 import { createSeedData } from '../domain/seed.ts'
 import { lastValuesFor, normalizeName, suggestSets } from '../domain/suggestions.ts'
@@ -42,6 +43,16 @@ export interface AppStore {
   restoreSet(exerciseId: string, set: WorkoutSet, index: number): void
   setSetDone(exerciseId: string, setId: string, done: boolean): boolean
   setEntryNote(exerciseId: string, note: string): void
+  // Halteübungen (Donut): Ablauf Arbeit → Pause → … je Übung
+  startHold(exerciseId: string, nowMs?: number): void
+  pauseHold(exerciseId: string, nowMs?: number): void
+  resumeHold(exerciseId: string, nowMs?: number): void
+  /** Aktuelle Phase sofort abschließen (Überspringen). */
+  skipHoldPhase(exerciseId: string, nowMs?: number): number
+  /** Ablauf abbrechen; abgehakte Sätze bleiben. */
+  stopHold(exerciseId: string): void
+  /** Abgelaufene Phasen nachziehen; liefert die Zahl abgeschlossener Phasen (für das Signal). */
+  advanceHold(exerciseId: string, nowMs?: number): number
   finishWorkout(): Workout | null
   discardWorkout(): void
 
@@ -308,6 +319,43 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         updateEntry(exerciseId, (e) => ({ ...e, note: note.trim() ? note : undefined }))
       },
 
+      startHold(exerciseId, nowMs = Date.now()) {
+        const ex = get().data.exercises.find((e) => e.id === exerciseId)
+        if (!ex) return
+        updateEntry(exerciseId, (e) => startHold(e, holdSecFor(ex), nowMs))
+      },
+      pauseHold(exerciseId, nowMs = Date.now()) {
+        updateEntry(exerciseId, (e) => pauseHold(e, nowMs))
+      },
+      resumeHold(exerciseId, nowMs = Date.now()) {
+        updateEntry(exerciseId, (e) => resumeHold(e, nowMs))
+      },
+      skipHoldPhase(exerciseId, nowMs = Date.now()) {
+        const d = get().data
+        const ex = d.exercises.find((e) => e.id === exerciseId)
+        if (!ex) return 0
+        let events = 0
+        updateEntry(exerciseId, (e) => {
+          const r = advanceHold(resumeHold(e, nowMs), holdSecFor(ex), restSecFor(ex, d.settings), nowMs, nowIso(), true)
+          events = r.events
+          return r.entry
+        })
+        return events
+      },
+      stopHold(exerciseId) {
+        updateEntry(exerciseId, (e) => (e.hold ? { ...e, hold: undefined } : e))
+      },
+      advanceHold(exerciseId, nowMs = Date.now()) {
+        const d = get().data
+        const ex = d.exercises.find((e) => e.id === exerciseId)
+        const entry = get().activeWorkout()?.entries.find((e) => e.exerciseId === exerciseId)
+        if (!ex || !entry?.hold || entry.hold.pausedRemainingSec !== undefined) return 0
+        if (new Date(entry.hold.endsAt!).getTime() > nowMs) return 0
+        const r = advanceHold(entry, holdSecFor(ex), restSecFor(ex, d.settings), nowMs, nowIso())
+        updateEntry(exerciseId, () => r.entry)
+        return r.events
+      },
+
       finishWorkout() {
         const active = get().activeWorkout()
         if (!active) return null
@@ -318,7 +366,7 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
           finishedAt: at,
           updatedAt: at,
           entries: active.entries
-            .map((e) => ({ ...e, sets: e.sets.filter((s) => s.done) }))
+            .map((e) => ({ ...e, hold: undefined, sets: e.sets.filter((s) => s.done) }))
             .filter((e) => e.sets.length > 0),
         }
         update((d) => ({
