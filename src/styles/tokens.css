@@ -8,7 +8,10 @@
   --border: #d9d9de;
   --header-bg: #151517;
   --header-text: #ffffff;
-  --accent: #151517;
+  --primary: #2f6fed;
+  --primary-soft: #e4ecfd;
+  --primary-text: #ffffff;
+  --accent: #2f6fed;
   --accent-text: #ffffff;
   --success: #1f9d55;
   --success-soft: #dff5e8;
@@ -45,8 +48,11 @@
     --border: #3a3a3c;
     --header-bg: #000000;
     --header-text: #ffffff;
-    --accent: #f5f5f7;
-    --accent-text: #111114;
+    --primary: #5b93ff;
+    --primary-soft: #17274a;
+    --primary-text: #ffffff;
+    --accent: #5b93ff;
+    --accent-text: #ffffff;
     --success: #30d158;
     --success-soft: #12351f;
     --danger: #ff453a;

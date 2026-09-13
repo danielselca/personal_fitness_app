@@ -25,6 +25,15 @@ export function parseWeight(input: string): number | null {
   return Math.round(Number(cleaned) * 100) / 100
 }
 
+/**
+ * Satz kompakt: "10 × 45" (kg ohne Einheit) bzw. "12 Wdh." ohne Gewicht.
+ * `withUnit` hängt " kg" an, wenn ein Gewicht vorhanden ist.
+ */
+export function formatSet(reps: number, weightKg: number | null, withUnit = false): string {
+  if (weightKg === null) return `${reps} Wdh.`
+  return `${reps} × ${formatNumber(weightKg)}${withUnit ? ' kg' : ''}`
+}
+
 /** Wiederholungen: ganze Zahl ≥ 1, sonst NaN. Leer → null. */
 export function parseReps(input: string): number | null {
   const cleaned = input.trim()

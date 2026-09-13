@@ -5,7 +5,7 @@ import { WeightChart } from '../components/WeightChart.tsx'
 import { weightProgression } from '../domain/stats.ts'
 import { matchesQuery } from '../domain/suggestions.ts'
 import type { Exercise } from '../domain/types.ts'
-import { formatDate, formatKg, formatMmSs, formatNumber } from '../lib/format.ts'
+import { formatDate, formatKg, formatMmSs, formatNumber, formatSet } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
 
 export function ExercisesScreen() {
@@ -64,7 +64,8 @@ function ExerciseList({ onSelect }: { onSelect: (id: string) => void }) {
                 <span className="row-title ellipsis" style={{ display: 'block' }}>{e.name}</span>
                 <span className="row-sub">
                   {e.machineNo && `Gerät ${e.machineNo} · `}
-                  {e.planTarget ? `Vorgabe ${e.planTarget.sets} × ${e.planTarget.reps} × ${formatKg(e.planTarget.weightKg)}` : 'keine Vorgabe'}
+                  {e.noWeight && 'ohne Gewicht · '}
+                  {e.planTarget ? `Vorgabe ${e.planTarget.sets} × ${e.planTarget.reps}${e.noWeight ? '' : ` × ${formatKg(e.planTarget.weightKg)}`}` : 'keine Vorgabe'}
                 </span>
               </span>
               <span className="muted" aria-hidden="true">›</span>
@@ -128,12 +129,13 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
           {exercise.machineNo && (<><dt>Gerät</dt><dd>{exercise.machineNo}</dd></>)}
           {exercise.aliases.length > 0 && (<><dt>Auch</dt><dd>{exercise.aliases.join(', ')}</dd></>)}
           <dt>Pause</dt><dd>{formatMmSs(exercise.defaultRestSec ?? settings.defaultRestSec)} min{exercise.defaultRestSec ? '' : ' (Standard)'}</dd>
-          <dt>Schritt</dt><dd>{formatNumber(exercise.weightStep ?? settings.weightStep)} kg{exercise.weightStep ? '' : ' (Standard)'}</dd>
+          <dt>Gewicht</dt><dd>{exercise.noWeight ? 'ohne (nur Wiederholungen)' : 'in kg'}</dd>
+          {!exercise.noWeight && (<><dt>Schritt</dt><dd>{formatNumber(exercise.weightStep ?? settings.weightStep)} kg{exercise.weightStep ? '' : ' (Standard)'}</dd></>)}
           {exercise.planTarget && (
             <>
               <dt>Vorgabe</dt>
               <dd>
-                {exercise.planTarget.sets} × {exercise.planTarget.reps} × {formatKg(exercise.planTarget.weightKg)}
+                {exercise.planTarget.sets} × {exercise.planTarget.reps}{!exercise.noWeight && <> × {formatKg(exercise.planTarget.weightKg)}</>}
                 <span className="muted"> ({exercise.planTarget.source})</span>
               </dd>
             </>
@@ -159,19 +161,19 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
       ) : (
         <>
           <div className="card">
-            <WeightChart points={history} />
+            <WeightChart points={history} mode={exercise.noWeight ? 'reps' : 'weight'} />
           </div>
           <div className="card" style={{ marginTop: 12 }}>
             <table className="table">
               <thead>
-                <tr><th>Datum</th><th>Max.</th><th>Sätze</th></tr>
+                <tr><th>Datum</th><th>{exercise.noWeight ? 'Max. Wdh.' : 'Max.'}</th><th>Sätze</th></tr>
               </thead>
               <tbody>
                 {[...history].reverse().map((p) => (
                   <tr key={p.workoutId}>
                     <td>{formatDate(p.date)}</td>
-                    <td className="num">{p.maxWeightKg === null ? '–' : `${p.reps} × ${formatKg(p.maxWeightKg)}`}</td>
-                    <td className="num muted">{p.sets.map((s) => `${s.reps}×${s.weightKg === null ? '–' : formatNumber(s.weightKg)}`).join(', ')}</td>
+                    <td className="num">{p.maxWeightKg === null ? (p.reps === null ? '–' : `${p.reps} Wdh.`) : `${p.reps} × ${formatKg(p.maxWeightKg)}`}</td>
+                    <td className="num muted">{p.sets.map((s) => formatSet(s.reps, exercise.noWeight ? null : s.weightKg)).join(', ')}</td>
                   </tr>
                 ))}
               </tbody>

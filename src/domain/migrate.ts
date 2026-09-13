@@ -1,4 +1,5 @@
-import { DEFAULT_SETTINGS, SCHEMA_VERSION, type AppData } from './types.ts'
+import { SEED_NO_WEIGHT_IDS } from './seed.ts'
+import { DEFAULT_SETTINGS, SCHEMA_VERSION, type AppData, type Exercise, type Workout } from './types.ts'
 
 /**
  * Migrationsgerüst: hebt gespeicherte Daten älterer Versionen auf die aktuelle an.
@@ -7,6 +8,23 @@ import { DEFAULT_SETTINGS, SCHEMA_VERSION, type AppData } from './types.ts'
 const MIGRATIONS: Record<number, (d: Record<string, unknown>) => Record<string, unknown>> = {
   // 0 → 1: erste Version (nur Vollständigkeit der Felder sicherstellen)
   0: (d) => ({ ...d, schemaVersion: 1 }),
+  // 1 → 2: Kennzeichen „ohne Gewicht“ für die Physio-/Dehnübungen des Seeds nachtragen,
+  // sofern der Nutzer dort noch nie ein Gewicht abgehakt hat.
+  1: (d) => {
+    const exercises = Array.isArray(d.exercises) ? (d.exercises as Exercise[]) : []
+    const workouts = Array.isArray(d.workouts) ? (d.workouts as Workout[]) : []
+    const weighted = new Set<string>()
+    for (const w of workouts) {
+      for (const e of w.entries ?? []) {
+        if ((e.sets ?? []).some((s) => s.done && s.weightKg !== null && s.weightKg !== undefined)) weighted.add(e.exerciseId)
+      }
+    }
+    return {
+      ...d,
+      schemaVersion: 2,
+      exercises: exercises.map((e) => (e.noWeight === undefined && SEED_NO_WEIGHT_IDS.has(e.id) && !weighted.has(e.id) ? { ...e, noWeight: true } : e)),
+    }
+  },
 }
 
 export class MigrationError extends Error {}

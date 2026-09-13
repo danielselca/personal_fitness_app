@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Exercise } from '../domain/types.ts'
 import { formatNumber, parseWeight } from '../lib/format.ts'
 import { Sheet } from './Sheet.tsx'
+import { Toggle } from './Toggle.tsx'
 import type { ExerciseInput } from '../store/appStore.ts'
 
 export interface ExerciseFormValues extends ExerciseInput {
@@ -26,6 +27,7 @@ export function ExerciseForm({
   const [machineNo, setMachineNo] = useState(initial?.machineNo ?? '')
   const [aliases, setAliases] = useState(initial?.aliases.join(', ') ?? '')
   const [hint, setHint] = useState(initial?.hint ?? '')
+  const [noWeight, setNoWeight] = useState(!!initial?.noWeight)
   const [rest, setRest] = useState(initial?.defaultRestSec ? String(initial.defaultRestSec) : '')
   const [step, setStep] = useState(initial?.weightStep ? formatNumber(initial.weightStep) : '')
   const [planSets, setPlanSets] = useState(initial?.planTarget ? String(initial.planTarget.sets) : '')
@@ -44,7 +46,7 @@ export function ExerciseForm({
     if (anyPlan) {
       const s = Number(planSets)
       const r = Number(planReps)
-      const w = planWeight.trim() ? parseWeight(planWeight) : null
+      const w = !noWeight && planWeight.trim() ? parseWeight(planWeight) : null
       if (!Number.isInteger(s) || s < 1 || !Number.isInteger(r) || r < 1) return setError('Vorgabe: Sätze und Wdh. als ganze Zahlen ab 1 angeben.')
       if (w !== null && (Number.isNaN(w) || w < 0)) return setError('Vorgabe: Gewicht ungültig.')
       planTarget = { sets: s, reps: r, weightKg: w, source: initial?.planTarget?.source ?? 'eigene Vorgabe' }
@@ -54,6 +56,7 @@ export function ExerciseForm({
       machineNo: machineNo.trim() || undefined,
       aliases: aliases.split(',').map((a) => a.trim()).filter(Boolean),
       hint: hint.trim() || undefined,
+      noWeight: noWeight || undefined,
       defaultRestSec: restN,
       weightStep: stepN ?? undefined,
       planTarget,
@@ -86,6 +89,9 @@ export function ExerciseForm({
             {error}
           </p>
         )}
+        <div className="card" style={{ padding: '4px 12px', marginBottom: 16 }}>
+          <Toggle label="Ohne Gewicht" hint="Körpergewicht, Band, Dehnung: nur Wiederholungen erfassen" checked={noWeight} onChange={setNoWeight} />
+        </div>
         <div className="btn-row" style={{ gap: 12 }}>
           <label className="field" style={{ flex: 1 }}>
             <span>Gerät-Nr.</span>
@@ -95,10 +101,12 @@ export function ExerciseForm({
             <span>Pause (s)</span>
             <input className="input" value={rest} onChange={(e) => setRest(e.target.value)} inputMode="numeric" placeholder="Standard" />
           </label>
-          <label className="field" style={{ flex: 1 }}>
-            <span>Schritt (kg)</span>
-            <input className="input" value={step} onChange={(e) => setStep(e.target.value)} inputMode="decimal" placeholder="Standard" />
-          </label>
+          {!noWeight && (
+            <label className="field" style={{ flex: 1 }}>
+              <span>Schritt (kg)</span>
+              <input className="input" value={step} onChange={(e) => setStep(e.target.value)} inputMode="decimal" placeholder="Standard" />
+            </label>
+          )}
         </div>
         <label className="field">
           <span>Weitere Namen (durch Komma)</span>
@@ -121,10 +129,12 @@ export function ExerciseForm({
               <span>Wdh.</span>
               <input className="input input-num" value={planReps} onChange={(e) => setPlanReps(e.target.value)} inputMode="numeric" aria-label="Vorgabe Wdh." />
             </label>
-            <label className="field" style={{ flex: 1 }}>
-              <span>kg</span>
-              <input className="input input-num" value={planWeight} onChange={(e) => setPlanWeight(e.target.value)} inputMode="decimal" aria-label="Vorgabe Gewicht" />
-            </label>
+            {!noWeight && (
+              <label className="field" style={{ flex: 1 }}>
+                <span>kg</span>
+                <input className="input input-num" value={planWeight} onChange={(e) => setPlanWeight(e.target.value)} inputMode="decimal" aria-label="Vorgabe Gewicht" />
+              </label>
+            )}
           </div>
           {initial?.planTarget && (
             <p className="muted" style={{ fontSize: 13, marginTop: -6 }}>

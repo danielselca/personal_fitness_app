@@ -101,9 +101,20 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
     addFromPicker(['Lat-Zug', 'Rudern'])
     expect(active().entries.map((e) => e.exerciseId)).toEqual(['ex-lat-zug', 'ex-rudern'])
-    fireEvent.click(within(card('Rudern')).getByRole('button', { name: 'Rudern nach oben' }))
+    // Sortiermodus: kompakte Zeilen statt Karten, Pfeile nur dort
+    expect(within(card('Lat-Zug')).queryByRole('button', { name: 'Lat-Zug nach oben' })).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Sortieren' }))
+    const sortList = screen.getByRole('list', { name: 'Reihenfolge der Übungen' })
+    expect(screen.queryAllByRole('region')).toHaveLength(0)
+    fireEvent.click(within(sortList).getByRole('button', { name: 'Rudern nach oben' }))
     expect(active().entries.map((e) => e.exerciseId)).toEqual(['ex-rudern', 'ex-lat-zug'])
-    expect(within(card('Rudern')).getByRole('button', { name: 'Rudern nach oben' }).hasAttribute('disabled')).toBe(true)
+    expect(within(sortList).getByRole('button', { name: 'Rudern nach oben' }).hasAttribute('disabled')).toBe(true)
+    fireEvent.click(screen.getByRole('button', { name: 'Fertig' }))
+    expect(screen.getAllByRole('region')).toHaveLength(2)
+    // Nach dem Sortieren ist Rudern die aktuelle Übung (ausgeklappt), Lat-Zug eingeklappt
+    expect(within(card('Rudern')).getByRole('button', { expanded: true })).toBeTruthy()
+    expect(within(card('Lat-Zug')).getByRole('button', { expanded: false })).toBeTruthy()
+    fireEvent.click(within(card('Lat-Zug')).getByRole('button', { expanded: false }))
 
     fireEvent.click(within(card('Lat-Zug')).getByRole('button', { name: 'Notiz' }))
     fireEvent.change(within(card('Lat-Zug')).getByLabelText('Notiz zu Lat-Zug'), { target: { value: 'Griff eng' } })
@@ -116,11 +127,74 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     fireEvent.click(within(dialog).getByRole('button', { name: '„Beinpresse“ als neue Übung anlegen' }))
     expect(data().exercises.some((e) => e.name === 'Beinpresse')).toBe(true)
     expect(card('Beinpresse')).toBeTruthy()
+    fireEvent.click(within(card('Beinpresse')).getByRole('button', { expanded: false })) // neue Übung ist hinten, daher eingeklappt
     expect(within(card('Beinpresse')).getByTestId('source-line').textContent).toBe('Keine früheren Werte')
     expect(within(card('Beinpresse')).getByRole('button', { name: 'Satz 1 abhaken' }).hasAttribute('disabled')).toBe(true)
 
+    // Entfernen über den Bearbeiten-Modus der Karte
+    fireEvent.click(within(card('Rudern')).getByRole('button', { name: 'Rudern: Sätze bearbeiten' }))
     fireEvent.click(within(card('Rudern')).getByRole('button', { name: 'Rudern entfernen' }))
     expect(active().entries.map((e) => e.exerciseId)).toEqual(['ex-lat-zug', expect.stringMatching(/^ex-/)])
+  })
+
+  it('Nur die aktuelle Übung ist ausgeklappt; erledigte klappen zu und die nächste öffnet sich (Übersicht)', () => {
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    addFromPicker(['Rudern', 'Lat-Zug'])
+    const rudern = card('Rudern')
+    const lat = card('Lat-Zug')
+    expect(rudern.getAttribute('data-state')).toBe('current')
+    expect(lat.getAttribute('data-state')).toBe('pending')
+    expect(within(lat).queryByLabelText('Satz 1 Gewicht')).toBeNull() // eingeklappt
+    expect(within(lat).getByTestId('progress-line').textContent).toBe('0/4 Sätze')
+    expect(screen.getByTestId('exercise-pos').textContent).toMatch(/Übung 1\/2/)
+
+    // Satz 1 aktuell (farbig), Satz 2 offen
+    expect(within(rudern).getByTestId('set-1').getAttribute('data-state')).toBe('current')
+    expect(within(rudern).getByTestId('set-2').getAttribute('data-state')).toBe('pending')
+    fireEvent.click(within(rudern).getByRole('button', { name: 'Satz 1 abhaken' }))
+    expect(within(rudern).getByTestId('set-1').getAttribute('data-state')).toBe('done')
+    expect(within(rudern).getByTestId('set-2').getAttribute('data-state')).toBe('current')
+
+    // Manuell die zweite Übung öffnen, dann alle Sätze der ersten abhaken → Wechsel
+    fireEvent.click(within(lat).getByRole('button', { expanded: false }))
+    expect(within(lat).getByLabelText('Satz 1 Gewicht')).toBeTruthy()
+    fireEvent.click(within(rudern).getByRole('button', { name: 'Satz 2 abhaken' }))
+    fireEvent.click(within(rudern).getByRole('button', { name: 'Satz 3 abhaken' }))
+    expect(card('Rudern').getAttribute('data-state')).toBe('done')
+    expect(within(card('Rudern')).queryByLabelText('Satz 1 Gewicht')).toBeNull()
+    expect(within(card('Rudern')).getByTestId('progress-line').textContent).toBe('3 Sätze erledigt · 12 × 50 kg')
+    expect(card('Lat-Zug').getAttribute('data-state')).toBe('current')
+    expect(within(card('Lat-Zug')).getByLabelText('Satz 1 Gewicht')).toBeTruthy()
+    expect(screen.getByTestId('exercise-pos').textContent).toMatch(/Übung 2\/2/)
+    expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe(String(Math.round((3 / 7) * 100)))
+  })
+
+  it('Übung ohne Gewicht: nur Wdh.-Feld, kein kg-Stepper; Umschalten im Training; Anzeige „Wdh.“', () => {
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    addFromPicker(['Serratusstütz', 'Lat-Zug'])
+    const ser = card('Serratusstütz')
+    expect(within(ser).queryByLabelText('Satz 1 Gewicht')).toBeNull()
+    expect(within(ser).getByLabelText('Satz 1 Wiederholungen')).toBeTruthy()
+    expect(within(ser).queryByRole('button', { name: /Gewicht plus/ })).toBeNull()
+    expect(within(ser).getByRole('button', { name: 'Eine Wiederholung mehr' })).toBeTruthy()
+    expect(within(ser).getByText('Wdh.', { selector: '.setrow-header span' })).toBeTruthy()
+    fireEvent.change(within(ser).getByLabelText('Satz 1 Wiederholungen'), { target: { value: '12' } })
+    fireEvent.click(within(ser).getByRole('button', { name: 'Satz 1 abhaken' }))
+    expect(within(ser).getByTestId('set-1').textContent).toMatch(/12\s*Wdh\./)
+    expect(active().entries[0].sets[0]).toMatchObject({ weightKg: null, reps: 12, done: true })
+
+    // Lat-Zug im Training auf „ohne Gewicht“ umstellen (Bearbeiten-Modus)
+    fireEvent.click(within(card('Lat-Zug')).getByRole('button', { expanded: false }))
+    const lat = card('Lat-Zug')
+    expect(within(lat).getByLabelText('Satz 1 Gewicht')).toBeTruthy()
+    fireEvent.click(within(lat).getByRole('button', { name: 'Lat-Zug: Sätze bearbeiten' }))
+    fireEvent.click(within(lat).getByRole('button', { name: 'Lat-Zug: ohne Gewicht' }))
+    expect(data().exercises.find((e) => e.id === 'ex-lat-zug')?.noWeight).toBe(true)
+    fireEvent.click(within(lat).getByRole('button', { name: 'Lat-Zug: Bearbeiten beenden' }))
+    expect(within(lat).queryByLabelText('Satz 1 Gewicht')).toBeNull()
+    expect(within(lat).getByTestId('source-line').textContent).toBe('Vorgabe: 4 × 10 (Fit7.11-Plan)')
   })
 
   it('Abschluss speichert nur abgehakte Sätze, zeigt Zusammenfassung; nächstes Training zeigt Letztes Mal (AK6)', () => {

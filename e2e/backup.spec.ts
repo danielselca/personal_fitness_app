@@ -21,7 +21,7 @@ test.describe('Sicherung', () => {
     const path = await download.path()
     const json = JSON.parse(readFileSync(path!, 'utf8'))
     expect(json.app).toBe('personal-fitness-app')
-    expect(json.schemaVersion).toBe(1)
+    expect(json.schemaVersion).toBe(2)
     expect(json.exercises).toHaveLength(21)
     expect(json.templates).toHaveLength(1)
     expect(json.workouts).toHaveLength(1)

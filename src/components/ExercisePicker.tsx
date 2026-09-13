@@ -66,7 +66,9 @@ export function ExercisePicker({ excludeIds, onAdd, onClose }: { excludeIds: str
               <button type="button" aria-pressed={on} className={`card card-tap row picker-row ${on ? 'picker-on' : ''}`} onClick={() => toggle(e.id)}>
                 <span className="row-main">
                   <span className="row-title ellipsis" style={{ display: 'block' }}>{e.name}</span>
-                  {e.machineNo && <span className="row-sub">Gerät {e.machineNo}</span>}
+                  {(e.machineNo || e.noWeight) && (
+                    <span className="row-sub">{[e.machineNo && `Gerät ${e.machineNo}`, e.noWeight && 'ohne Gewicht'].filter(Boolean).join(' · ')}</span>
+                  )}
                 </span>
                 <span className={`check-mark ${on ? 'check-on' : ''}`} aria-hidden="true">{on ? '✓' : ''}</span>
               </button>

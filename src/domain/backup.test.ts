@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { applyImport, backupFileName, buildBackup, summarizeBackup, validateBackup } from './backup.ts'
 import { createSeedData } from './seed.ts'
-import type { Workout } from './types.ts'
+import { SCHEMA_VERSION, type Workout } from './types.ts'
 
 const data = createSeedData('2026-09-01T00:00:00.000Z')
 const lat = data.exercises.find((e) => e.name === 'Lat-Zug')!
@@ -16,7 +16,7 @@ function doneWorkout(id: string, at: string, weight: number): Workout {
 describe('Export (F12, AK21)', () => {
   it('enthält alle Bereiche, Version und Datum im Dateinamen', () => {
     const b = buildBackup({ ...data, workouts: [doneWorkout('w1', '2026-09-02T10:00:00Z', 45)] }, '0.1.0', new Date(2026, 8, 10))
-    expect(b.schemaVersion).toBe(1)
+    expect(b.schemaVersion).toBe(SCHEMA_VERSION)
     expect(b.app).toBe('personal-fitness-app')
     expect(b.exercises).toHaveLength(21)
     expect(b.templates).toHaveLength(1)

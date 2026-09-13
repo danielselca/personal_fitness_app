@@ -1,6 +1,6 @@
 /** Datenmodell der App (SPEC.md Abschnitt 5). Alle Zeitstempel sind ISO-8601-Strings. */
 
-export const SCHEMA_VERSION = 1 as const
+export const SCHEMA_VERSION = 2 as const
 
 export interface PlanTarget {
   sets: number
@@ -25,6 +25,8 @@ export interface Exercise {
   weightStep?: number
   /** Startvorschlag ohne Historie; erzeugt keine Trainingshistorie. */
   planTarget?: PlanTarget
+  /** true = Übung ohne Gewichtsangabe (Körpergewicht, Band, Dehnung): kg-Feld wird ausgeblendet. */
+  noWeight?: boolean
   archived: boolean
   createdAt: string
   updatedAt: string

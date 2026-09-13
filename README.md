@@ -19,7 +19,10 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 - Je Übung stehen die Sätze vorbefüllt: aus dem letzten Training, sonst aus der Plan-Vorgabe. Links steht „Zuletzt“ mit den Werten des gleichen Satzes beim letzten Mal.
 - Beim aktuellen Satz gibt es große **+/−-Tasten** für Gewicht und Wiederholungen. Tippen ins Feld öffnet die Zahlentastatur, Komma ist erlaubt (12,5).
 - **Haken** tippen = Satz gespeichert. Der Pausentimer startet automatisch mit der Pause der Übung (Standard 90 s). Unten: **+30 s**, **Neu**, **Skip**. Ohne laufenden Timer stehen dort 1:00 / 1:30 / 2:00 und eine eigene Dauer.
-- **+ Satz**, **Notiz**, **Bearbeiten** (Sätze löschen), Pfeile zum Umsortieren, ✕ entfernt die Übung. **+ Übung** öffnet die Suche; steht die Übung nicht im Katalog, legt „… als neue Übung anlegen“ sie sofort an.
+- Nur die **aktuelle Übung** (blau umrandet) ist aufgeklappt, alle anderen stehen als eine Zeile darunter; antippen klappt sie auf. Erledigte Übungen werden grün. Oben zeigen „Übung 2/8“ und ein Balken den Fortschritt.
+- **Sortieren** (oben rechts) zeigt alle Übungen als kurze Liste mit ↑ ↓ ✕, **Fertig** kehrt zurück.
+- **+ Satz**, **Notiz**, **Bearbeiten** (Sätze löschen, **Ohne Gewicht** umschalten, Übung entfernen). **+ Übung** öffnet die Suche; steht die Übung nicht im Katalog, legt „… als neue Übung anlegen“ sie sofort an.
+- **Übungen ohne Gewicht** (Serratusstütz, Aufdehnen, Theraband usw.) zeigen nur ein Wdh.-Feld. Die Physio-Übungen sind so vorbelegt; jede andere Übung lässt sich im Katalog oder im Training umstellen.
 - **Abschließen** speichert nur abgehakte Sätze. Ohne abgehakten Satz wird gefragt, ob verworfen werden soll.
 - Die App speichert jede Eingabe sofort. Wird sie unterbrochen, geht es beim nächsten Öffnen an derselben Stelle weiter, der Timer läuft korrekt weiter.
 

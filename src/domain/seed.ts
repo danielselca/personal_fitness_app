@@ -9,6 +9,8 @@ interface SeedExercise {
   machineNo?: string
   hint?: string
   defaultRestSec?: number
+  /** Ohne Gewichtsangabe (Körpergewicht, Band, Dehnung). */
+  noWeight?: boolean
   plan?: { sets: number; reps: number; weightKg: number | null }
 }
 
@@ -17,19 +19,20 @@ interface SeedExercise {
  * Siehe SPEC.md Abschnitt 2. Die Haken in den Notizen werden ignoriert.
  */
 const SEED_EXERCISES: SeedExercise[] = [
-  { id: 'ex-aufdehnen-seitlich', name: 'Aufdehnen seitlich' },
+  { id: 'ex-aufdehnen-seitlich', name: 'Aufdehnen seitlich', noWeight: true },
   { id: 'ex-ueberzuege', name: 'Überzüge' },
-  { id: 'ex-bein-absenken', name: 'Bein absenken (unterer Bauch)' },
-  { id: 'ex-serratusstuetz', name: 'Serratusstütz' },
-  { id: 'ex-stuetz-auf-step', name: 'Stütz auf Step' },
-  { id: 'ex-uppercut-theraband', name: 'Uppercut Theraband' },
-  { id: 'ex-uppercut-tuch', name: 'Uppercut Tuch' },
-  { id: 'ex-bear-hug', name: 'Bear hug' },
-  { id: 'ex-tiefes-v', name: 'Tiefes V' },
-  { id: 'ex-holzhacken', name: 'Holzhacken Gummiball Wand' },
+  { id: 'ex-bein-absenken', name: 'Bein absenken (unterer Bauch)', noWeight: true },
+  { id: 'ex-serratusstuetz', name: 'Serratusstütz', noWeight: true },
+  { id: 'ex-stuetz-auf-step', name: 'Stütz auf Step', noWeight: true },
+  { id: 'ex-uppercut-theraband', name: 'Uppercut Theraband', noWeight: true },
+  { id: 'ex-uppercut-tuch', name: 'Uppercut Tuch', noWeight: true },
+  { id: 'ex-bear-hug', name: 'Bear hug', noWeight: true },
+  { id: 'ex-tiefes-v', name: 'Tiefes V', noWeight: true },
+  { id: 'ex-holzhacken', name: 'Holzhacken Gummiball Wand', noWeight: true },
   {
     id: 'ex-kopfheben',
     name: '10x10s Kopfheben 1 cm Doppelkinn',
+    noWeight: true,
     hint: 'Laut Notizen 10 × 10 s halten (Zeit, kein Gewicht). Als 10 Wdh. erfassen.',
   },
   { id: 'ex-incline-frontraise', name: 'Incline Frontraise' },
@@ -124,6 +127,7 @@ export function buildSeedExercises(at: string): Exercise[] {
     machineNo: s.machineNo,
     hint: s.hint,
     defaultRestSec: s.defaultRestSec,
+    noWeight: s.noWeight,
     planTarget: s.plan ? { ...s.plan, source: SOURCE } : undefined,
     archived: false,
     createdAt: at,
@@ -159,3 +163,6 @@ export function createSeedData(at = new Date().toISOString()): AppData {
 }
 
 export const SEED_EXERCISE_COUNT = SEED_EXERCISES.length
+
+/** IDs der Seed-Übungen ohne Gewicht; für die Migration bestehender Daten (Schema 1 → 2). */
+export const SEED_NO_WEIGHT_IDS: ReadonlySet<string> = new Set(SEED_EXERCISES.filter((s) => s.noWeight).map((s) => s.id))
