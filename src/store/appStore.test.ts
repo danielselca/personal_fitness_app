@@ -66,13 +66,18 @@ describe('Store: Übungen (F1, AK4)', () => {
 })
 
 describe('Store: Trainingsablauf (F2, F3, F7, AK5–AK7, AK9, AK10)', () => {
-  it('Vorlage startet 8 Übungen in Planreihenfolge mit Plan-Vorschlägen', async () => {
+  it('Vorlage startet 12 Übungen in Standard-Reihenfolge mit Plan-Vorschlägen', async () => {
     const { store } = await freshStore()
     const s = store.getState()
     const w = s.startWorkout({ templateId: store.getState().data.templates[0].id })
-    expect(w.entries).toHaveLength(8)
-    expect(w.entries[0].sets).toHaveLength(4)
-    expect(w.entries[0].sets[0]).toMatchObject({ weightKg: 45, reps: 10, done: false })
+    expect(w.entries).toHaveLength(12)
+    expect(w.entries[0].exerciseId).toBe('ex-aufdehnen-seitlich')
+    expect(w.entries[0].sets).toHaveLength(3)
+    expect(w.entries[0].sets[0]).toMatchObject({ weightKg: null, reps: null, done: false })
+    const lat = w.entries[11]
+    expect(lat.exerciseId).toBe('ex-lat-zug')
+    expect(lat.sets).toHaveLength(4)
+    expect(lat.sets[0]).toMatchObject({ weightKg: 45, reps: 10, done: false })
     expect(s.startWorkout()).toBe(store.getState().activeWorkout()) // nur eines gleichzeitig
   })
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { migrateAppData } from './migrate.ts'
-import { createSeedData } from './seed.ts'
-import { SCHEMA_VERSION } from './types.ts'
+import { createSeedData, SEED_TEMPLATE_ID, STANDARD_TEMPLATE_ORDER } from './seed.ts'
+import { SCHEMA_VERSION, type Exercise } from './types.ts'
 
 describe('Migration Schema 1 → 2 (ohne Gewicht)', () => {
   const v1 = (): Record<string, unknown> => {
@@ -28,7 +28,37 @@ describe('Migration Schema 1 → 2 (ohne Gewicht)', () => {
     d.exercises = (d.exercises as { id: string }[]).map((e) => (e.id === 'ex-tiefes-v' || e.id === 'ex-bear-hug' ? { ...e, noWeight: true } : e))
     const out = migrateAppData(d)
     expect(out.exercises.find((e) => e.id === 'ex-tiefes-v')!.noWeight).toBeUndefined()
-    expect(out.exercises.find((e) => e.id === 'ex-bear-hug')!.noWeight).toBe(true)
+    expect(out.exercises.find((e) => e.id === 'ex-bear-hug')!.noWeight).toBeUndefined() // Schema 4
+  })
+
+  it('Schema 3 → 4: Bear hug mit Gewicht, alte Hinweise bereinigt, Seed-Vorlage neu geordnet und umbenannt', () => {
+    const d = v1()
+    d.schemaVersion = 3
+    d.exercises = (d.exercises as Exercise[]).map((e) => {
+      if (e.id === 'ex-bear-hug') return { ...e, noWeight: true }
+      if (e.id === 'ex-lat-zug') return { ...e, hint: 'Zuordnung zu Fit7.11 „Latzug am Kabel“ (#28) vermutet.' }
+      if (e.id === 'ex-schraegbank-kurzhantel') return { ...e, hint: 'Zuordnung zu Fit7.11 „Bankdrücken schräg Kurzhantel“ vermutet. Gewicht vermutlich pro Hantel.' }
+      if (e.id === 'ex-kreuzheben') return { ...e, hint: 'Eigener Hinweis bleibt' }
+      return e
+    })
+    d.templates = [{ id: SEED_TEMPLATE_ID, name: 'Oberkörper Fokus Schulter', entries: [{ exerciseId: 'ex-lat-zug', sets: 4 }], createdAt: 'x', updatedAt: 'x' }, { id: 'tpl-eigene', name: 'Eigene', entries: [{ exerciseId: 'ex-rudern', sets: 2 }], createdAt: 'x', updatedAt: 'x' }]
+    const out = migrateAppData(d)
+    const by = (id: string) => out.exercises.find((e) => e.id === id)!
+    expect(by('ex-bear-hug').noWeight).toBeUndefined()
+    expect(by('ex-lat-zug').hint).toBeUndefined()
+    expect(by('ex-schraegbank-kurzhantel').hint).toBe('Gewicht pro Hantel')
+    expect(by('ex-kreuzheben').hint).toBe('Eigener Hinweis bleibt')
+    const seedTpl = out.templates.find((t) => t.id === SEED_TEMPLATE_ID)!
+    expect(seedTpl.name).toBe('Oberkörper')
+    expect(seedTpl.entries.map((e) => e.exerciseId)).toEqual(STANDARD_TEMPLATE_ORDER)
+    expect(out.templates.find((t) => t.id === 'tpl-eigene')!.entries).toEqual([{ exerciseId: 'ex-rudern', sets: 2 }])
+  })
+
+  it('Schema 3 → 4 behält einen vom Nutzer vergebenen Vorlagennamen', () => {
+    const d = v1()
+    d.schemaVersion = 3
+    d.templates = [{ id: SEED_TEMPLATE_ID, name: 'Mein Plan', entries: [], createdAt: 'x', updatedAt: 'x' }]
+    expect(migrateAppData(d).templates[0].name).toBe('Mein Plan')
   })
 
   it('lässt Übungen unangetastet, bei denen schon ein Gewicht abgehakt wurde', () => {

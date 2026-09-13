@@ -1,5 +1,5 @@
-import { SEED_NO_WEIGHT_IDS } from './seed.ts'
-import { DEFAULT_SETTINGS, SCHEMA_VERSION, type AppData, type Exercise, type Workout } from './types.ts'
+import { buildStandardEntries, LEGACY_TEMPLATE_NAME, SEED_HINTS, SEED_NO_WEIGHT_IDS, SEED_TEMPLATE_ID, SEED_TEMPLATE_NAME } from './seed.ts'
+import { DEFAULT_SETTINGS, SCHEMA_VERSION, type AppData, type Exercise, type Template, type Workout } from './types.ts'
 
 /**
  * Migrationsgerüst: hebt gespeicherte Daten älterer Versionen auf die aktuelle an.
@@ -33,6 +33,24 @@ const MIGRATIONS: Record<number, (d: Record<string, unknown>) => Record<string, 
       schemaVersion: 3,
       exercises: exercises.map((e) => (e.id === 'ex-tiefes-v' && e.noWeight === true ? { ...e, noWeight: undefined } : e)),
     }
+  },
+  // 3 → 4 (Feedback 2026-09-13): „Bear hug“ mit Gewicht; alte Seed-Hinweise („Zuordnung zu Fit7.11 … vermutet“)
+  // entfernen bzw. kürzen; Seed-Vorlage auf die Standard-Reihenfolge des Nutzers bringen und umbenennen.
+  3: (d) => {
+    const exercises = (Array.isArray(d.exercises) ? (d.exercises as Exercise[]) : []).map((e) => {
+      let next = e
+      if (e.id === 'ex-bear-hug' && e.noWeight === true) next = { ...next, noWeight: undefined }
+      if (SEED_HINTS.has(e.id) && e.hint && (e.hint.startsWith('Zuordnung zu Fit7.11') || e.hint.startsWith('Laut Notizen') || e.hint.startsWith('Gewicht vermutlich pro Hantel'))) {
+        next = { ...next, hint: SEED_HINTS.get(e.id) }
+      }
+      return next
+    })
+    const templates = (Array.isArray(d.templates) ? (d.templates as Template[]) : []).map((t) =>
+      t.id === SEED_TEMPLATE_ID
+        ? { ...t, name: t.name === LEGACY_TEMPLATE_NAME ? SEED_TEMPLATE_NAME : t.name, entries: buildStandardEntries(exercises), updatedAt: new Date().toISOString() }
+        : t,
+    )
+    return { ...d, schemaVersion: 4, exercises, templates }
   },
 }
 

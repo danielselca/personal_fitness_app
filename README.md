@@ -15,12 +15,12 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 
 **Training erfassen**
 
-- Tab **Training** → „Training starten“ oder eine Vorlage tippen („Oberkörper Fokus Schulter“ ist vorbereitet) oder „Letztes Training wiederholen“.
+- Tab **Training** → „Training starten“ oder eine Vorlage tippen („Oberkörper“ ist vorbereitet: erst die vier Übungen ohne Gewicht, dann Adduktion, Tiefes V, Reverse Butterfly, Butterfly, Incline Frontraise, Schrägbank, Rudern, Lat-Zug) oder „Letztes Training wiederholen“.
 - Je Übung stehen die Sätze vorbefüllt: aus dem letzten Training, sonst aus der Plan-Vorgabe. Links steht „Zuletzt“ mit den Werten des gleichen Satzes beim letzten Mal.
 - Beim aktuellen Satz gibt es große **+/−-Tasten** für Gewicht und Wiederholungen. Tippen ins Feld öffnet die Zahlentastatur, Komma ist erlaubt (12,5).
 - **Haken** tippen = Satz gespeichert. Der Pausentimer startet automatisch mit der Pause der Übung (Standard 90 s). Unten: **+30 s**, **Neu**, **Skip**. Ohne laufenden Timer stehen dort 1:00 / 1:30 / 2:00 und eine eigene Dauer.
 - Nur die **aktuelle Übung** (blau umrandet) ist aufgeklappt, alle anderen stehen als eine Zeile darunter; antippen klappt sie auf. Erledigte Übungen werden grün. Oben zeigen „Übung 2/8“ und ein Balken den Fortschritt.
-- **Sortieren** (oben rechts) zeigt alle Übungen als kurze Liste mit ↑ ↓ ✕; **Ohne Gewicht zuerst** schiebt die Körpergewichts- und Bandübungen nach vorn, **Fertig** kehrt zurück. Die Übungsauswahl listet „Ohne Gewicht“ vor „Mit Gewicht“ und übernimmt Mehrfachauswahl in dieser Reihenfolge.
+- **Sortieren** (oben rechts) zeigt alle Übungen als kurze Liste mit „ganz nach oben“, ↑, ↓, „ganz nach unten“ und ✕; **Ohne Gewicht zuerst** schiebt die Körpergewichts- und Bandübungen nach vorn, **Fertig** kehrt zurück. Die Übungsauswahl listet „Ohne Gewicht“ vor „Mit Gewicht“ und übernimmt Mehrfachauswahl in dieser Reihenfolge.
 - **+ Satz**, **Notiz**, **Bearbeiten** (Sätze löschen, **Ohne Gewicht** umschalten, Übung entfernen). **+ Übung** öffnet die Suche; steht die Übung nicht im Katalog, legt „… als neue Übung anlegen“ sie sofort an.
 - **Übungen ohne Gewicht** (Serratusstütz, Aufdehnen, Theraband usw.) zeigen nur ein Wdh.-Feld. Die Physio-Übungen sind so vorbelegt; jede andere Übung lässt sich im Katalog oder im Training umstellen.
 - **Abschließen** speichert nur abgehakte Sätze. Ohne abgehakten Satz wird gefragt, ob verworfen werden soll.

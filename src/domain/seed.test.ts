@@ -36,16 +36,20 @@ describe('Seed-Katalog (AK3)', () => {
     expect(data.workouts).toHaveLength(0)
   })
 
-  it('Vorlage „Oberkörper Fokus Schulter“ mit 8 Übungen in Screenshot-Reihenfolge', () => {
+  it('Vorlage „Oberkörper“ mit 12 Übungen in der Standard-Reihenfolge (ohne Gewicht zuerst)', () => {
     expect(data.templates).toHaveLength(1)
     const t = data.templates[0]
     expect(t.name).toBe(SEED_TEMPLATE_NAME)
     const names = t.entries.map((en) => data.exercises.find((e) => e.id === en.exerciseId)!.name)
-    expect(names).toEqual([
-      'Lat-Zug', 'Butterfly Maschine', 'Reverse Butterfly', 'Facepulls', 'Rudern',
-      'Schrägbank Kurzhantel', 'Seitheben Kurzhantel', 'Adduktion',
-    ])
-    expect(t.entries[0].sets).toBe(4)
+    expect(names).toEqual(['Aufdehnen seitlich', 'Bein absenken (unterer Bauch)', 'Serratusstütz', 'Stütz auf Step', 'Adduktion', 'Tiefes V', 'Reverse Butterfly', 'Butterfly Maschine', 'Incline Frontraise', 'Schrägbank Kurzhantel', 'Rudern', 'Lat-Zug'])
+    expect(t.entries[0].sets).toBe(3)
+    expect(t.entries[11].sets).toBe(4) // Lat-Zug laut Plan
+  })
+
+  it('Hinweise sind kurz; keine „Zuordnung zu Fit7.11“-Texte mehr', () => {
+    for (const e of data.exercises) expect(e.hint ?? '').not.toMatch(/Zuordnung|vermutlich|Fit7\.11/)
+    expect(data.exercises.find((e) => e.id === 'ex-bear-hug')!.noWeight).toBeUndefined()
+    expect(data.exercises.find((e) => e.id === 'ex-tiefes-v')!.noWeight).toBeUndefined()
   })
 
   it('IDs sind eindeutig', () => {

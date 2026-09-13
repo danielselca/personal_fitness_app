@@ -148,6 +148,7 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
   const timer = useAppStore((s) => s.data.timer)
   const addExerciseToWorkout = useAppStore((s) => s.addExerciseToWorkout)
   const moveEntry = useAppStore((s) => s.moveWorkoutEntry)
+  const moveEntryToEnd = useAppStore((s) => s.moveWorkoutEntryToEnd)
   const removeEntry = useAppStore((s) => s.removeExerciseFromWorkout)
   const sortNoWeightFirst = useAppStore((s) => s.sortWorkoutNoWeightFirst)
   const startTimer = useAppStore((s) => s.startTimer)
@@ -232,14 +233,17 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
             const st = entryState(entry, entry.exerciseId === currentId)
             return (
               <li key={entry.exerciseId} className="card sort-row">
-                <span className={`ex-badge ex-badge-${st}`} aria-hidden="true">{st === 'done' ? '✓' : i + 1}</span>
+                <span className={`sort-no sort-no-${st} num`} aria-hidden="true">{st === 'done' ? '✓' : i + 1}</span>
                 <span className="row-main">
                   <span className="row-title ellipsis" style={{ display: 'block' }}>{ex.name}</span>
-                  <span className="row-sub">{entry.sets.filter((s) => s.done).length}/{entry.sets.length} Sätze</span>
                 </span>
-                <button type="button" className="btn btn-icon btn-sm" aria-label={`${ex.name} nach oben`} disabled={i === 0} onClick={() => moveEntry(ex.id, -1)}>↑</button>
-                <button type="button" className="btn btn-icon btn-sm" aria-label={`${ex.name} nach unten`} disabled={i === workout.entries.length - 1} onClick={() => moveEntry(ex.id, 1)}>↓</button>
+                <span className="sort-actions">
+                <button type="button" className="btn btn-icon btn-sm" aria-label={`${ex.name} ganz nach oben`} disabled={i === 0} onClick={() => moveEntryToEnd(ex.id, 'top')}><ArrowIcon dir="up" bar /></button>
+                <button type="button" className="btn btn-icon btn-sm" aria-label={`${ex.name} nach oben`} disabled={i === 0} onClick={() => moveEntry(ex.id, -1)}><ArrowIcon dir="up" /></button>
+                <button type="button" className="btn btn-icon btn-sm" aria-label={`${ex.name} nach unten`} disabled={i === workout.entries.length - 1} onClick={() => moveEntry(ex.id, 1)}><ArrowIcon dir="down" /></button>
+                <button type="button" className="btn btn-icon btn-sm" aria-label={`${ex.name} ganz nach unten`} disabled={i === workout.entries.length - 1} onClick={() => moveEntryToEnd(ex.id, 'bottom')}><ArrowIcon dir="down" bar /></button>
                 <button type="button" className="btn btn-icon btn-sm btn-danger-text" aria-label={`${ex.name} entfernen`} onClick={() => removeEntry(ex.id)}>✕</button>
+                </span>
               </li>
             )
           })}
@@ -339,5 +343,15 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
         />
       )}
     </div>
+  )
+}
+
+/** Pfeil nach oben/unten, optional mit Balken („ganz nach …“). */
+function ArrowIcon({ dir, bar }: { dir: 'up' | 'down'; bar?: boolean }) {
+  return (
+    <svg className="arrow-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={dir === 'down' ? { transform: 'scaleY(-1)' } : undefined}>
+      {bar && <path d="M5 3h10" />}
+      <path d="M10 17V6M5.5 10.5L10 6l4.5 4.5" />
+    </svg>
   )
 }

@@ -26,14 +26,14 @@ const SEED_EXERCISES: SeedExercise[] = [
   { id: 'ex-stuetz-auf-step', name: 'Stütz auf Step', noWeight: true },
   { id: 'ex-uppercut-theraband', name: 'Uppercut Theraband', noWeight: true },
   { id: 'ex-uppercut-tuch', name: 'Uppercut Tuch', noWeight: true },
-  { id: 'ex-bear-hug', name: 'Bear hug', noWeight: true },
+  { id: 'ex-bear-hug', name: 'Bear hug' },
   { id: 'ex-tiefes-v', name: 'Tiefes V' },
   { id: 'ex-holzhacken', name: 'Holzhacken Gummiball Wand', noWeight: true },
   {
     id: 'ex-kopfheben',
     name: '10x10s Kopfheben 1 cm Doppelkinn',
     noWeight: true,
-    hint: 'Laut Notizen 10 × 10 s halten (Zeit, kein Gewicht). Als 10 Wdh. erfassen.',
+    hint: '10 × 10 s halten, als 10 Wdh. erfassen.',
   },
   { id: 'ex-incline-frontraise', name: 'Incline Frontraise' },
   { id: 'ex-kreuzheben', name: 'Kreuzheben' },
@@ -42,7 +42,6 @@ const SEED_EXERCISES: SeedExercise[] = [
     name: 'Rudern',
     aliases: ['Ruderzug am Kabel', '711 #29'],
     machineNo: '29',
-    hint: 'Zuordnung zu Fit7.11 „Ruderzug am Kabel“ (#29) vermutet.',
     defaultRestSec: 60,
     plan: { sets: 3, reps: 12, weightKg: 50 },
   },
@@ -51,7 +50,6 @@ const SEED_EXERCISES: SeedExercise[] = [
     name: 'Reverse Butterfly',
     aliases: ['Butterfly reverse', '711 #13'],
     machineNo: '13',
-    hint: 'Zuordnung zu Fit7.11 „Butterfly reverse“ (#13) vermutet.',
     defaultRestSec: 60,
     plan: { sets: 3, reps: 10, weightKg: 30 },
   },
@@ -59,7 +57,6 @@ const SEED_EXERCISES: SeedExercise[] = [
     id: 'ex-adduktion',
     name: 'Adduktion',
     aliases: ['Arm-Adduktion einarmig Kabelzug'],
-    hint: 'Zuordnung zu Fit7.11 „Arm-Adduktion einarmig Kabelzug“ vermutet. Pause im Plan nicht sichtbar.',
     plan: { sets: 3, reps: 12, weightKg: 15 },
   },
   {
@@ -67,7 +64,6 @@ const SEED_EXERCISES: SeedExercise[] = [
     name: 'Lat-Zug',
     aliases: ['Latzug am Kabel', '711 #28'],
     machineNo: '28',
-    hint: 'Zuordnung zu Fit7.11 „Latzug am Kabel“ (#28) vermutet.',
     defaultRestSec: 90,
     plan: { sets: 4, reps: 10, weightKg: 45 },
   },
@@ -75,7 +71,7 @@ const SEED_EXERCISES: SeedExercise[] = [
     id: 'ex-schraegbank-kurzhantel',
     name: 'Schrägbank Kurzhantel',
     aliases: ['Bankdrücken schräg Kurzhantel'],
-    hint: 'Zuordnung zu Fit7.11 „Bankdrücken schräg Kurzhantel“ vermutet. Gewicht vermutlich pro Hantel.',
+    hint: 'Gewicht pro Hantel',
     defaultRestSec: 60,
     plan: { sets: 3, reps: 12, weightKg: 10 },
   },
@@ -98,26 +94,32 @@ const SEED_EXERCISES: SeedExercise[] = [
   {
     id: 'ex-seitheben-kurzhantel',
     name: 'Seitheben Kurzhantel',
-    hint: 'Gewicht vermutlich pro Hantel. Im Fit7.11-Plan mit Trainer-Kommentar.',
+    hint: 'Gewicht pro Hantel',
     defaultRestSec: 90,
     plan: { sets: 3, reps: 15, weightKg: 2 },
   },
 ]
 
-/** Reihenfolge der Screenshots des Fit7.11-Plans „Oberkörper Fokus Schulter“. */
-const PLAN_TEMPLATE_ORDER = [
-  'ex-lat-zug',
-  'ex-butterfly-maschine',
-  'ex-reverse-butterfly',
-  'ex-facepulls',
-  'ex-rudern',
-  'ex-schraegbank-kurzhantel',
-  'ex-seitheben-kurzhantel',
+/** Standard-Oberkörpertraining des Nutzers (Reihenfolge vom 2026-09-13): erst ohne Gewicht, dann Geräte. */
+export const STANDARD_TEMPLATE_ORDER = [
+  'ex-aufdehnen-seitlich',
+  'ex-bein-absenken',
+  'ex-serratusstuetz',
+  'ex-stuetz-auf-step',
   'ex-adduktion',
+  'ex-tiefes-v',
+  'ex-reverse-butterfly',
+  'ex-butterfly-maschine',
+  'ex-incline-frontraise',
+  'ex-schraegbank-kurzhantel',
+  'ex-rudern',
+  'ex-lat-zug',
 ]
 
 export const SEED_TEMPLATE_ID = 'tpl-oberkoerper-fokus-schulter'
-export const SEED_TEMPLATE_NAME = 'Oberkörper Fokus Schulter'
+/** Früherer Name der Seed-Vorlage (bis Schema 3). */
+export const LEGACY_TEMPLATE_NAME = 'Oberkörper Fokus Schulter'
+export const SEED_TEMPLATE_NAME = 'Oberkörper'
 
 export function buildSeedExercises(at: string): Exercise[] {
   return SEED_EXERCISES.map((s) => ({
@@ -135,15 +137,20 @@ export function buildSeedExercises(at: string): Exercise[] {
   }))
 }
 
-export function buildSeedTemplate(at: string, exercises: Exercise[]): Template {
+/** Einträge der Standard-Vorlage; nur vorhandene, nicht archivierte Übungen. */
+export function buildStandardEntries(exercises: Exercise[]): Template['entries'] {
   const byId = new Map(exercises.map((e) => [e.id, e]))
+  return STANDARD_TEMPLATE_ORDER.filter((id) => byId.get(id) && !byId.get(id)!.archived).map((exerciseId) => ({
+    exerciseId,
+    sets: byId.get(exerciseId)?.planTarget?.sets ?? 3,
+  }))
+}
+
+export function buildSeedTemplate(at: string, exercises: Exercise[]): Template {
   return {
     id: SEED_TEMPLATE_ID,
     name: SEED_TEMPLATE_NAME,
-    entries: PLAN_TEMPLATE_ORDER.map((exerciseId) => ({
-      exerciseId,
-      sets: byId.get(exerciseId)?.planTarget?.sets ?? 3,
-    })),
+    entries: buildStandardEntries(exercises),
     createdAt: at,
     updatedAt: at,
   }
@@ -163,6 +170,9 @@ export function createSeedData(at = new Date().toISOString()): AppData {
 }
 
 export const SEED_EXERCISE_COUNT = SEED_EXERCISES.length
+
+/** Aktuelle Seed-Hinweise je ID (für die Bereinigung alter Hinweise in der Migration). */
+export const SEED_HINTS: ReadonlyMap<string, string | undefined> = new Map(SEED_EXERCISES.map((s) => [s.id, s.hint]))
 
 /** IDs der Seed-Übungen ohne Gewicht; für die Migration bestehender Daten (Schema 1 → 2). */
 export const SEED_NO_WEIGHT_IDS: ReadonlySet<string> = new Set(SEED_EXERCISES.filter((s) => s.noWeight).map((s) => s.id))

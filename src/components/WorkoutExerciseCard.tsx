@@ -54,8 +54,8 @@ export function WorkoutExerciseCard({
     ? `Letztes Mal: ${formatRelativeDay(last.date)} · ${last.sets.length} Sätze`
     : exercise.planTarget
       ? noWeight
-        ? `Vorgabe: ${exercise.planTarget.sets} × ${exercise.planTarget.reps} (${exercise.planTarget.source})`
-        : `Vorgabe: ${exercise.planTarget.sets} × ${exercise.planTarget.reps} × ${formatKg(exercise.planTarget.weightKg)} (${exercise.planTarget.source})`
+        ? `Vorgabe: ${exercise.planTarget.sets} × ${exercise.planTarget.reps}`
+        : `Vorgabe: ${exercise.planTarget.sets} × ${exercise.planTarget.reps} × ${formatKg(exercise.planTarget.weightKg)}`
       : 'Keine früheren Werte'
 
   const lastDone = [...entry.sets].reverse().find((s) => s.done && s.reps !== null)

@@ -33,6 +33,7 @@ export interface AppStore {
   addExerciseToWorkout(exerciseId: string): void
   removeExerciseFromWorkout(exerciseId: string): void
   moveWorkoutEntry(exerciseId: string, direction: -1 | 1): void
+  moveWorkoutEntryToEnd(exerciseId: string, end: 'top' | 'bottom'): void
   /** Übungen ohne Gewicht nach vorn, Reihenfolge sonst unverändert. */
   sortWorkoutNoWeightFirst(): void
   addSet(exerciseId: string): void
@@ -235,6 +236,15 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
           const entries = [...w.entries]
           ;[entries[i], entries[j]] = [entries[j], entries[i]]
           return { ...w, entries }
+        })
+      },
+
+      moveWorkoutEntryToEnd(exerciseId, end) {
+        updateActive((w) => {
+          const entry = w.entries.find((e) => e.exerciseId === exerciseId)
+          if (!entry) return w
+          const rest = w.entries.filter((e) => e.exerciseId !== exerciseId)
+          return { ...w, entries: end === 'top' ? [entry, ...rest] : [...rest, entry] }
         })
       },
 

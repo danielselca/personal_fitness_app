@@ -31,7 +31,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     // Leeres Training → Auswahl offen
     addFromPicker(['Lat-Zug'])
     const c = card('Lat-Zug')
-    expect(within(c).getByTestId('source-line').textContent).toMatch(/Vorgabe: 4 × 10 × 45 kg \(Fit7.11-Plan\)/)
+    expect(within(c).getByTestId('source-line').textContent).toBe('Vorgabe: 4 × 10 × 45 kg')
     expect(within(c).getAllByTestId(/^set-/)).toHaveLength(4)
     expect((within(c).getByLabelText('Satz 1 Gewicht') as HTMLInputElement).value).toBe('45')
     expect((within(c).getByLabelText('Satz 1 Wiederholungen') as HTMLInputElement).value).toBe('10')
@@ -194,7 +194,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     expect(data().exercises.find((e) => e.id === 'ex-lat-zug')?.noWeight).toBe(true)
     fireEvent.click(within(lat).getByRole('button', { name: 'Lat-Zug: Bearbeiten beenden' }))
     expect(within(lat).queryByLabelText('Satz 1 Gewicht')).toBeNull()
-    expect(within(lat).getByTestId('source-line').textContent).toBe('Vorgabe: 4 × 10 (Fit7.11-Plan)')
+    expect(within(lat).getByTestId('source-line').textContent).toBe('Vorgabe: 4 × 10')
   })
 
   it('Abschluss speichert nur abgehakte Sätze, zeigt Zusammenfassung; nächstes Training zeigt Letztes Mal (AK6)', () => {
@@ -224,12 +224,14 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     expect(within(c).getAllByTestId(/^set-/)).toHaveLength(3)
   })
 
-  it('Vorlage startet 8 Übungen in Planreihenfolge (AK24)', () => {
+  it('Vorlage startet 12 Übungen in Standard-Reihenfolge, erste ausgeklappt (AK24)', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Vorlage Oberkörper Fokus Schulter starten' }))
-    expect(active().entries).toHaveLength(8)
+    fireEvent.click(screen.getByRole('button', { name: 'Vorlage Oberkörper starten' }))
+    expect(active().entries).toHaveLength(12)
     const names = screen.getAllByRole('region').map((r) => r.getAttribute('aria-label'))
-    expect(names).toEqual(['Lat-Zug', 'Butterfly Maschine', 'Reverse Butterfly', 'Facepulls', 'Rudern', 'Schrägbank Kurzhantel', 'Seitheben Kurzhantel', 'Adduktion'])
+    expect(names).toEqual(['Aufdehnen seitlich', 'Bein absenken (unterer Bauch)', 'Serratusstütz', 'Stütz auf Step', 'Adduktion', 'Tiefes V', 'Reverse Butterfly', 'Butterfly Maschine', 'Incline Frontraise', 'Schrägbank Kurzhantel', 'Rudern', 'Lat-Zug'])
+    expect(card('Aufdehnen seitlich').getAttribute('data-state')).toBe('current')
+    expect(within(card('Aufdehnen seitlich')).getByLabelText('Satz 1 Wiederholungen')).toBeTruthy()
   })
 })
 
@@ -242,7 +244,7 @@ describe('Vorsortierung: ohne Gewicht zuerst', () => {
     expect(items[0].getAttribute('data-group')).toBe('Ohne Gewicht')
     expect(items[0].textContent).toMatch(/^10x10s Kopfheben/)
     const firstWeighted = items.findIndex((li) => li.getAttribute('data-group') === 'Mit Gewicht')
-    expect(firstWeighted).toBe(9) // 9 Übungen ohne Gewicht (Tiefes V zählt mit Gewicht)
+    expect(firstWeighted).toBe(8) // 8 Übungen ohne Gewicht (Tiefes V und Bear hug zählen mit Gewicht)
     expect(items[firstWeighted].textContent).toMatch(/^Adduktion/)
     expect(items.filter((li) => li.hasAttribute('data-group'))).toHaveLength(2)
     // Antippen in Reihenfolge Lat-Zug, Serratusstütz → Serratusstütz landet vorn
@@ -250,17 +252,28 @@ describe('Vorsortierung: ohne Gewicht zuerst', () => {
     expect(active().entries.map((e) => e.exerciseId)).toEqual(['ex-serratusstuetz', 'ex-lat-zug'])
   })
 
-  it('Sortiermodus: „Ohne Gewicht zuerst“ ordnet stabil um', () => {
+  it('Sortiermodus: „Ohne Gewicht zuerst“, ganz nach oben, ganz nach unten', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Vorlage Oberkörper Fokus Schulter starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Vorlage Oberkörper starten' }))
     fireEvent.click(screen.getByRole('button', { name: '+ Übung' }))
-    addFromPicker(['Bear hug', 'Aufdehnen seitlich'])
-    expect(active().entries.map((e) => e.exerciseId).slice(-2)).toEqual(['ex-bear-hug', 'ex-aufdehnen-seitlich']) // Antipp-Reihenfolge
+    addFromPicker(['Uppercut Tuch'])
+    expect(active().entries.at(-1)!.exerciseId).toBe('ex-uppercut-tuch')
     fireEvent.click(screen.getByRole('button', { name: 'Sortieren' }))
     fireEvent.click(screen.getByRole('button', { name: 'Ohne Gewicht zuerst' }))
-    const ids = active().entries.map((e) => e.exerciseId)
-    expect(ids.slice(0, 2)).toEqual(['ex-bear-hug', 'ex-aufdehnen-seitlich'])
-    expect(ids.slice(2)).toEqual(['ex-lat-zug', 'ex-butterfly-maschine', 'ex-reverse-butterfly', 'ex-facepulls', 'ex-rudern', 'ex-schraegbank-kurzhantel', 'ex-seitheben-kurzhantel', 'ex-adduktion'])
+    let ids = active().entries.map((e) => e.exerciseId)
+    expect(ids.slice(0, 5)).toEqual(['ex-aufdehnen-seitlich', 'ex-bein-absenken', 'ex-serratusstuetz', 'ex-stuetz-auf-step', 'ex-uppercut-tuch'])
+    expect(ids.slice(5)).toEqual(['ex-adduktion', 'ex-tiefes-v', 'ex-reverse-butterfly', 'ex-butterfly-maschine', 'ex-incline-frontraise', 'ex-schraegbank-kurzhantel', 'ex-rudern', 'ex-lat-zug'])
+
+    fireEvent.click(screen.getByRole('button', { name: 'Lat-Zug ganz nach oben' }))
+    ids = active().entries.map((e) => e.exerciseId)
+    expect(ids[0]).toBe('ex-lat-zug')
+    expect(ids[1]).toBe('ex-aufdehnen-seitlich')
+    expect(screen.getByRole('button', { name: 'Lat-Zug ganz nach oben' }).hasAttribute('disabled')).toBe(true)
+    fireEvent.click(screen.getByRole('button', { name: 'Lat-Zug ganz nach unten' }))
+    ids = active().entries.map((e) => e.exerciseId)
+    expect(ids.at(-1)).toBe('ex-lat-zug')
+    expect(ids[0]).toBe('ex-aufdehnen-seitlich')
+    expect(ids).toHaveLength(13)
   })
 })
 
