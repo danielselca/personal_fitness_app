@@ -72,8 +72,8 @@ describe('Store: Trainingsablauf (F2, F3, F7, AK5–AK7, AK9, AK10)', () => {
     const w = s.startWorkout({ templateId: store.getState().data.templates[0].id })
     expect(w.entries).toHaveLength(12)
     expect(w.entries[0].exerciseId).toBe('ex-aufdehnen-seitlich')
-    expect(w.entries[0].sets).toHaveLength(3)
-    expect(w.entries[0].sets[0]).toMatchObject({ weightKg: null, reps: null, done: false })
+    expect(w.entries[0].sets).toHaveLength(2)
+    expect(w.entries[0].sets[0]).toMatchObject({ weightKg: null, reps: 10, done: false })
     const lat = w.entries[11]
     expect(lat.exerciseId).toBe('ex-lat-zug')
     expect(lat.sets).toHaveLength(4)

@@ -33,6 +33,8 @@ describe('Seed-Katalog (AK3)', () => {
     expect(lat.defaultRestSec).toBe(90)
     const rud = data.exercises.find((e) => e.name === 'Rudern')!
     expect(rud.planTarget).toEqual({ sets: 3, reps: 12, weightKg: 50, source: 'Fit7.11-Plan' })
+    const auf = data.exercises.find((e) => e.name === 'Aufdehnen seitlich')!
+    expect(auf.planTarget).toEqual({ sets: 2, reps: 10, weightKg: null, source: 'eigene Vorgabe' })
     expect(data.workouts).toHaveLength(0)
   })
 
@@ -42,7 +44,8 @@ describe('Seed-Katalog (AK3)', () => {
     expect(t.name).toBe(SEED_TEMPLATE_NAME)
     const names = t.entries.map((en) => data.exercises.find((e) => e.id === en.exerciseId)!.name)
     expect(names).toEqual(['Aufdehnen seitlich', 'Bein absenken (unterer Bauch)', 'Serratusstütz', 'Stütz auf Step', 'Adduktion', 'Tiefes V', 'Reverse Butterfly', 'Butterfly Maschine', 'Incline Frontraise', 'Schrägbank Kurzhantel', 'Rudern', 'Lat-Zug'])
-    expect(t.entries[0].sets).toBe(3)
+    expect(t.entries[0].sets).toBe(2) // Aufdehnen seitlich: 2 × 10
+    expect(t.entries[1].sets).toBe(3)
     expect(t.entries[11].sets).toBe(4) // Lat-Zug laut Plan
   })
 

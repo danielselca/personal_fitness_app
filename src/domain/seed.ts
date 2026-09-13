@@ -1,6 +1,7 @@
 import { DEFAULT_SETTINGS, SCHEMA_VERSION, type AppData, type Exercise, type Template } from './types.ts'
 
 const SOURCE = 'Fit7.11-Plan'
+const OWN_SOURCE = 'eigene Vorgabe'
 
 interface SeedExercise {
   id: string
@@ -11,7 +12,7 @@ interface SeedExercise {
   defaultRestSec?: number
   /** Ohne Gewichtsangabe (Körpergewicht, Band, Dehnung). */
   noWeight?: boolean
-  plan?: { sets: number; reps: number; weightKg: number | null }
+  plan?: { sets: number; reps: number; weightKg: number | null; source?: string }
 }
 
 /**
@@ -19,7 +20,7 @@ interface SeedExercise {
  * Siehe SPEC.md Abschnitt 2. Die Haken in den Notizen werden ignoriert.
  */
 const SEED_EXERCISES: SeedExercise[] = [
-  { id: 'ex-aufdehnen-seitlich', name: 'Aufdehnen seitlich', noWeight: true },
+  { id: 'ex-aufdehnen-seitlich', name: 'Aufdehnen seitlich', noWeight: true, plan: { sets: 2, reps: 10, weightKg: null, source: OWN_SOURCE } },
   { id: 'ex-ueberzuege', name: 'Überzüge' },
   { id: 'ex-bein-absenken', name: 'Bein absenken (unterer Bauch)', noWeight: true },
   { id: 'ex-serratusstuetz', name: 'Serratusstütz', noWeight: true },
@@ -130,7 +131,7 @@ export function buildSeedExercises(at: string): Exercise[] {
     hint: s.hint,
     defaultRestSec: s.defaultRestSec,
     noWeight: s.noWeight,
-    planTarget: s.plan ? { ...s.plan, source: SOURCE } : undefined,
+    planTarget: s.plan ? { sets: s.plan.sets, reps: s.plan.reps, weightKg: s.plan.weightKg, source: s.plan.source ?? SOURCE } : undefined,
     archived: false,
     createdAt: at,
     updatedAt: at,
@@ -170,6 +171,9 @@ export function createSeedData(at = new Date().toISOString()): AppData {
 }
 
 export const SEED_EXERCISE_COUNT = SEED_EXERCISES.length
+
+/** Vorgabe „Aufdehnen seitlich“ (Nutzerwunsch 2026-09-13): 2 × 10 ohne Gewicht. */
+export const AUFDEHNEN_PLAN = { sets: 2, reps: 10, weightKg: null, source: OWN_SOURCE } as const
 
 /** Aktuelle Seed-Hinweise je ID (für die Bereinigung alter Hinweise in der Migration). */
 export const SEED_HINTS: ReadonlyMap<string, string | undefined> = new Map(SEED_EXERCISES.map((s) => [s.id, s.hint]))

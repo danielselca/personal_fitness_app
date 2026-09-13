@@ -1,4 +1,4 @@
-import { buildStandardEntries, LEGACY_TEMPLATE_NAME, SEED_HINTS, SEED_NO_WEIGHT_IDS, SEED_TEMPLATE_ID, SEED_TEMPLATE_NAME } from './seed.ts'
+import { AUFDEHNEN_PLAN, buildStandardEntries, LEGACY_TEMPLATE_NAME, SEED_HINTS, SEED_NO_WEIGHT_IDS, SEED_TEMPLATE_ID, SEED_TEMPLATE_NAME } from './seed.ts'
 import { DEFAULT_SETTINGS, SCHEMA_VERSION, type AppData, type Exercise, type Template, type Workout } from './types.ts'
 
 /**
@@ -51,6 +51,19 @@ const MIGRATIONS: Record<number, (d: Record<string, unknown>) => Record<string, 
         : t,
     )
     return { ...d, schemaVersion: 4, exercises, templates }
+  },
+  // 4 → 5: „Aufdehnen seitlich“ bekommt die Vorgabe 2 × 10 (nur wenn noch keine eigene Vorgabe gesetzt ist);
+  // Seed-Vorlage übernimmt 2 Sätze, sofern dort noch der alte Standard 3 steht.
+  4: (d) => {
+    const exercises = (Array.isArray(d.exercises) ? (d.exercises as Exercise[]) : []).map((e) =>
+      e.id === 'ex-aufdehnen-seitlich' && !e.planTarget ? { ...e, planTarget: { ...AUFDEHNEN_PLAN } } : e,
+    )
+    const templates = (Array.isArray(d.templates) ? (d.templates as Template[]) : []).map((t) =>
+      t.id === SEED_TEMPLATE_ID
+        ? { ...t, entries: t.entries.map((en) => (en.exerciseId === 'ex-aufdehnen-seitlich' && en.sets === 3 ? { ...en, sets: AUFDEHNEN_PLAN.sets } : en)) }
+        : t,
+    )
+    return { ...d, schemaVersion: 5, exercises, templates }
   },
 }
 

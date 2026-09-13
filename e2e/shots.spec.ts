@@ -7,7 +7,7 @@ test('Screenshots: gemischte Zustände, Sortiermodus, Dunkelmodus', async ({ pag
   await openApp(page)
   await page.getByRole('button', { name: 'Vorlage Oberkörper starten' }).click()
   const first = card(page, 'Aufdehnen seitlich')
-  for (const i of [1, 2, 3]) {
+  for (const i of [1, 2]) {
     await first.getByLabel(`Satz ${i} Wiederholungen`).fill('12')
     await first.getByRole('button', { name: `Satz ${i} abhaken` }).click()
     await page.getByRole('button', { name: 'Überspringen' }).click()

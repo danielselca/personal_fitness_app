@@ -125,7 +125,7 @@ Settings  { defaultRestSec: 90, autoStartTimer: true, sound: true, vibration: fa
 Backup    { schemaVersion, app, exportedAt, exercises[], templates[], workouts[], settings }
 ```
 
-Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punkt. Wdh. ganzzahlig ≥ 1. `noWeight = true` blendet Gewicht in Training, Verlauf und Katalog aus (Werte bleiben `null`). Aktuelles Schema: 4. Volumen = Σ (Gewicht × Wdh.) über Sätze mit `done = true`; Sätze ohne Gewicht zählen 0 kg.
+Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punkt. Wdh. ganzzahlig ≥ 1. `noWeight = true` blendet Gewicht in Training, Verlauf und Katalog aus (Werte bleiben `null`). Aktuelles Schema: 5 (Schema 5: „Aufdehnen seitlich“ mit Vorgabe 2 × 10). Volumen = Σ (Gewicht × Wdh.) über Sätze mit `done = true`; Sätze ohne Gewicht zählen 0 kg.
 
 ---
 

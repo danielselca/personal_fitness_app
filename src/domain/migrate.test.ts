@@ -54,6 +54,24 @@ describe('Migration Schema 1 → 2 (ohne Gewicht)', () => {
     expect(out.templates.find((t) => t.id === 'tpl-eigene')!.entries).toEqual([{ exerciseId: 'ex-rudern', sets: 2 }])
   })
 
+  it('Schema 4 → 5: Aufdehnen seitlich bekommt 2 × 10 als Vorgabe, Seed-Vorlage 2 Sätze', () => {
+    const d = v1()
+    d.schemaVersion = 4
+    d.exercises = (d.exercises as Exercise[]).map((e) => (e.id === 'ex-aufdehnen-seitlich' ? { ...e, planTarget: undefined } : e))
+    d.templates = [{ id: SEED_TEMPLATE_ID, name: 'Oberkörper', entries: [{ exerciseId: 'ex-aufdehnen-seitlich', sets: 3 }, { exerciseId: 'ex-lat-zug', sets: 4 }], createdAt: 'x', updatedAt: 'x' }]
+    const out = migrateAppData(d)
+    expect(out.exercises.find((e) => e.id === 'ex-aufdehnen-seitlich')!.planTarget).toEqual({ sets: 2, reps: 10, weightKg: null, source: 'eigene Vorgabe' })
+    expect(out.templates[0].entries).toEqual([{ exerciseId: 'ex-aufdehnen-seitlich', sets: 2 }, { exerciseId: 'ex-lat-zug', sets: 4 }])
+  })
+
+  it('Schema 4 → 5 überschreibt eine vorhandene eigene Vorgabe nicht', () => {
+    const d = v1()
+    d.schemaVersion = 4
+    d.exercises = (d.exercises as Exercise[]).map((e) => (e.id === 'ex-aufdehnen-seitlich' ? { ...e, planTarget: { sets: 4, reps: 8, weightKg: null, source: 'eigene Vorgabe' } } : e))
+    const out = migrateAppData(d)
+    expect(out.exercises.find((e) => e.id === 'ex-aufdehnen-seitlich')!.planTarget).toMatchObject({ sets: 4, reps: 8 })
+  })
+
   it('Schema 3 → 4 behält einen vom Nutzer vergebenen Vorlagennamen', () => {
     const d = v1()
     d.schemaVersion = 3
