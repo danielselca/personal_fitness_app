@@ -34,9 +34,13 @@ const SEED_EXERCISES: SeedExercise[] = [
   { id: 'ex-holzhacken', name: 'Holzhacken Gummiball Wand', noWeight: true },
   {
     id: 'ex-kopfheben',
-    name: '10x10s Kopfheben 1 cm Doppelkinn',
+    name: 'Kopfheben (Doppelkinn)',
+    aliases: ['10x10s Kopfheben 1 cm Doppelkinn'],
     noWeight: true,
-    hint: '10 × 10 s halten, als 10 Wdh. erfassen.',
+    hint: 'Kopf nur 1 cm anheben',
+    holdSec: 10,
+    defaultRestSec: 10,
+    plan: { sets: 10, reps: 10, weightKg: null, source: OWN_SOURCE },
   },
   { id: 'ex-incline-frontraise', name: 'Incline Frontraise' },
   { id: 'ex-kreuzheben', name: 'Kreuzheben' },
@@ -179,7 +183,8 @@ export const SEED_EXERCISE_COUNT = SEED_EXERCISES.length
 /** Vorgabe „Aufdehnen seitlich“ (Nutzerwunsch 2026-09-13): 2 × 10 ohne Gewicht. */
 export const AUFDEHNEN_PLAN = { sets: 2, reps: 10, weightKg: null, source: OWN_SOURCE } as const
 
-/** Halteübungen des Seeds (Nutzerwunsch 2026-09-13): 4 × 60 s halten, 60 s Pause. */
+/** Halteübungen des Seeds (Nutzerwunsch 2026-09-13): Serratusstütz/Stütz 4 × 60 s (60 s Pause), Kopfheben 10 × 10 s (10 s Pause). */
+export const LEGACY_KOPFHEBEN_NAME = '10x10s Kopfheben 1 cm Doppelkinn'
 export const HOLD_SEED: ReadonlyMap<string, { holdSec: number; restSec: number; sets: number }> = new Map(
   SEED_EXERCISES.filter((e) => e.holdSec).map((e) => [e.id, { holdSec: e.holdSec!, restSec: e.defaultRestSec ?? 60, sets: e.plan?.sets ?? 4 }]),
 )

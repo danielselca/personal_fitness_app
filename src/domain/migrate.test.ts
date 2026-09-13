@@ -89,6 +89,27 @@ describe('Migration Schema 1 → 2 (ohne Gewicht)', () => {
     expect(out.templates[0].entries).toEqual([{ exerciseId: 'ex-serratusstuetz', sets: 4 }, { exerciseId: 'ex-stuetz-auf-step', sets: 2 }])
   })
 
+  it('Schema 6 → 7: Kopfheben wird Halteübung 10 × 10 s, Name gekürzt, alter Name als Alias', () => {
+    const d = v1()
+    d.schemaVersion = 6
+    d.exercises = (d.exercises as Exercise[]).map((e) =>
+      e.id === 'ex-kopfheben' ? { ...e, name: '10x10s Kopfheben 1 cm Doppelkinn', aliases: [], hint: '10 × 10 s halten, als 10 Wdh. erfassen.', mode: undefined, holdSec: undefined, defaultRestSec: undefined, planTarget: undefined } : e,
+    )
+    const out = migrateAppData(d)
+    const k = out.exercises.find((e) => e.id === 'ex-kopfheben')!
+    expect(k).toMatchObject({ name: 'Kopfheben (Doppelkinn)', mode: 'hold', holdSec: 10, defaultRestSec: 10, hint: 'Kopf nur 1 cm anheben' })
+    expect(k.aliases).toContain('10x10s Kopfheben 1 cm Doppelkinn')
+    expect(k.planTarget).toMatchObject({ sets: 10, reps: 10 })
+  })
+
+  it('Schema 6 → 7 lässt einen vom Nutzer umbenannten oder umgestellten Kopfheben-Eintrag in Ruhe', () => {
+    const d = v1()
+    d.schemaVersion = 6
+    d.exercises = (d.exercises as Exercise[]).map((e) => (e.id === 'ex-kopfheben' ? { ...e, name: 'Nacken', mode: 'reps', holdSec: undefined } : e))
+    const k = migrateAppData(d).exercises.find((e) => e.id === 'ex-kopfheben')!
+    expect(k).toMatchObject({ name: 'Nacken', mode: 'reps' })
+  })
+
   it('Schema 3 → 4 behält einen vom Nutzer vergebenen Vorlagennamen', () => {
     const d = v1()
     d.schemaVersion = 3

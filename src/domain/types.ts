@@ -1,6 +1,6 @@
 /** Datenmodell der App (SPEC.md Abschnitt 5). Alle Zeitstempel sind ISO-8601-Strings. */
 
-export const SCHEMA_VERSION = 6 as const
+export const SCHEMA_VERSION = 7 as const
 
 export type ExerciseMode = 'reps' | 'hold'
 

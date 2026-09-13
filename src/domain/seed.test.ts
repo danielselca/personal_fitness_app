@@ -15,7 +15,7 @@ describe('Seed-Katalog (AK3)', () => {
     for (const n of [
       'Aufdehnen seitlich', 'Überzüge', 'Bein absenken (unterer Bauch)', 'Serratusstütz', 'Stütz auf Step',
       'Uppercut Theraband', 'Uppercut Tuch', 'Bear hug', 'Tiefes V', 'Holzhacken Gummiball Wand',
-      '10x10s Kopfheben 1 cm Doppelkinn', 'Incline Frontraise', 'Kreuzheben', 'Rudern', 'Reverse Butterfly',
+      'Kopfheben (Doppelkinn)', 'Incline Frontraise', 'Kreuzheben', 'Rudern', 'Reverse Butterfly',
       'Adduktion', 'Lat-Zug', 'Schrägbank Kurzhantel',
     ]) expect(names).toContain(n)
   })
@@ -36,6 +36,10 @@ describe('Seed-Katalog (AK3)', () => {
     const ser = data.exercises.find((e) => e.name === 'Serratusstütz')!
     expect(ser).toMatchObject({ mode: 'hold', holdSec: 60, defaultRestSec: 60, noWeight: true })
     expect(ser.planTarget).toEqual({ sets: 4, reps: 60, weightKg: null, source: 'eigene Vorgabe' })
+    const kopf = data.exercises.find((e) => e.id === 'ex-kopfheben')!
+    expect(kopf).toMatchObject({ mode: 'hold', holdSec: 10, defaultRestSec: 10 })
+    expect(kopf.planTarget).toMatchObject({ sets: 10, reps: 10 })
+    expect(matchesQuery(kopf, '10x10s')).toBe(true) // alter Name als Alias
     const auf = data.exercises.find((e) => e.name === 'Aufdehnen seitlich')!
     expect(auf.planTarget).toEqual({ sets: 2, reps: 10, weightKg: null, source: 'eigene Vorgabe' })
     expect(data.workouts).toHaveLength(0)

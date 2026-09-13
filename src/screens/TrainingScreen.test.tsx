@@ -242,7 +242,7 @@ describe('Vorsortierung: ohne Gewicht zuerst', () => {
     const dialog = screen.getByRole('dialog', { name: 'Übungen hinzufügen' })
     const items = within(dialog).getAllByRole('listitem')
     expect(items[0].getAttribute('data-group')).toBe('Ohne Gewicht')
-    expect(items[0].textContent).toMatch(/^10x10s Kopfheben/)
+    expect(items[0].textContent).toMatch(/^Aufdehnen seitlich/)
     const firstWeighted = items.findIndex((li) => li.getAttribute('data-group') === 'Mit Gewicht')
     expect(firstWeighted).toBe(8) // 8 Übungen ohne Gewicht (Tiefes V und Bear hug zählen mit Gewicht)
     expect(items[firstWeighted].textContent).toMatch(/^Adduktion/)
