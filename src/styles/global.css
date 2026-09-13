@@ -302,6 +302,8 @@ body {
 .btn-on { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
 .btn-danger-text { color: var(--danger); }
 .picker-row { border: 2px solid transparent; }
+.picker-group::before { content: attr(data-group); display: block; font-size: 13px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.04em; margin: 10px 4px 6px; }
+.picker-group:first-child::before { margin-top: 0; }
 .picker-on { border-color: var(--success); }
 .check-mark { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--border); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; flex: none; }
 .check-on { background: var(--success); border-color: var(--success); }

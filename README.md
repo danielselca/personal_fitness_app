@@ -20,7 +20,7 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 - Beim aktuellen Satz gibt es große **+/−-Tasten** für Gewicht und Wiederholungen. Tippen ins Feld öffnet die Zahlentastatur, Komma ist erlaubt (12,5).
 - **Haken** tippen = Satz gespeichert. Der Pausentimer startet automatisch mit der Pause der Übung (Standard 90 s). Unten: **+30 s**, **Neu**, **Skip**. Ohne laufenden Timer stehen dort 1:00 / 1:30 / 2:00 und eine eigene Dauer.
 - Nur die **aktuelle Übung** (blau umrandet) ist aufgeklappt, alle anderen stehen als eine Zeile darunter; antippen klappt sie auf. Erledigte Übungen werden grün. Oben zeigen „Übung 2/8“ und ein Balken den Fortschritt.
-- **Sortieren** (oben rechts) zeigt alle Übungen als kurze Liste mit ↑ ↓ ✕, **Fertig** kehrt zurück.
+- **Sortieren** (oben rechts) zeigt alle Übungen als kurze Liste mit ↑ ↓ ✕; **Ohne Gewicht zuerst** schiebt die Körpergewichts- und Bandübungen nach vorn, **Fertig** kehrt zurück. Die Übungsauswahl listet „Ohne Gewicht“ vor „Mit Gewicht“ und übernimmt Mehrfachauswahl in dieser Reihenfolge.
 - **+ Satz**, **Notiz**, **Bearbeiten** (Sätze löschen, **Ohne Gewicht** umschalten, Übung entfernen). **+ Übung** öffnet die Suche; steht die Übung nicht im Katalog, legt „… als neue Übung anlegen“ sie sofort an.
 - **Übungen ohne Gewicht** (Serratusstütz, Aufdehnen, Theraband usw.) zeigen nur ein Wdh.-Feld. Die Physio-Übungen sind so vorbelegt; jede andere Übung lässt sich im Katalog oder im Training umstellen.
 - **Abschließen** speichert nur abgehakte Sätze. Ohne abgehakten Satz wird gefragt, ob verworfen werden soll.

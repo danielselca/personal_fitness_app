@@ -3,6 +3,7 @@ import { useStore } from 'zustand'
 import { applyImport, type ImportMode, type ImportResult } from '../domain/backup.ts'
 import { newId, nowIso } from '../domain/ids.ts'
 import { migrateAppData } from '../domain/migrate.ts'
+import { noWeightFirst } from '../domain/progress.ts'
 import { createSeedData } from '../domain/seed.ts'
 import { lastValuesFor, normalizeName, suggestSets } from '../domain/suggestions.ts'
 import type { AppData, Backup, Exercise, Settings, Template, TemplateEntry, Workout, WorkoutEntry, WorkoutSet } from '../domain/types.ts'
@@ -32,6 +33,8 @@ export interface AppStore {
   addExerciseToWorkout(exerciseId: string): void
   removeExerciseFromWorkout(exerciseId: string): void
   moveWorkoutEntry(exerciseId: string, direction: -1 | 1): void
+  /** Übungen ohne Gewicht nach vorn, Reihenfolge sonst unverändert. */
+  sortWorkoutNoWeightFirst(): void
   addSet(exerciseId: string): void
   updateSet(exerciseId: string, setId: string, patch: Partial<Pick<WorkoutSet, 'weightKg' | 'reps'>>): void
   deleteSet(exerciseId: string, setId: string): { set: WorkoutSet; index: number } | null
@@ -233,6 +236,11 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
           ;[entries[i], entries[j]] = [entries[j], entries[i]]
           return { ...w, entries }
         })
+      },
+
+      sortWorkoutNoWeightFirst() {
+        const byId = new Map(get().data.exercises.map((e) => [e.id, e]))
+        updateActive((w) => ({ ...w, entries: noWeightFirst(w.entries, (e) => !!byId.get(e.exerciseId)?.noWeight) }))
       },
 
       addSet(exerciseId) {

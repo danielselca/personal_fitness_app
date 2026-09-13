@@ -19,6 +19,16 @@ describe('Migration Schema 1 → 2 (ohne Gewicht)', () => {
     expect(by('ex-uppercut-theraband').noWeight).toBe(true)
     expect(by('ex-lat-zug').noWeight).toBeUndefined()
     expect(by('ex-kreuzheben').noWeight).toBeUndefined()
+    expect(by('ex-tiefes-v').noWeight).toBeUndefined() // wird mit Gewicht trainiert
+  })
+
+  it('Schema 2 → 3 nimmt das Kennzeichen bei „Tiefes V“ zurück', () => {
+    const d = v1()
+    d.schemaVersion = 2
+    d.exercises = (d.exercises as { id: string }[]).map((e) => (e.id === 'ex-tiefes-v' || e.id === 'ex-bear-hug' ? { ...e, noWeight: true } : e))
+    const out = migrateAppData(d)
+    expect(out.exercises.find((e) => e.id === 'ex-tiefes-v')!.noWeight).toBeUndefined()
+    expect(out.exercises.find((e) => e.id === 'ex-bear-hug')!.noWeight).toBe(true)
   })
 
   it('lässt Übungen unangetastet, bei denen schon ein Gewicht abgehakt wurde', () => {
@@ -29,7 +39,7 @@ describe('Migration Schema 1 → 2 (ohne Gewicht)', () => {
     }]
     const out = migrateAppData(d)
     expect(out.exercises.find((e) => e.id === 'ex-bear-hug')!.noWeight).toBeUndefined()
-    expect(out.exercises.find((e) => e.id === 'ex-tiefes-v')!.noWeight).toBe(true)
+    expect(out.exercises.find((e) => e.id === 'ex-serratusstuetz')!.noWeight).toBe(true)
   })
 
   it('überschreibt ein explizit gesetztes Kennzeichen nicht', () => {

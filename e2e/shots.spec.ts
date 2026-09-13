@@ -31,3 +31,10 @@ test('Screenshots: gemischte Zustände, Sortiermodus, Dunkelmodus', async ({ pag
   await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({ path: `${OUT}/14-dark.png` })
 })
+
+test('Screenshot: Übungsauswahl mit Gruppen', async ({ page }) => {
+  await openApp(page)
+  await page.getByRole('button', { name: 'Training starten' }).click()
+  await page.getByRole('dialog', { name: 'Übungen hinzufügen' }).waitFor()
+  await page.screenshot({ path: `${OUT}/15-picker.png` })
+})

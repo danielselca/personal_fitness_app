@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { noWeightFirst, sortForPicker } from '../domain/progress.ts'
 import { matchesQuery, normalizeName } from '../domain/suggestions.ts'
 import { useAppStore } from '../store/appStore.ts'
 import { Sheet } from './Sheet.tsx'
@@ -13,20 +14,19 @@ export function ExercisePicker({ excludeIds, onAdd, onClose }: { excludeIds: str
   const [selected, setSelected] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
 
-  const available = useMemo(
-    () => exercises.filter((e) => !e.archived && !excludeIds.includes(e.id)).sort((a, b) => a.name.localeCompare(b.name, 'de')),
-    [exercises, excludeIds],
-  )
+  const available = useMemo(() => sortForPicker(exercises.filter((e) => !e.archived && !excludeIds.includes(e.id))), [exercises, excludeIds])
   const list = useMemo(() => available.filter((e) => matchesQuery(e, query)), [available, query])
   const q = query.trim()
   const exactExists = q ? exercises.some((e) => normalizeName(e.name) === normalizeName(q)) : true
 
   const toggle = (id: string) => setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]))
+  // Beim Hinzufügen: ohne Gewicht zuerst, sonst in Antipp-Reihenfolge
+  const ordered = (ids: string[]) => noWeightFirst(ids, (id) => !!exercises.find((e) => e.id === id)?.noWeight)
 
   const createAndAdd = () => {
     const r = addExercise({ name: q })
     if (!r.ok) return setError(r.error)
-    onAdd([...selected, r.exercise.id])
+    onAdd([...ordered(selected), r.exercise.id])
   }
 
   return (
@@ -34,7 +34,7 @@ export function ExercisePicker({ excludeIds, onAdd, onClose }: { excludeIds: str
       title="Übungen hinzufügen"
       onClose={onClose}
       footer={
-        <button type="button" className="btn btn-primary btn-block" disabled={selected.length === 0} onClick={() => onAdd(selected)}>
+        <button type="button" className="btn btn-primary btn-block" disabled={selected.length === 0} onClick={() => onAdd(ordered(selected))}>
           {selected.length === 0 ? 'Übungen auswählen' : `${selected.length} hinzufügen`}
         </button>
       }
@@ -59,15 +59,16 @@ export function ExercisePicker({ excludeIds, onAdd, onClose }: { excludeIds: str
         </button>
       )}
       <ul className="list" style={{ marginTop: 12 }}>
-        {list.map((e) => {
+        {list.map((e, i) => {
           const on = selected.includes(e.id)
+          const groupStart = !q && (i === 0 || !!list[i - 1].noWeight !== !!e.noWeight)
           return (
-            <li key={e.id}>
+            <li key={e.id} className={groupStart ? 'picker-group' : undefined} data-group={groupStart ? (e.noWeight ? 'Ohne Gewicht' : 'Mit Gewicht') : undefined}>
               <button type="button" aria-pressed={on} className={`card card-tap row picker-row ${on ? 'picker-on' : ''}`} onClick={() => toggle(e.id)}>
                 <span className="row-main">
                   <span className="row-title ellipsis" style={{ display: 'block' }}>{e.name}</span>
-                  {(e.machineNo || e.noWeight) && (
-                    <span className="row-sub">{[e.machineNo && `Gerät ${e.machineNo}`, e.noWeight && 'ohne Gewicht'].filter(Boolean).join(' · ')}</span>
+                  {(e.machineNo || (q && e.noWeight)) && (
+                    <span className="row-sub">{[e.machineNo && `Gerät ${e.machineNo}`, q && e.noWeight && 'ohne Gewicht'].filter(Boolean).join(' · ')}</span>
                   )}
                 </span>
                 <span className={`check-mark ${on ? 'check-on' : ''}`} aria-hidden="true">{on ? '✓' : ''}</span>

@@ -149,6 +149,7 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
   const addExerciseToWorkout = useAppStore((s) => s.addExerciseToWorkout)
   const moveEntry = useAppStore((s) => s.moveWorkoutEntry)
   const removeEntry = useAppStore((s) => s.removeExerciseFromWorkout)
+  const sortNoWeightFirst = useAppStore((s) => s.sortWorkoutNoWeightFirst)
   const startTimer = useAppStore((s) => s.startTimer)
   const restoreSet = useAppStore((s) => s.restoreSet)
   const finishWorkout = useAppStore((s) => s.finishWorkout)
@@ -218,6 +219,11 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
         </div>
       </div>
 
+      {sorting && (
+        <button type="button" className="btn btn-block" style={{ minHeight: 44, fontSize: 16, marginBottom: 10 }} onClick={sortNoWeightFirst}>
+          Ohne Gewicht zuerst
+        </button>
+      )}
       {sorting ? (
         <ul className="list sort-list" aria-label="Reihenfolge der Übungen">
           {workout.entries.map((entry, i) => {

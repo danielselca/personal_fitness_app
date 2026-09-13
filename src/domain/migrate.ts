@@ -25,6 +25,15 @@ const MIGRATIONS: Record<number, (d: Record<string, unknown>) => Record<string, 
       exercises: exercises.map((e) => (e.noWeight === undefined && SEED_NO_WEIGHT_IDS.has(e.id) && !weighted.has(e.id) ? { ...e, noWeight: true } : e)),
     }
   },
+  // 2 → 3: „Tiefes V“ wird laut Nutzer mit Gewicht trainiert; das in Schema 2 gesetzte Kennzeichen zurücknehmen.
+  2: (d) => {
+    const exercises = Array.isArray(d.exercises) ? (d.exercises as Exercise[]) : []
+    return {
+      ...d,
+      schemaVersion: 3,
+      exercises: exercises.map((e) => (e.id === 'ex-tiefes-v' && e.noWeight === true ? { ...e, noWeight: undefined } : e)),
+    }
+  },
 }
 
 export class MigrationError extends Error {}

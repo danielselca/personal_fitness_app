@@ -233,6 +233,37 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
   })
 })
 
+describe('Vorsortierung: ohne Gewicht zuerst', () => {
+  it('Auswahl gruppiert ohne Gewicht zuerst und fügt in dieser Reihenfolge hinzu', () => {
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    const dialog = screen.getByRole('dialog', { name: 'Übungen hinzufügen' })
+    const items = within(dialog).getAllByRole('listitem')
+    expect(items[0].getAttribute('data-group')).toBe('Ohne Gewicht')
+    expect(items[0].textContent).toMatch(/^10x10s Kopfheben/)
+    const firstWeighted = items.findIndex((li) => li.getAttribute('data-group') === 'Mit Gewicht')
+    expect(firstWeighted).toBe(9) // 9 Übungen ohne Gewicht (Tiefes V zählt mit Gewicht)
+    expect(items[firstWeighted].textContent).toMatch(/^Adduktion/)
+    expect(items.filter((li) => li.hasAttribute('data-group'))).toHaveLength(2)
+    // Antippen in Reihenfolge Lat-Zug, Serratusstütz → Serratusstütz landet vorn
+    addFromPicker(['Lat-Zug', 'Serratusstütz'])
+    expect(active().entries.map((e) => e.exerciseId)).toEqual(['ex-serratusstuetz', 'ex-lat-zug'])
+  })
+
+  it('Sortiermodus: „Ohne Gewicht zuerst“ ordnet stabil um', () => {
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: 'Vorlage Oberkörper Fokus Schulter starten' }))
+    fireEvent.click(screen.getByRole('button', { name: '+ Übung' }))
+    addFromPicker(['Bear hug', 'Aufdehnen seitlich'])
+    expect(active().entries.map((e) => e.exerciseId).slice(-2)).toEqual(['ex-bear-hug', 'ex-aufdehnen-seitlich']) // Antipp-Reihenfolge
+    fireEvent.click(screen.getByRole('button', { name: 'Sortieren' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Ohne Gewicht zuerst' }))
+    const ids = active().entries.map((e) => e.exerciseId)
+    expect(ids.slice(0, 2)).toEqual(['ex-bear-hug', 'ex-aufdehnen-seitlich'])
+    expect(ids.slice(2)).toEqual(['ex-lat-zug', 'ex-butterfly-maschine', 'ex-reverse-butterfly', 'ex-facepulls', 'ex-rudern', 'ex-schraegbank-kurzhantel', 'ex-seitheben-kurzhantel', 'ex-adduktion'])
+  })
+})
+
 describe('Timer (AK12, AK13)', () => {
   function startWithLat() {
     render(<TrainingScreen />)

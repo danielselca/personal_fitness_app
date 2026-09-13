@@ -27,7 +27,7 @@ const SEED_EXERCISES: SeedExercise[] = [
   { id: 'ex-uppercut-theraband', name: 'Uppercut Theraband', noWeight: true },
   { id: 'ex-uppercut-tuch', name: 'Uppercut Tuch', noWeight: true },
   { id: 'ex-bear-hug', name: 'Bear hug', noWeight: true },
-  { id: 'ex-tiefes-v', name: 'Tiefes V', noWeight: true },
+  { id: 'ex-tiefes-v', name: 'Tiefes V' },
   { id: 'ex-holzhacken', name: 'Holzhacken Gummiball Wand', noWeight: true },
   {
     id: 'ex-kopfheben',

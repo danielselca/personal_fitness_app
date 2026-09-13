@@ -96,7 +96,7 @@ Weitere Informationen aus den Screenshots: Plan „Oberkörper Fokus Schulter“
 ### Aktives Training – Detailverhalten (wichtigster Bildschirm)
 
 - **Übersicht (seit 2026-09-13):** Nur die **aktuelle Übung** (erste mit offenem Satz) ist ausgeklappt und farbig umrandet; alle anderen sind einzeilig eingeklappt (Nummer, Name, „2/4 Sätze“, Satz-Punkte) und lassen sich antippen. Erledigte Übungen sind grün markiert, sobald alle Sätze abgehakt sind, klappt die Karte zu und die nächste öffnet sich. Kopfzeile mit „Übung 2/8 · 5/24 Sätze · Minuten“ und Fortschrittsbalken. **Sortieren** schaltet in eine kompakte Liste (nur Namen mit ↑ ↓ ✕), damit beim Umsortieren kein Platz durch Satzzeilen verloren geht.
-- **Übungen ohne Gewicht** (`noWeight`, z. B. Serratusstütz, Aufdehnen, Therabandübungen): kein kg-Feld, kein kg-Stepper, nur Wiederholungen; Anzeige „12 Wdh.“ statt „12 × – kg“. Umschaltbar im Übungsformular und direkt im Training (Karte → Bearbeiten → „Ohne Gewicht“). Die zehn Physio-/Dehnübungen des Seeds sind so vorbelegt (Migration Schema 1 → 2 trägt es auf bestehenden Geräten nach, außer es wurde dort schon ein Gewicht abgehakt).
+- **Übungen ohne Gewicht** (`noWeight`, z. B. Serratusstütz, Aufdehnen, Therabandübungen): kein kg-Feld, kein kg-Stepper, nur Wiederholungen; Anzeige „12 Wdh.“ statt „12 × – kg“. Umschaltbar im Übungsformular und direkt im Training (Karte → Bearbeiten → „Ohne Gewicht“). Neun Physio-/Dehnübungen des Seeds sind so vorbelegt (Migration Schema 1 → 2 trägt es auf bestehenden Geräten nach, außer es wurde dort schon ein Gewicht abgehakt; Schema 3 nimmt es bei „Tiefes V“ zurück, das mit Gewicht trainiert wird). **Vorsortierung:** Die Übungsauswahl zeigt die Gruppe „Ohne Gewicht“ vor „Mit Gewicht“ und fügt Mehrfachauswahl in dieser Reihenfolge hinzu; im Sortiermodus ordnet „Ohne Gewicht zuerst“ das laufende Training stabil um.
 - Jede Übung ist eine Karte mit Satzzeilen. Der **aktuelle Satz** (erster nicht abgehakter) ist hervorgehoben und zeigt große Bedienelemente: Gewicht mit `−`/`+` (Schrittweite je Übung, Standard 2,5 kg), Wdh. mit `−`/`+`, Zahlenfelder für direkte Eingabe, großer Haken rechts.
 - Links in jeder Satzzeile steht „Letztes Mal: 10 × 45 kg“ (Werte des gleichen Satzes im letzten abgeschlossenen Training mit dieser Übung).
 - Vorschlagswerte werden vorbefüllt, sind editierbar und gelten erst nach dem **Abhaken** als absolviert. Abhaken lässt sich rückgängig machen.
@@ -121,7 +121,7 @@ Settings  { defaultRestSec: 90, autoStartTimer: true, sound: true, vibration: fa
 Backup    { schemaVersion, app, exportedAt, exercises[], templates[], workouts[], settings }
 ```
 
-Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punkt. Wdh. ganzzahlig ≥ 1. `noWeight = true` blendet Gewicht in Training, Verlauf und Katalog aus (Werte bleiben `null`). Aktuelles Schema: 2. Volumen = Σ (Gewicht × Wdh.) über Sätze mit `done = true`; Sätze ohne Gewicht zählen 0 kg.
+Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punkt. Wdh. ganzzahlig ≥ 1. `noWeight = true` blendet Gewicht in Training, Verlauf und Katalog aus (Werte bleiben `null`). Aktuelles Schema: 3. Volumen = Σ (Gewicht × Wdh.) über Sätze mit `done = true`; Sätze ohne Gewicht zählen 0 kg.
 
 ---
 
@@ -229,7 +229,7 @@ Konsequenz: v1 hält den Bildschirm während des Trainings per Wake Lock an (Sta
 | 8 | Statistik mit Leerzuständen | F11 | **erledigt** |
 | 9 | Vorlagen, „Letztes Training wiederholen“ | F14 | **erledigt** |
 | 10 | Feinschliff: Hinweise (Installation, Speicher, Signalgrenzen), Tests, Handy-Durchlauf aller AK | AK1–AK28 | **erledigt** |
-| 11 | Übersichtlichkeit nach erstem Feedback (2026-09-13): einklappbare Karten, Farben für aktuell/erledigt, Fortschritt, Sortiermodus, Übungen ohne Gewicht | Feedback 1 | **erledigt** |
+| 11 | Übersichtlichkeit nach erstem Feedback (2026-09-13): einklappbare Karten, Farben für aktuell/erledigt, Fortschritt, Sortiermodus, Übungen ohne Gewicht, Vorsortierung „ohne Gewicht zuerst“ | Feedback 1 | **erledigt** |
 
 **Warum Export/Import so früh (Schritt 3 statt 8):** Die Trainingsdaten liegen ausschließlich im Browser des Geräts. Ohne Sicherungsweg gäbe es eine Phase, in der echte Trainings erfasst werden, die bei Geräteverlust, App-Löschung oder Gerätewechsel unwiederbringlich wären. Ab Schritt 3 existiert für jeden erfassten Datensatz ein Weg, ihn zu sichern und auf ein neues Gerät zu übertragen.
 
