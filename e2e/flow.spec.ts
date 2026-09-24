@@ -198,4 +198,34 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(0)
   })
+
+  test('Coach: oberes Ende erreicht → nächstes Mal Gewicht erhöht, „Wie letztes Mal“ (Schritt 20a)', async ({ page }) => {
+    await openApp(page)
+    await page.getByRole('button', { name: /^Programme/ }).click()
+    await page.getByRole('listitem', { name: 'Vorschlag Ganzkörper A/B' }).getByRole('button', { name: 'Übernehmen …' }).click()
+    await page.getByRole('dialog', { name: 'Ganzkörper A/B übernehmen' }).getByRole('button', { name: 'Übernehmen und aktivieren' }).click()
+    const hero = page.getByRole('region', { name: 'Programm Ganzkörper A/B' })
+    await hero.getByRole('button', { name: /Nächstes: Ganzkörper A/ }).click()
+
+    const lat = card(page, 'Lat-Zug')
+    await lat.getByRole('button', { expanded: false }).click()
+    await expect(lat.getByRole('note', { name: 'Coach' })).toContainText('Erstes Mal')
+    for (const i of [1, 2, 3]) {
+      await lat.getByLabel(`Satz ${i} Wiederholungen`).fill('12')
+      await lat.getByRole('button', { name: `Satz ${i} abhaken` }).click()
+    }
+    await page.getByRole('button', { name: 'Abschließen' }).click()
+    await page.getByRole('dialog', { name: 'Training abschließen' }).getByRole('button', { name: 'Abschließen' }).click()
+    await page.getByRole('button', { name: 'OK' }).click()
+
+    await hero.getByRole('button', { name: 'Anderen Tag wählen' }).click()
+    await page.getByRole('button', { name: 'Ganzkörper A starten' }).click()
+    const lat2 = card(page, 'Lat-Zug')
+    await lat2.getByRole('button', { expanded: false }).click()
+    await expect(lat2.getByRole('note', { name: 'Coach' })).toContainText('↑ 47,5 kg – letztes Mal 3 × 12 × 45 kg')
+    await expect(lat2.getByLabel('Satz 1 Gewicht')).toHaveValue('47,5')
+    await page.screenshot({ path: 'test-results/shots/60-coach-hint.png' })
+    await lat2.getByRole('button', { name: 'Wie letztes Mal' }).click()
+    await expect(lat2.getByLabel('Satz 1 Gewicht')).toHaveValue('45')
+  })
 })

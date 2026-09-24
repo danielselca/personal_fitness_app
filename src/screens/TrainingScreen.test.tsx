@@ -509,3 +509,57 @@ describe('Übung tauschen und Schonen im Training (Schritt 18b)', () => {
     expect(data().templates[0].entries.some((e) => e.exerciseId === 'ex-butterfly-maschine')).toBe(true) // Vorlage unverändert
   })
 })
+
+describe('Coach: Steigerung im Training (Schritt 20a)', () => {
+  function programWithHistory(sets: [number, number][], rating?: 'leicht' | 'passend' | 'schwer') {
+    const p = appStore.getState().installProgram('builtin-ganzkoerper', { goal: 'muskelaufbau', physioBlock: false })!
+    const at = new Date(Date.now() - 2 * 86_400_000).toISOString()
+    const w: Workout = {
+      id: 'w-hist', startedAt: at, finishedAt: at, status: 'done', updatedAt: at, programId: p.id, programDayId: p.days[1].id,
+      entries: [{ exerciseId: 'ex-lat-zug', rating, sets: sets.map(([kg, r], i) => ({ id: `h${i}`, weightKg: kg, reps: r, done: true })) }],
+    }
+    appStore.setState({ data: { ...data(), workouts: [w] } })
+    return p
+  }
+
+  it('alle Sätze am oberen Ende → Hinweis mit Gewichtssteigerung, „Wie letztes Mal“ setzt zurück', () => {
+    programWithHistory([[45, 12], [45, 12], [45, 12]])
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: /Nächstes: Ganzkörper A/ }))
+    const lat = card('Lat-Zug')
+    if (within(lat).queryByRole('button', { expanded: false })) fireEvent.click(within(lat).getByRole('button', { expanded: false }))
+    expect(within(lat).getByRole('note', { name: 'Coach' }).textContent).toContain('↑ 47,5 kg – letztes Mal 3 × 12 × 45 kg')
+    expect((within(lat).getByLabelText('Satz 1 Gewicht') as HTMLInputElement).value).toBe('47,5')
+    expect((within(lat).getByLabelText('Satz 1 Wiederholungen') as HTMLInputElement).value).toBe('8')
+    fireEvent.click(within(lat).getByRole('button', { name: 'Wie letztes Mal' }))
+    expect((within(lat).getByLabelText('Satz 1 Gewicht') as HTMLInputElement).value).toBe('45')
+    expect((within(lat).getByLabelText('Satz 1 Wiederholungen') as HTMLInputElement).value).toBe('12')
+    expect(within(lat).queryByRole('note', { name: 'Coach' })).toBeNull()
+  })
+
+  it('Coach abgeschaltet → wie bisher letzte Werte, kein Hinweis', () => {
+    programWithHistory([[45, 12], [45, 12], [45, 12]])
+    appStore.getState().updateSettings({ coachProgression: false })
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: /Nächstes: Ganzkörper A/ }))
+    const lat = card('Lat-Zug')
+    if (within(lat).queryByRole('button', { expanded: false })) fireEvent.click(within(lat).getByRole('button', { expanded: false }))
+    expect(within(lat).queryByRole('note', { name: 'Coach' })).toBeNull()
+    expect((within(lat).getByLabelText('Satz 1 Gewicht') as HTMLInputElement).value).toBe('45')
+  })
+
+  it("Abschluss: „Wie war's?“ je Übung mit Zielbereich, danach neue Bestwerte", () => {
+    programWithHistory([[45, 12], [45, 12], [45, 12]])
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: /Nächstes: Ganzkörper A/ }))
+    const lat = card('Lat-Zug')
+    if (within(lat).queryByRole('button', { expanded: false })) fireEvent.click(within(lat).getByRole('button', { expanded: false }))
+    fireEvent.click(within(lat).getByRole('button', { name: 'Satz 1 abhaken' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Abschließen' }))
+    const sheet = screen.getByRole('dialog', { name: 'Training abschließen' })
+    fireEvent.click(within(within(sheet).getByRole('group', { name: 'Wie war Lat-Zug?' })).getByRole('button', { name: 'schwer' }))
+    expect(active().entries.find((e) => e.exerciseId === 'ex-lat-zug')?.rating).toBe('schwer')
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Abschließen' }))
+    expect(screen.getByTestId('new-records').textContent).toContain('Lat-Zug: 47,5 kg (bisher 45 kg)')
+  })
+})

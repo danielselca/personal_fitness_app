@@ -53,6 +53,7 @@ export function WorkoutExerciseCard({
   const deleteSet = useAppStore((s) => s.deleteSet)
   const setEntryNote = useAppStore((s) => s.setEntryNote)
   const updateExercise = useAppStore((s) => s.updateExercise)
+  const applyLastValues = useAppStore((s) => s.applyLastValues)
   const remove = useAppStore((s) => s.removeExerciseFromWorkout)
   const [noteOpen, setNoteOpen] = useState(!!entry.note)
   const [editing, setEditing] = useState(false)
@@ -126,6 +127,28 @@ export function WorkoutExerciseCard({
                 <button type="button" className="btn btn-sm" onClick={() => remove(exercise.id)}>Heute auslassen</button>
                 {onDismissHits && <button type="button" className="btn btn-sm btn-link" onClick={onDismissHits}>Trotzdem</button>}
               </div>
+            </div>
+          )}
+          {entry.coach && (
+            <div className="coach-hint" data-kind={entry.coach.kind} role="note" aria-label="Coach">
+              <span className="coach-hint-text">{entry.coach.note}</span>
+              {entry.coach.kind === 'halten' ? (
+                <button
+                  type="button"
+                  className="btn btn-sm"
+                  onClick={() => {
+                    updateExercise(exercise.id, { holdSec: (exercise.holdSec ?? 60) + 5 })
+                  }}
+                >
+                  Auf {(exercise.holdSec ?? 60) + 5} s erhöhen
+                </button>
+              ) : (
+                last && entry.coach.kind !== 'erstes-mal' && entry.coach.kind !== 'geschont' && doneCount < entry.sets.length && (
+                  <button type="button" className="btn btn-sm" onClick={() => applyLastValues(exercise.id)}>
+                    Wie letztes Mal
+                  </button>
+                )
+              )}
             </div>
           )}
           {exercise.libraryId && (

@@ -3,10 +3,12 @@ import { useStore } from 'zustand'
 import { applyImport, type ImportMode, type ImportResult } from '../domain/backup.ts'
 import { newId, nowIso } from '../domain/ids.ts'
 import { adoptExercise } from '../domain/adopt.ts'
+import { dayKey } from '../domain/restrictions.ts'
 import { migrateAppData } from '../domain/migrate.ts'
 import { advanceHold, holdSecFor, pauseHold, restSecFor, resumeHold, startHold } from '../domain/hold.ts'
 import { noWeightFirst } from '../domain/progress.ts'
 import { createSeedData } from '../domain/seed.ts'
+import { progressionFor, type ProgressionTarget } from '../domain/coach/progression.ts'
 import { lastValuesFor, normalizeName, suggestSets } from '../domain/suggestions.ts'
 import {
   builtinProgram,
@@ -17,7 +19,7 @@ import {
   installProgram as installProgramData,
   type InstallOptions,
 } from '../domain/programs.ts'
-import type { AppData, Backup, Exercise, Program, ProgramDay, Restriction, Settings, Template, TemplateEntry, Workout, WorkoutEntry, WorkoutSet } from '../domain/types.ts'
+import type { AppData, Backup, EntryRating, Exercise, Program, ProgramDay, Restriction, Settings, Template, TemplateEntry, Workout, WorkoutEntry, WorkoutSet } from '../domain/types.ts'
 import { idbStorage, type DataStorage } from './persistence.ts'
 
 export type ExerciseInput = Omit<Exercise, 'id' | 'createdAt' | 'updatedAt' | 'archived' | 'aliases'> & {
@@ -79,6 +81,10 @@ export interface AppStore {
   restoreSet(exerciseId: string, set: WorkoutSet, index: number): void
   setSetDone(exerciseId: string, setId: string, done: boolean): boolean
   setEntryNote(exerciseId: string, note: string): void
+  /** „Wie letztes Mal“: offene Sätze auf die Werte der letzten Einheit setzen (Coach-Hinweis entfällt). */
+  applyLastValues(exerciseId: string): void
+  /** „Wie war's?“ – leicht / passend / schwer (undefined löscht). */
+  setEntryRating(exerciseId: string, rating: EntryRating | undefined): void
   // Halteübungen (Donut): Ablauf Arbeit → Pause → … je Übung
   startHold(exerciseId: string, nowMs?: number): void
   pauseHold(exerciseId: string, nowMs?: number): void
@@ -130,6 +136,8 @@ export interface AppStore {
   // Körperbereiche schonen
   addRestriction(input: Pick<Restriction, 'bodyParts' | 'muscles' | 'note' | 'until'>): Restriction | null
   removeRestriction(id: string): void
+  /** Schonen beenden: gilt ab heute nicht mehr, bleibt aber für den Wiedereinstieg erhalten. */
+  endRestriction(id: string): void
   markBackupDone(): void
   importBackup(backup: Backup, mode: ImportMode): ImportResult
   markHintSeen(id: string): void
@@ -181,13 +189,28 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
     const buildEntry = (
       d: AppData,
       exerciseId: string,
-      opts: { targetSets?: number; excludeWorkoutId?: string; skipArchived?: boolean } = {},
+      opts: { targetSets?: number; excludeWorkoutId?: string; skipArchived?: boolean; target?: ProgressionTarget } = {},
     ): WorkoutEntry | null => {
       const ex = d.exercises.find((e) => e.id === exerciseId)
       if (!ex || (opts.skipArchived && ex.archived)) return null
+      // Mit Zielbereich schlägt der Coach die nächste Steigerung vor (abschaltbar)
+      if (opts.target && d.settings.coachProgression) {
+        const r = progressionFor({
+          exercise: ex,
+          target: opts.target,
+          workouts: d.workouts,
+          restrictions: d.restrictions,
+          weightStep: d.settings.weightStep,
+          now: new Date(),
+          excludeWorkoutId: opts.excludeWorkoutId,
+        })
+        if (r) return { exerciseId, sets: r.sets, coach: r.coach }
+      }
       const last = lastValuesFor(d.workouts, exerciseId, opts.excludeWorkoutId)
       return { exerciseId, sets: suggestSets(ex, last, opts.targetSets).sets }
     }
+    const targetOf = (e: { sets: number; repMin?: number; repMax?: number }): ProgressionTarget | undefined =>
+      e.repMin !== undefined && e.repMax !== undefined ? { sets: e.sets, repMin: e.repMin, repMax: e.repMax } : undefined
 
     return {
       data: createSeedData(),
@@ -290,7 +313,7 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         const fromTemplate = (t: Template) =>
           t.entries
             .map((te): WorkoutEntry | null => {
-              const e = buildEntry(d, te.exerciseId, { targetSets: te.sets, skipArchived: true })
+              const e = buildEntry(d, te.exerciseId, { targetSets: te.sets, skipArchived: true, target: targetOf(te) })
               if (!e) return null
               return {
                 ...e,
@@ -345,7 +368,11 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         const active = get().activeWorkout()
         const old = active?.entries.find((e) => e.exerciseId === oldId)
         if (!active || !old || old.sets.some((s) => s.done) || active.entries.some((e) => e.exerciseId === newId)) return false
-        const built = buildEntry(d, newId, { targetSets: old.sets.length, excludeWorkoutId: active.id })
+        const built = buildEntry(d, newId, {
+          targetSets: old.sets.length,
+          excludeWorkoutId: active.id,
+          target: targetOf({ sets: old.sets.length, repMin: old.repMin, repMax: old.repMax }),
+        })
         if (!built) return false
         // Zielbereich bleibt (gleiche Aufgabe), die Pause kommt von der neuen Übung
         const entry: WorkoutEntry = { ...built, ...(old.repMin !== undefined && old.repMax !== undefined ? { repMin: old.repMin, repMax: old.repMax } : {}) }
@@ -449,6 +476,26 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
 
       setEntryNote(exerciseId, note) {
         updateEntry(exerciseId, (e) => ({ ...e, note: note.trim() ? note : undefined }))
+      },
+
+      applyLastValues(exerciseId) {
+        const active = get().activeWorkout()
+        if (!active) return
+        const last = lastValuesFor(get().data.workouts, exerciseId, active.id)
+        if (!last) return
+        updateEntry(exerciseId, (e) => ({
+          ...e,
+          coach: undefined,
+          sets: e.sets.map((s, i) => {
+            if (s.done) return s
+            const src = last.sets[i] ?? last.sets[last.sets.length - 1]
+            return { ...s, weightKg: src.weightKg, reps: src.reps }
+          }),
+        }))
+      },
+
+      setEntryRating(exerciseId, rating) {
+        updateEntry(exerciseId, (e) => ({ ...e, rating }))
       },
 
       startHold(exerciseId, nowMs = Date.now()) {
@@ -691,6 +738,13 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         }
         update((d) => ({ ...d, restrictions: [...d.restrictions, r] }))
         return r
+      },
+
+      endRestriction(id) {
+        const y = new Date()
+        y.setDate(y.getDate() - 1)
+        const until = dayKey(y)
+        update((d) => ({ ...d, restrictions: d.restrictions.map((r) => (r.id === id ? { ...r, until, updatedAt: nowIso() } : r)) }))
       },
 
       removeRestriction(id) {

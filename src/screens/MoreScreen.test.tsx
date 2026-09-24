@@ -111,7 +111,9 @@ describe('Körperbereiche schonen (Schritt 18b)', () => {
     const list = screen.getByRole('list', { name: 'Geschonte Bereiche' })
     expect(list.textContent).toContain('Schulter · bis 31.12.2099')
     fireEvent.click(within(list).getByRole('button', { name: /Schonen beenden/ }))
-    expect(appStore.getState().data.restrictions).toEqual([])
+    // bleibt für den Wiedereinstieg gespeichert, gilt aber ab heute nicht mehr
+    expect(appStore.getState().data.restrictions[0].until! < new Date().toISOString().slice(0, 10)).toBe(true)
+    expect(screen.queryByRole('list', { name: 'Geschonte Bereiche' })).toBeNull()
   })
 
   it('abgelaufene Einträge werden nicht angezeigt', () => {

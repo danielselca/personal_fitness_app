@@ -564,3 +564,19 @@ ul.list > li.restrict-row { display: flex; }
 .licenses { font-size: 14px; }
 .licenses ul { margin: 0 0 10px; padding-left: 20px; }
 .licenses a { color: var(--primary); }
+
+/* ---------- Coach (Schritt 20) ---------- */
+.coach-hint {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 10px;
+  padding: 8px 10px; border-radius: var(--radius-sm); background: var(--primary-soft); color: var(--text); font-size: 14px; font-weight: 600;
+}
+.coach-hint-text { flex: 1 1 200px; }
+.coach-hint[data-kind="geschont"], .coach-hint[data-kind="pause"], .coach-hint[data-kind="wiedereinstieg"] { background: var(--warning-soft); }
+.coach-hint[data-kind="erstes-mal"], .coach-hint[data-kind="gleich"] { background: var(--surface-2); font-weight: 500; }
+.rating-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; }
+.rating-row + .rating-row { border-top: 1px solid var(--border); }
+.rating-row .row-title { flex: 1; min-width: 0; font-size: 15px; }
+.rating-chips { display: flex; gap: 4px; flex: none; }
+.rating-chips .chip { min-height: 36px; padding: 0 10px; font-size: 13px; }
+.records { margin: 8px 0 0; padding-left: 18px; font-size: 14px; }
+.records-box { margin-top: 10px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--success-soft); font-size: 14px; }
