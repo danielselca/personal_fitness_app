@@ -212,6 +212,7 @@ export function createSeedData(at = new Date().toISOString()): AppData {
     workouts: [],
     programs: [],
     restrictions: [],
+    bodyLog: [],
     settings: { ...DEFAULT_SETTINGS },
     timer: null,
     meta: { workoutsSinceBackup: 0, hintsSeen: [], seededAt: at },

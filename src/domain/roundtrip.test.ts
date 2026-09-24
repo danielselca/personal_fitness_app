@@ -24,6 +24,7 @@ describe('Rundreise: nichts geht verloren', () => {
     expect(checked.backup.workouts).toEqual(full.workouts)
     expect(checked.backup.programs).toEqual(full.programs)
     expect(checked.backup.restrictions).toEqual(full.restrictions)
+    expect(checked.backup.bodyLog).toEqual(full.bodyLog)
     expect(checked.backup.settings).toEqual(full.settings)
 
     const local = createSeedData('2026-09-01T00:00:00.000Z')
@@ -33,6 +34,7 @@ describe('Rundreise: nichts geht verloren', () => {
     expect(data.workouts).toEqual(full.workouts)
     expect(data.programs).toEqual(full.programs)
     expect(data.restrictions).toEqual(full.restrictions)
+    expect(data.bodyLog).toEqual(full.bodyLog)
     expect(data.settings).toEqual(full.settings)
   })
 

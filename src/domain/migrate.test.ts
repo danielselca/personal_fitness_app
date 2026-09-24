@@ -204,3 +204,26 @@ describe('Migration Schema 8 → 9 (Programme, Schonung)', () => {
     expect(out.templates).toEqual(d.templates)
   })
 })
+
+describe('Migration Schema 9 → 10 (Coach I)', () => {
+  const AT = '2026-09-01T00:00:00.000Z'
+  const v9 = (): Record<string, unknown> => {
+    const { bodyLog: _b, ...d } = createSeedData(AT) as unknown as Record<string, unknown>
+    const { coachProgression: _c, ...settings } = d.settings as Record<string, unknown>
+    return { ...d, schemaVersion: 9, settings }
+  }
+
+  it('migrierter Seed entspricht einem frisch angelegten: Körpergewicht leer, Coach an', () => {
+    const out = migrateAppData(v9())
+    expect(out).toEqual(createSeedData(AT))
+    expect(out.bodyLog).toEqual([])
+    expect(out.settings.coachProgression).toBe(true)
+  })
+
+  it('Trainings behalten ihre Werte, unbekannte Bewertungen fallen beim Import weg', () => {
+    const d = v9()
+    const workout = { id: 'wo-1', startedAt: AT, finishedAt: AT, status: 'done', updatedAt: AT, entries: [{ exerciseId: 'ex-lat-zug', sets: [{ id: 's1', weightKg: 45, reps: 10, done: true }] }] }
+    d.workouts = [workout]
+    expect(migrateAppData(structuredClone(d)).workouts).toEqual([workout])
+  })
+})

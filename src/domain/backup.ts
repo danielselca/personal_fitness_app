@@ -5,6 +5,7 @@ import {
   isNum,
   isObj,
   isStr,
+  normalizeBodyLog,
   normalizeExercise,
   normalizeList,
   normalizeProgram,
@@ -12,7 +13,7 @@ import {
   normalizeTemplate,
   normalizeWorkout,
 } from './normalize.ts'
-import { BACKUP_APP_ID, SCHEMA_VERSION, type AppData, type Backup, type Exercise, type Program, type Restriction, type Template, type Workout } from './types.ts'
+import { BACKUP_APP_ID, SCHEMA_VERSION, type AppData, type Backup, type BodyLogEntry, type Exercise, type Program, type Restriction, type Template, type Workout } from './types.ts'
 
 /** Export (F12): vollständige Datenstruktur mit Version und Zeitstempel. */
 export function buildBackup(data: AppData, appVersion: string, now = new Date()): Backup {
@@ -26,6 +27,7 @@ export function buildBackup(data: AppData, appVersion: string, now = new Date())
     workouts: data.workouts,
     programs: data.programs,
     restrictions: data.restrictions,
+    bodyLog: data.bodyLog,
     settings: data.settings,
   }
 }
@@ -102,8 +104,8 @@ export function validateBackup(raw: unknown): ValidationResult {
     })
   })
 
-  // Programme und Schonung gibt es erst ab Schema 9; in älteren Sicherungen fehlen sie.
-  for (const key of ['programs', 'restrictions'] as const) {
+  // Programme und Schonung gibt es erst ab Schema 9, Körpergewicht ab 10; in älteren Sicherungen fehlen sie.
+  for (const key of ['programs', 'restrictions', 'bodyLog'] as const) {
     if (raw[key] !== undefined && !Array.isArray(raw[key])) errors.push(`Feld „${key}“ ist keine Liste.`)
   }
   if (raw.settings !== undefined && !isObj(raw.settings)) errors.push('Feld „settings“ ist kein Objekt.')
@@ -117,6 +119,7 @@ export function validateBackup(raw: unknown): ValidationResult {
     workouts: workouts.map((w) => normalizeWorkout(w as Record<string, unknown>)),
     programs: normalizeList(raw.programs, normalizeProgram),
     restrictions: normalizeList(raw.restrictions, normalizeRestriction),
+    bodyLog: normalizeList(raw.bodyLog, normalizeBodyLog),
     settings: raw.settings ?? {},
   })
   const knownIds = new Set(migrated.exercises.map((e) => e.id))
@@ -137,6 +140,7 @@ export function validateBackup(raw: unknown): ValidationResult {
       workouts: migrated.workouts,
       programs: migrated.programs,
       restrictions: migrated.restrictions,
+      bodyLog: migrated.bodyLog,
       settings: migrated.settings,
     },
   }
@@ -185,6 +189,7 @@ export interface ImportCounts {
   workouts: number
   programs: number
   restrictions: number
+  bodyLog: number
 }
 
 export interface ImportResult {
@@ -209,6 +214,7 @@ export function applyImport(local: AppData, backup: Backup, mode: ImportMode): I
         workouts: backup.workouts,
         programs: backup.programs,
         restrictions: backup.restrictions,
+        bodyLog: backup.bodyLog,
         settings: { ...local.settings, ...backup.settings },
         timer: null,
       },
@@ -218,8 +224,9 @@ export function applyImport(local: AppData, backup: Backup, mode: ImportMode): I
         workouts: backup.workouts.length,
         programs: backup.programs.length,
         restrictions: backup.restrictions.length,
+        bodyLog: backup.bodyLog.length,
       },
-      updated: { exercises: 0, templates: 0, workouts: 0, programs: 0, restrictions: 0 },
+      updated: { exercises: 0, templates: 0, workouts: 0, programs: 0, restrictions: 0, bodyLog: 0 },
       skippedActiveWorkout: false,
     }
   }
@@ -237,10 +244,11 @@ export function applyImport(local: AppData, backup: Backup, mode: ImportMode): I
   const wo = mergeById<Workout>(local.workouts, incomingWorkouts)
   const pr = mergeById<Program>(local.programs, backup.programs)
   const rs = mergeById<Restriction>(local.restrictions, backup.restrictions)
+  const bl = mergeById<BodyLogEntry>(local.bodyLog, backup.bodyLog)
   return {
-    data: { ...local, exercises: ex.items, templates: tp.items, workouts: wo.items, programs: pr.items, restrictions: rs.items },
-    added: { exercises: ex.added, templates: tp.added, workouts: wo.added, programs: pr.added, restrictions: rs.added },
-    updated: { exercises: ex.updated, templates: tp.updated, workouts: wo.updated, programs: pr.updated, restrictions: rs.updated },
+    data: { ...local, exercises: ex.items, templates: tp.items, workouts: wo.items, programs: pr.items, restrictions: rs.items, bodyLog: bl.items },
+    added: { exercises: ex.added, templates: tp.added, workouts: wo.added, programs: pr.added, restrictions: rs.added, bodyLog: bl.added },
+    updated: { exercises: ex.updated, templates: tp.updated, workouts: wo.updated, programs: pr.updated, restrictions: rs.updated, bodyLog: bl.updated },
     skippedActiveWorkout,
   }
 }
