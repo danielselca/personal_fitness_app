@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
-import { addExercises, card, openApp } from './helpers.ts'
+import { SEED_EXERCISE_COUNT } from '../src/domain/seed.ts'
+import { addExercises, card, openApp, tab } from './helpers.ts'
 
 test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
   test('Übungen wählen, letzte Werte, Sätze erfassen, Timer, abschließen, Statistik', async ({ page }) => {
@@ -58,7 +59,7 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     await page.getByRole('alertdialog').getByRole('button', { name: 'Verwerfen' }).click()
 
     // Verlauf und Statistik
-    await page.getByRole('button', { name: 'Verlauf' }).click()
+    await tab(page, 'Verlauf').click()
     await expect(page.getByRole('listitem')).toHaveCount(1)
     await expect(page.getByRole('listitem').first()).toContainText('1.350 kg')
     await page.getByRole('tab', { name: 'Statistik' }).click()
@@ -78,8 +79,8 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     await expect(card(page, 'Beinpresse')).toBeVisible()
     await expect(card(page, 'Beinpresse').getByTestId('source-line')).toHaveText('Keine früheren Werte')
 
-    await page.getByRole('button', { name: 'Übungen' }).click()
-    await expect(page.getByRole('listitem')).toHaveCount(22)
+    await tab(page, 'Übungen').click()
+    await expect(page.getByRole('listitem')).toHaveCount(SEED_EXERCISE_COUNT + 1)
     await page.getByLabel('Übungen suchen').fill('28')
     await expect(page.getByRole('listitem')).toHaveCount(1)
     await expect(page.getByRole('listitem').first()).toContainText('Lat-Zug')
@@ -93,8 +94,8 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     await addExercises(page, ['Lat-Zug'])
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(0)
-    for (const name of ['Training', 'Übungen', 'Verlauf', 'Mehr']) {
-      const box = await page.getByRole('button', { name, exact: true }).boundingBox()
+    for (const name of ['Training', 'Übungen', 'Verlauf', 'Mehr'] as const) {
+      const box = await tab(page, name).boundingBox()
       expect(box!.height).toBeGreaterThanOrEqual(44)
     }
     const check = await card(page, 'Lat-Zug').getByRole('button', { name: 'Satz 1 abhaken' }).boundingBox()
@@ -102,7 +103,7 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     expect(check!.height).toBeGreaterThanOrEqual(44)
     const fontSize = await card(page, 'Lat-Zug').getByLabel('Satz 1 Gewicht').evaluate((el) => parseFloat(getComputedStyle(el).fontSize))
     expect(fontSize).toBeGreaterThanOrEqual(16)
-    const tab = await page.getByRole('navigation', { name: 'Hauptnavigation' }).boundingBox()
-    expect(tab!.y + tab!.height).toBeLessThanOrEqual(812)
+    const nav = await page.getByRole('navigation', { name: 'Hauptnavigation' }).boundingBox()
+    expect(nav!.y + nav!.height).toBeLessThanOrEqual(812)
   })
 })

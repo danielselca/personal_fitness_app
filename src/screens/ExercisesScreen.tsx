@@ -3,7 +3,7 @@ import { ExerciseForm } from '../components/ExerciseForm.tsx'
 import { ConfirmDialog } from '../components/Sheet.tsx'
 import { WeightChart } from '../components/WeightChart.tsx'
 import { weightProgression } from '../domain/stats.ts'
-import { matchesQuery } from '../domain/suggestions.ts'
+import { matchesQuery } from '../domain/search.ts'
 import type { Exercise } from '../domain/types.ts'
 import { formatDate, formatKg, formatMmSs, formatNumber, formatSetFor } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
@@ -59,11 +59,17 @@ function ExerciseList({ onSelect }: { onSelect: (id: string) => void }) {
       <ul className="list">
         {list.map((e) => (
           <li key={e.id}>
-            <button type="button" className="card card-tap row" onClick={() => onSelect(e.id)}>
+            <button
+              type="button"
+              className="card card-tap row"
+              aria-label={e.name}
+              aria-describedby={e.machineNo || e.noWeight || e.planTarget ? `sub-${e.id}` : undefined}
+              onClick={() => onSelect(e.id)}
+            >
               <span className="row-main">
                 <span className="row-title ellipsis" style={{ display: 'block' }}>{e.name}</span>
                 {(e.machineNo || e.noWeight || e.planTarget) && (
-                  <span className="row-sub">
+                  <span className="row-sub" id={`sub-${e.id}`}>
                     {[
                       e.machineNo && `Gerät ${e.machineNo}`,
                       e.mode === 'hold' ? `Halten ${e.holdSec ?? 60} s` : e.noWeight && 'ohne Gewicht',

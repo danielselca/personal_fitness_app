@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { createSeedData, SEED_EXERCISE_COUNT, SEED_TEMPLATE_NAME } from './seed.ts'
-import { matchesQuery } from './suggestions.ts'
+import { matchesQuery } from './search.ts'
 
 describe('Seed-Katalog (AK3)', () => {
   const data = createSeedData('2026-09-10T00:00:00.000Z')

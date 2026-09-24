@@ -116,11 +116,19 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
     const updateEntry = (exerciseId: string, fn: (e: WorkoutEntry) => WorkoutEntry) =>
       updateActive((w) => ({ ...w, entries: w.entries.map((e) => (e.exerciseId === exerciseId ? fn(e) : e)) }))
 
-    const buildEntry = (d: AppData, exerciseId: string, targetSets?: number, excludeWorkoutId?: string): WorkoutEntry | null => {
+    /**
+     * Neuer Trainingseintrag mit vorbefüllten Sätzen. `skipArchived`: beim Start aus einer Vorlage
+     * oder „Letztes wiederholen“ bleiben archivierte Übungen draußen (bewusst ausgewählte nicht).
+     */
+    const buildEntry = (
+      d: AppData,
+      exerciseId: string,
+      opts: { targetSets?: number; excludeWorkoutId?: string; skipArchived?: boolean } = {},
+    ): WorkoutEntry | null => {
       const ex = d.exercises.find((e) => e.id === exerciseId)
-      if (!ex) return null
-      const last = lastValuesFor(d.workouts, exerciseId, excludeWorkoutId)
-      return { exerciseId, sets: suggestSets(ex, last, targetSets).sets }
+      if (!ex || (opts.skipArchived && ex.archived)) return null
+      const last = lastValuesFor(d.workouts, exerciseId, opts.excludeWorkoutId)
+      return { exerciseId, sets: suggestSets(ex, last, opts.targetSets).sets }
     }
 
     return {
@@ -208,7 +216,7 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
           const t = d.templates.find((x) => x.id === opts.templateId)
           if (t) {
             templateId = t.id
-            entries = t.entries.map((te) => buildEntry(d, te.exerciseId, te.sets)).filter((e): e is WorkoutEntry => !!e)
+            entries = t.entries.map((te) => buildEntry(d, te.exerciseId, { targetSets: te.sets, skipArchived: true })).filter((e): e is WorkoutEntry => !!e)
           }
         } else if (opts && 'exerciseIds' in opts) {
           entries = opts.exerciseIds.map((eid) => buildEntry(d, eid)).filter((e): e is WorkoutEntry => !!e)
@@ -218,7 +226,7 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
             .sort((a, b) => (a.finishedAt! < b.finishedAt! ? 1 : -1))[0]
           if (last) {
             templateId = last.templateId
-            entries = last.entries.map((e) => buildEntry(d, e.exerciseId)).filter((e): e is WorkoutEntry => !!e)
+            entries = last.entries.map((e) => buildEntry(d, e.exerciseId, { skipArchived: true })).filter((e): e is WorkoutEntry => !!e)
           }
         }
         const workout: Workout = { id, startedAt: at, status: 'active', templateId, entries, updatedAt: at }
@@ -230,7 +238,7 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         const d = get().data
         const active = get().activeWorkout()
         if (!active || active.entries.some((e) => e.exerciseId === exerciseId)) return
-        const entry = buildEntry(d, exerciseId, undefined, active.id)
+        const entry = buildEntry(d, exerciseId, { excludeWorkoutId: active.id })
         if (!entry) return
         updateActive((w) => ({ ...w, entries: [...w.entries, entry] }))
       },

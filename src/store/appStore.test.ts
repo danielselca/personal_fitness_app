@@ -81,6 +81,25 @@ describe('Store: Trainingsablauf (F2, F3, F7, AK5–AK7, AK9, AK10)', () => {
     expect(s.startWorkout()).toBe(store.getState().activeWorkout()) // nur eines gleichzeitig
   })
 
+  it('Vorlage und „Letztes wiederholen“ lassen archivierte Übungen weg', async () => {
+    const { store } = await freshStore()
+    const s = store.getState()
+    s.setExerciseArchived('ex-lat-zug', true)
+    const w = s.startWorkout({ templateId: store.getState().data.templates[0].id })
+    expect(w.entries).toHaveLength(11)
+    expect(w.entries.some((e) => e.exerciseId === 'ex-lat-zug')).toBe(false)
+    s.discardWorkout()
+
+    // letztes Training enthielt Rudern und Lat-Zug; Lat-Zug ist inzwischen archiviert
+    s.setExerciseArchived('ex-lat-zug', false)
+    s.startWorkout({ exerciseIds: ['ex-rudern', 'ex-lat-zug'] })
+    for (const e of store.getState().activeWorkout()!.entries) s.setSetDone(e.exerciseId, e.sets[0].id, true)
+    s.finishWorkout()
+    s.setExerciseArchived('ex-lat-zug', true)
+    const again = s.startWorkout({ repeatLast: true })
+    expect(again.entries.map((e) => e.exerciseId)).toEqual(['ex-rudern'])
+  })
+
   it('nur abgehakte Sätze zählen; Abschluss verwirft offene Sätze', async () => {
     const { store } = await freshStore()
     const s = store.getState()

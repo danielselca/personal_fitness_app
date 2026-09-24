@@ -1,4 +1,5 @@
 import { migrateAppData } from './migrate.ts'
+import { isBool, isIso, isNum, isObj, isStr, normalizeExercise, normalizeTemplate, normalizeWorkout } from './normalize.ts'
 import { BACKUP_APP_ID, SCHEMA_VERSION, type AppData, type Backup, type Exercise, type Template, type Workout } from './types.ts'
 
 /** Export (F12): vollständige Datenstruktur mit Version und Zeitstempel. */
@@ -23,12 +24,6 @@ export function backupFileName(now = new Date()): string {
 }
 
 export type ValidationResult = { ok: true; backup: Backup; warnings: string[] } | { ok: false; errors: string[] }
-
-const isObj = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v)
-const isStr = (v: unknown): v is string => typeof v === 'string'
-const isNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
-const isBool = (v: unknown): v is boolean => typeof v === 'boolean'
-const isIso = (v: unknown): v is string => isStr(v) && !Number.isNaN(Date.parse(v))
 
 /** Import-Validierung (F13, AK22): Struktur, Typen, Version. Ungültig → Fehlerliste, nichts wird geändert. */
 export function validateBackup(raw: unknown): ValidationResult {
@@ -100,7 +95,7 @@ export function validateBackup(raw: unknown): ValidationResult {
   const migrated = migrateAppData({
     schemaVersion: raw.schemaVersion,
     exercises: exercises.map((e) => normalizeExercise(e as Record<string, unknown>)),
-    templates,
+    templates: templates.map((t) => normalizeTemplate(t as Record<string, unknown>)),
     workouts: workouts.map((w) => normalizeWorkout(w as Record<string, unknown>)),
     settings: raw.settings ?? {},
   })
@@ -122,56 +117,6 @@ export function validateBackup(raw: unknown): ValidationResult {
       workouts: migrated.workouts,
       settings: migrated.settings,
     },
-  }
-}
-
-function normalizeExercise(e: Record<string, unknown>): Exercise {
-  const at = isIso(e.createdAt) ? e.createdAt : new Date(0).toISOString()
-  return {
-    id: e.id as string,
-    name: (e.name as string).trim(),
-    aliases: Array.isArray(e.aliases) ? (e.aliases as unknown[]).filter(isStr) : [],
-    machineNo: isStr(e.machineNo) ? e.machineNo : undefined,
-    hint: isStr(e.hint) ? e.hint : undefined,
-    defaultRestSec: isNum(e.defaultRestSec) ? e.defaultRestSec : undefined,
-    weightStep: isNum(e.weightStep) ? e.weightStep : undefined,
-    noWeight: e.noWeight === true ? true : undefined,
-    mode: e.mode === 'hold' ? 'hold' : undefined,
-    holdSec: isNum(e.holdSec) && e.holdSec > 0 ? e.holdSec : undefined,
-    planTarget: isObj(e.planTarget)
-      ? {
-          sets: e.planTarget.sets as number,
-          reps: e.planTarget.reps as number,
-          weightKg: (e.planTarget.weightKg as number | null) ?? null,
-          source: isStr(e.planTarget.source) ? e.planTarget.source : 'Import',
-        }
-      : undefined,
-    archived: e.archived === true,
-    createdAt: at,
-    updatedAt: isIso(e.updatedAt) ? e.updatedAt : at,
-  }
-}
-
-function normalizeWorkout(w: Record<string, unknown>): Workout {
-  return {
-    id: w.id as string,
-    startedAt: w.startedAt as string,
-    finishedAt: isIso(w.finishedAt) ? w.finishedAt : undefined,
-    status: w.status as Workout['status'],
-    templateId: isStr(w.templateId) ? w.templateId : undefined,
-    note: isStr(w.note) ? w.note : undefined,
-    updatedAt: isIso(w.updatedAt) ? w.updatedAt : (w.finishedAt as string | undefined) ?? (w.startedAt as string),
-    entries: (w.entries as Record<string, unknown>[]).map((en) => ({
-      exerciseId: en.exerciseId as string,
-      note: isStr(en.note) ? en.note : undefined,
-      sets: (en.sets as Record<string, unknown>[]).map((s) => ({
-        id: s.id as string,
-        weightKg: (s.weightKg as number | null | undefined) ?? null,
-        reps: (s.reps as number | null | undefined) ?? null,
-        done: s.done as boolean,
-        doneAt: isIso(s.doneAt) ? s.doneAt : undefined,
-      })),
-    })),
   }
 }
 

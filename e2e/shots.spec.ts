@@ -1,5 +1,5 @@
 import { test } from '@playwright/test'
-import { card, openApp } from './helpers.ts'
+import { card, openApp, tab } from './helpers.ts'
 
 const OUT = process.env.SHOT_DIR ?? 'test-results/shots'
 
@@ -17,7 +17,7 @@ test('Screenshots: gemischte Zustände, Sortiermodus, Dunkelmodus', async ({ pag
   await second.getByRole('button', { name: 'Satz 1 abhaken' }).click()
   await page.getByRole('button', { name: '+ Übung' }).click()
   const dialog = page.getByRole('dialog', { name: 'Übungen hinzufügen' })
-  await dialog.getByRole('button', { name: /^Kreuzheben/ }).click()
+  await dialog.getByRole('button', { name: 'Kreuzheben', exact: true }).click()
   await dialog.getByRole('button', { name: '1 hinzufügen' }).click()
   await page.screenshot({ path: `${OUT}/10-mixed.png` })
   await page.getByRole('button', { name: 'Überspringen' }).click()
@@ -45,11 +45,11 @@ test('Screenshot: Übungsauswahl mit Gruppen', async ({ page }) => {
 test('Screenshots: Übungen, Verlauf, Mehr (dunkel)', async ({ page }) => {
   await openApp(page)
   await page.getByRole('button', { name: 'Dunklen Modus einschalten' }).click()
-  await page.getByRole('button', { name: 'Übungen' }).click()
+  await tab(page, 'Übungen').click()
   await page.screenshot({ path: `${OUT}/16-exercises-dark.png` })
   await page.getByRole('button', { name: 'Lat-Zug' }).click()
   await page.screenshot({ path: `${OUT}/17-exercise-detail-dark.png` })
-  await page.getByRole('button', { name: 'Mehr' }).click()
+  await tab(page, 'Mehr').click()
   await page.screenshot({ path: `${OUT}/18-more-dark.png` })
   await page.getByRole('button', { name: 'Hellen Modus einschalten' }).click()
   await page.screenshot({ path: `${OUT}/19-more-light.png` })
@@ -59,7 +59,7 @@ test('Screenshot: Halteübung als Donut', async ({ page }) => {
   await openApp(page)
   await page.getByRole('button', { name: 'Freies Training' }).click()
   const dialog = page.getByRole('dialog', { name: 'Übungen hinzufügen' })
-  await dialog.getByRole('button', { name: /^Serratusstütz/ }).click()
+  await dialog.getByRole('button', { name: 'Serratusstütz', exact: true }).click()
   await dialog.getByRole('button', { name: '1 hinzufügen' }).click()
   const c = card(page, 'Serratusstütz')
   await c.getByRole('button', { name: 'Halten starten' }).click()

@@ -237,6 +237,9 @@ Konsequenz: v1 hält den Bildschirm während des Trainings per Wake Lock an (Sta
 | 11 | Übersichtlichkeit nach erstem Feedback (2026-09-13): einklappbare Karten, Farben für aktuell/erledigt, Fortschritt, Sortiermodus (↑ ↓, ganz nach oben/unten), Übungen ohne Gewicht, Vorsortierung „ohne Gewicht zuerst“, Standard-Vorlage „Oberkörper“, kleinere Schrift, gekürzte Hinweise | Feedback 1–3 | **erledigt** |
 | 12 | Neues Erscheinungsbild nach WHOOP/FitFusion-Vorbild, Hell/Dunkel-Schalter, kleinere Schrift, Texte gekürzt | Feedback 4 | **erledigt** |
 | 13 | Halteübungen als Donut mit Phasen-Countdown (Serratusstütz, Stütz auf Step: 4 × 60 s / 60 s Pause) | Feedback 5 | **erledigt** |
+| 14 | Handhabung im Training: nächste Übung rückt nach oben, gefüllter Haken, Löschen nur unter „Bearbeiten“ | UX-Durchsicht | **erledigt** |
+| 15 | Kompakter Trainingskopf, einklappbare Pausenleiste, Startseite mit Vorlagen und Wochenleiste | UX-Durchsicht | **erledigt** |
+| 16–23 | Übungsbibliothek, Programme, Ausführungsgrafiken, Personal Trainer („Coach“), Übergabe an Claude – siehe [ROADMAP.md](ROADMAP.md) | Roadmap 2026-09-24 | in Arbeit |
 
 **Warum Export/Import so früh (Schritt 3 statt 8):** Die Trainingsdaten liegen ausschließlich im Browser des Geräts. Ohne Sicherungsweg gäbe es eine Phase, in der echte Trainings erfasst werden, die bei Geräteverlust, App-Löschung oder Gerätewechsel unwiederbringlich wären. Ab Schritt 3 existiert für jeden erfassten Datensatz ein Weg, ihn zu sichern und auf ein neues Gerät zu übertragen.
 

@@ -59,16 +59,6 @@ export function suggestSets(
   return { sets, source: 'none' }
 }
 
-/** Suche über Name, Alias und Gerätenummer, ohne Groß-/Kleinschreibung (F1, AK3). */
-export function matchesQuery(e: Exercise, query: string): boolean {
-  const q = query.trim().toLowerCase()
-  if (!q) return true
-  if (e.name.toLowerCase().includes(q)) return true
-  if (e.aliases.some((a) => a.toLowerCase().includes(q))) return true
-  if (e.machineNo && (e.machineNo === q || `#${e.machineNo}` === q || e.machineNo.includes(q))) return true
-  return false
-}
-
 export function normalizeName(name: string): string {
   return name.trim().replace(/\s+/g, ' ').toLowerCase()
 }

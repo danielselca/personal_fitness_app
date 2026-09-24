@@ -1,9 +1,12 @@
 import { AUFDEHNEN_PLAN, buildStandardEntries, HOLD_SEED, LEGACY_KOPFHEBEN_NAME, LEGACY_TEMPLATE_NAME, SEED_HINTS, SEED_NO_WEIGHT_IDS, SEED_TEMPLATE_ID, SEED_TEMPLATE_NAME } from './seed.ts'
-import { DEFAULT_SETTINGS, SCHEMA_VERSION, type AppData, type Exercise, type Template, type Workout } from './types.ts'
+import { normalizeMeta, normalizeSettings, normalizeTimer } from './normalize.ts'
+import { SCHEMA_VERSION, type AppData, type Exercise, type Template, type Workout } from './types.ts'
 
 /**
  * Migrationsgerüst: hebt gespeicherte Daten älterer Versionen auf die aktuelle an.
  * Jede Migration bekommt die Daten der Vorversion und liefert die nächste.
+ * Regeln ab Schema 8: nur leere Felder ergänzen, Nutzerwerte nie überschreiben und `updatedAt`
+ * nicht setzen (sonst gewinnt beim Zusammenführen eine alte Sicherung gegen neuere Änderungen).
  */
 const MIGRATIONS: Record<number, (d: Record<string, unknown>) => Record<string, unknown>> = {
   // 0 → 1: erste Version (nur Vollständigkeit der Felder sicherstellen)
@@ -122,22 +125,26 @@ export function migrateAppData(raw: unknown): AppData {
   return fillDefaults(d)
 }
 
+type Normalizers = { [K in keyof AppData]: (v: unknown) => AppData[K] }
+
+/**
+ * Ein Normalisierer je Schlüssel von `AppData`. Kommt ein Schlüssel hinzu, meldet TypeScript
+ * hier einen Fehler, bis er ergänzt ist – so gehen neue Daten beim Laden nicht verloren.
+ * Übungen, Vorlagen und Trainings werden beim Laden unverändert übernommen (selbst geschrieben).
+ */
+const NORMALIZERS: Normalizers = {
+  schemaVersion: () => SCHEMA_VERSION,
+  exercises: (v) => (Array.isArray(v) ? (v as AppData['exercises']) : []),
+  templates: (v) => (Array.isArray(v) ? (v as AppData['templates']) : []),
+  workouts: (v) => (Array.isArray(v) ? (v as AppData['workouts']) : []),
+  settings: normalizeSettings,
+  timer: normalizeTimer,
+  meta: normalizeMeta,
+}
+
 /** Ergänzt fehlende Felder, ohne vorhandene zu überschreiben. */
 export function fillDefaults(d: Record<string, unknown>): AppData {
-  const settings = { ...DEFAULT_SETTINGS, ...((d.settings as object) ?? {}) }
-  const metaIn = (d.meta as Partial<AppData['meta']>) ?? {}
-  return {
-    schemaVersion: SCHEMA_VERSION,
-    exercises: Array.isArray(d.exercises) ? (d.exercises as AppData['exercises']) : [],
-    templates: Array.isArray(d.templates) ? (d.templates as AppData['templates']) : [],
-    workouts: Array.isArray(d.workouts) ? (d.workouts as AppData['workouts']) : [],
-    settings,
-    timer: (d.timer as AppData['timer']) ?? null,
-    meta: {
-      lastBackupAt: metaIn.lastBackupAt,
-      workoutsSinceBackup: metaIn.workoutsSinceBackup ?? 0,
-      hintsSeen: metaIn.hintsSeen ?? [],
-      seededAt: metaIn.seededAt ?? new Date().toISOString(),
-    },
-  }
+  const out: Record<string, unknown> = {}
+  for (const key of Object.keys(NORMALIZERS) as (keyof AppData)[]) out[key] = NORMALIZERS[key](d[key])
+  return out as unknown as AppData
 }

@@ -9,9 +9,14 @@ export async function openApp(page: Page) {
 export async function addExercises(page: Page, names: string[]) {
   const dialog = page.getByRole('dialog', { name: 'Übungen hinzufügen' })
   await expect(dialog).toBeVisible()
-  for (const n of names) await dialog.getByRole('button', { name: new RegExp(`^${n}`) }).click()
+  for (const n of names) await dialog.getByRole('button', { name: n, exact: true }).click()
   await dialog.getByRole('button', { name: `${names.length} hinzufügen` }).click()
   await expect(dialog).toBeHidden()
+}
+
+/** Tab der Hauptnavigation, exakt nach Namen (kein Treffer auf andere Knöpfe mit ähnlichem Text). */
+export function tab(page: Page, name: 'Training' | 'Übungen' | 'Verlauf' | 'Mehr') {
+  return page.getByRole('navigation', { name: 'Hauptnavigation' }).getByRole('button', { name, exact: true })
 }
 
 export function card(page: Page, name: string) {

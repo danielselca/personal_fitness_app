@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
-import { addExercises, card, openApp, waitForPrecache } from './helpers.ts'
+import { SEED_EXERCISE_COUNT } from '../src/domain/seed.ts'
+import { addExercises, card, openApp, tab, waitForPrecache } from './helpers.ts'
 
 test.describe('Persistenz, Offline, Timer', () => {
   test('laufendes Training samt Eingaben und Timer überlebt ein Neuladen (AK11)', async ({ page }) => {
@@ -38,8 +39,8 @@ test.describe('Persistenz, Offline, Timer', () => {
     await context.setOffline(true)
     await page.reload()
     await expect(page.getByRole('button', { name: 'Freies Training' })).toBeVisible({ timeout: 15_000 })
-    await page.getByRole('button', { name: 'Übungen' }).click()
-    await expect(page.getByRole('listitem')).toHaveCount(21)
+    await tab(page, 'Übungen').click()
+    await expect(page.getByRole('listitem')).toHaveCount(SEED_EXERCISE_COUNT)
     await context.setOffline(false)
   })
 

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { TabBar, type TabId } from './components/TabBar.tsx'
 import { UpdatePrompt } from './pwa/UpdatePrompt.tsx'
 import { TrainingScreen } from './screens/TrainingScreen.tsx'
@@ -8,6 +7,7 @@ import { MoreScreen } from './screens/MoreScreen.tsx'
 import { useTheme } from './hooks/useTheme.ts'
 import { formatDate } from './lib/format.ts'
 import { useAppStore } from './store/appStore.ts'
+import { useNav } from './store/navStore.ts'
 
 const TITLES: Record<TabId, string> = {
   training: 'Training',
@@ -17,7 +17,8 @@ const TITLES: Record<TabId, string> = {
 }
 
 export function App() {
-  const [tab, setTab] = useState<TabId>('training')
+  const tab = useNav((s) => s.tab)
+  const setTab = useNav((s) => s.setTab)
   const hydrated = useAppStore((s) => s.hydrated)
   const loadError = useAppStore((s) => s.loadError)
   const updateSettings = useAppStore((s) => s.updateSettings)

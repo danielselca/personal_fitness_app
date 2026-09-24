@@ -39,6 +39,8 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        // Übungsgrafiken nicht beim Installieren laden, sondern bei Bedarf (Laufzeit-Cache, ab Schritt 19)
+        globIgnores: ['**/media/**'],
         // Neue Service-Worker-Version übernimmt offene Seiten sofort, damit schon der erste Besuch offline-fähig ist.
         clientsClaim: true,
         navigateFallback: `${BASE}index.html`,
