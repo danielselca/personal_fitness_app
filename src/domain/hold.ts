@@ -8,8 +8,9 @@ export function holdSecFor(e: Pick<Exercise, 'holdSec'>): number {
   return e.holdSec ?? DEFAULT_HOLD_SEC
 }
 
-export function restSecFor(e: Pick<Exercise, 'defaultRestSec'>, settings: Pick<Settings, 'defaultRestSec'>): number {
-  return e.defaultRestSec ?? settings.defaultRestSec
+/** Pause: Vorgabe der Vorlage (im Trainingseintrag) → Pause der Übung → Einstellung. */
+export function restSecFor(e: Pick<Exercise, 'defaultRestSec'>, settings: Pick<Settings, 'defaultRestSec'>, entry?: { restSec?: number }): number {
+  return entry?.restSec ?? e.defaultRestSec ?? settings.defaultRestSec
 }
 
 export interface HoldSegment {

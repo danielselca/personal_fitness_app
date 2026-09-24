@@ -2,13 +2,22 @@ import { createStore, type StoreApi } from 'zustand/vanilla'
 import { useStore } from 'zustand'
 import { applyImport, type ImportMode, type ImportResult } from '../domain/backup.ts'
 import { newId, nowIso } from '../domain/ids.ts'
-import { libraryEntry } from '../domain/library.ts'
+import { adoptExercise } from '../domain/adopt.ts'
 import { migrateAppData } from '../domain/migrate.ts'
 import { advanceHold, holdSecFor, pauseHold, restSecFor, resumeHold, startHold } from '../domain/hold.ts'
 import { noWeightFirst } from '../domain/progress.ts'
 import { createSeedData } from '../domain/seed.ts'
 import { lastValuesFor, normalizeName, suggestSets } from '../domain/suggestions.ts'
-import type { AppData, Backup, Exercise, Settings, Template, TemplateEntry, Workout, WorkoutEntry, WorkoutSet } from '../domain/types.ts'
+import {
+  builtinProgram,
+  createEmptyProgram,
+  deleteProgram as deleteProgramData,
+  duplicateProgram as duplicateProgramData,
+  duplicateTemplate as duplicateTemplateData,
+  installProgram as installProgramData,
+  type InstallOptions,
+} from '../domain/programs.ts'
+import type { AppData, Backup, Exercise, Program, ProgramDay, Settings, Template, TemplateEntry, Workout, WorkoutEntry, WorkoutSet } from '../domain/types.ts'
 import { idbStorage, type DataStorage } from './persistence.ts'
 
 export type ExerciseInput = Omit<Exercise, 'id' | 'createdAt' | 'updatedAt' | 'archived' | 'aliases'> & {
@@ -25,7 +34,12 @@ export type AdoptResult =
   | { status: 'name-match'; exercise: Exercise }
   | { status: 'unknown' }
 
-export type StartOptions = { templateId?: string } | { exerciseIds: string[] } | { repeatLast: true } | undefined
+export type StartOptions =
+  | { templateId?: string }
+  | { programId: string; dayId: string }
+  | { exerciseIds: string[] }
+  | { repeatLast: true }
+  | undefined
 
 export interface AppStore {
   data: AppData
@@ -87,6 +101,24 @@ export interface AppStore {
   saveTemplate(name: string, entries: TemplateEntry[]): Template
   updateTemplate(id: string, patch: Partial<Pick<Template, 'name' | 'entries'>>): void
   deleteTemplate(id: string): void
+  /** Leere eigene Vorlage. */
+  createTemplate(name: string): Template
+  /** Kopie als eigenständige Vorlage (auch von einem Programm-Tag). */
+  duplicateTemplate(id: string): Template | null
+
+  // Programme
+  /** Mitgeliefertes Programm als eigene Kopie übernehmen und aktivieren. */
+  installProgram(builtinId: string, opts: InstallOptions): Program | null
+  createProgram(name: string): Program
+  /** Name, Ziel, Tage/Woche oder Tage (Reihenfolge, Namen) ändern; Tagesnamen gehen an die Vorlagen. */
+  updateProgram(id: string, patch: Partial<Pick<Program, 'name' | 'goal' | 'sessionsPerWeek' | 'days'>>): void
+  /** Neuer, leerer Tag mit eigener Vorlage. */
+  addProgramDay(programId: string, name: string): ProgramDay | null
+  /** Tag und seine Vorlage entfernen (abgeschlossene Trainings bleiben). */
+  removeProgramDay(programId: string, dayId: string): void
+  duplicateProgram(id: string): Program | null
+  deleteProgram(id: string): void
+  setActiveProgram(id: string | undefined): void
   markBackupDone(): void
   importBackup(backup: Backup, mode: ImportMode): ImportResult
   markHintSeen(id: string): void
@@ -216,39 +248,10 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
       },
 
       adoptFromLibrary(entryId, opts = {}) {
-        const entry = libraryEntry(entryId)
-        if (!entry) return { status: 'unknown' }
-        const exercises = get().data.exercises
-        const fixedId = `ex-lib-${entry.id}`
-        const existing = exercises.find((e) => e.libraryId === entry.id) ?? exercises.find((e) => e.id === fixedId)
-        if (existing) {
-          if (existing.archived) get().setExerciseArchived(existing.id, false)
-          return { status: 'existing', exercise: get().data.exercises.find((e) => e.id === existing.id)! }
-        }
-        if (opts.linkTo) {
-          get().linkExercise(opts.linkTo, entry.id)
-          const linked = get().data.exercises.find((e) => e.id === opts.linkTo)
-          return linked ? { status: 'linked', exercise: linked } : { status: 'unknown' }
-        }
-        const sameName = exercises.find((e) => !e.libraryId && normalizeName(e.name) === normalizeName(entry.name))
-        if (sameName && !opts.createNew) return { status: 'name-match', exercise: sameName }
-        const taken = (n: string) => exercises.some((e) => normalizeName(e.name) === normalizeName(n))
-        const at = nowIso()
-        const exercise: Exercise = {
-          id: fixedId,
-          name: taken(entry.name) ? `${entry.name} (Bibliothek)` : entry.name,
-          aliases: [],
-          libraryId: entry.id,
-          defaultRestSec: entry.restSec,
-          noWeight: entry.noWeight,
-          mode: entry.mode,
-          holdSec: entry.holdSec,
-          archived: false,
-          createdAt: at,
-          updatedAt: at,
-        }
-        update((d) => ({ ...d, exercises: [...d.exercises, exercise] }))
-        return { status: 'created', exercise }
+        const r = adoptExercise(get().data.exercises, entryId, nowIso(), opts)
+        if (r.status === 'unknown') return r
+        if (r.exercises !== get().data.exercises) update((d) => ({ ...d, exercises: r.exercises }))
+        return { status: r.status, exercise: r.exercise }
       },
 
       linkExercise(exerciseId, entryId) {
@@ -270,11 +273,36 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         const id = newId('wo-')
         let entries: WorkoutEntry[] = []
         let templateId: string | undefined
-        if (opts && 'templateId' in opts && opts.templateId) {
+        let programId: string | undefined
+        let programDayId: string | undefined
+        // Vorlage: Satzzahl, Zielbereich und Pause kommen aus der Vorlage (Kopie, Historie bleibt stabil)
+        const fromTemplate = (t: Template) =>
+          t.entries
+            .map((te): WorkoutEntry | null => {
+              const e = buildEntry(d, te.exerciseId, { targetSets: te.sets, skipArchived: true })
+              if (!e) return null
+              return {
+                ...e,
+                ...(te.repMin !== undefined && te.repMax !== undefined ? { repMin: te.repMin, repMax: te.repMax } : {}),
+                ...(te.restSec !== undefined ? { restSec: te.restSec } : {}),
+              }
+            })
+            .filter((e): e is WorkoutEntry => !!e)
+        if (opts && 'programId' in opts) {
+          const p = d.programs.find((x) => x.id === opts.programId)
+          const day = p?.days.find((x) => x.id === opts.dayId)
+          const t = day && d.templates.find((x) => x.id === day.templateId)
+          if (p && day && t) {
+            programId = p.id
+            programDayId = day.id
+            templateId = t.id
+            entries = fromTemplate(t)
+          }
+        } else if (opts && 'templateId' in opts && opts.templateId) {
           const t = d.templates.find((x) => x.id === opts.templateId)
           if (t) {
             templateId = t.id
-            entries = t.entries.map((te) => buildEntry(d, te.exerciseId, { targetSets: te.sets, skipArchived: true })).filter((e): e is WorkoutEntry => !!e)
+            entries = fromTemplate(t)
           }
         } else if (opts && 'exerciseIds' in opts) {
           entries = opts.exerciseIds.map((eid) => buildEntry(d, eid)).filter((e): e is WorkoutEntry => !!e)
@@ -287,7 +315,7 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
             entries = last.entries.map((e) => buildEntry(d, e.exerciseId, { skipArchived: true })).filter((e): e is WorkoutEntry => !!e)
           }
         }
-        const workout: Workout = { id, startedAt: at, status: 'active', templateId, entries, updatedAt: at }
+        const workout: Workout = { id, startedAt: at, status: 'active', templateId, programId, programDayId, entries, updatedAt: at }
         update((x) => ({ ...x, workouts: [...x.workouts, workout], timer: null }))
         return workout
       },
@@ -402,7 +430,7 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         if (!ex) return 0
         let events = 0
         updateEntry(exerciseId, (e) => {
-          const r = advanceHold(resumeHold(e, nowMs), holdSecFor(ex), restSecFor(ex, d.settings), nowMs, nowIso(), true)
+          const r = advanceHold(resumeHold(e, nowMs), holdSecFor(ex), restSecFor(ex, d.settings, e), nowMs, nowIso(), true)
           events = r.events
           return r.entry
         })
@@ -417,7 +445,7 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         const entry = get().activeWorkout()?.entries.find((e) => e.exerciseId === exerciseId)
         if (!ex || !entry?.hold || entry.hold.pausedRemainingSec !== undefined) return 0
         if (new Date(entry.hold.endsAt!).getTime() > nowMs) return 0
-        const r = advanceHold(entry, holdSecFor(ex), restSecFor(ex, d.settings), nowMs, nowIso())
+        const r = advanceHold(entry, holdSecFor(ex), restSecFor(ex, d.settings, entry), nowMs, nowIso())
         updateEntry(exerciseId, () => r.entry)
         return r.events
       },
@@ -517,6 +545,87 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
 
       deleteTemplate(id) {
         update((d) => ({ ...d, templates: d.templates.filter((t) => t.id !== id) }))
+      },
+
+      createTemplate(name) {
+        return get().saveTemplate(name, [])
+      },
+
+      duplicateTemplate(id) {
+        const r = duplicateTemplateData(get().data, id, nowIso())
+        if (!r) return null
+        update(() => r.data)
+        return r.template
+      },
+
+      installProgram(builtinId, opts) {
+        const def = builtinProgram(builtinId)
+        if (!def) return null
+        const r = installProgramData(get().data, def, opts, nowIso())
+        update(() => ({ ...r.data, settings: { ...r.data.settings, activeProgramId: r.program.id } }))
+        return r.program
+      },
+
+      createProgram(name) {
+        const r = createEmptyProgram(get().data, name, nowIso())
+        update(() => r.data)
+        return r.program
+      },
+
+      updateProgram(id, patch) {
+        const at = nowIso()
+        update((d) => {
+          const p = d.programs.find((x) => x.id === id)
+          if (!p) return d
+          const renamed = new Map((patch.days ?? []).filter((day) => p.days.find((o) => o.id === day.id)?.name !== day.name).map((day) => [day.templateId, day.name]))
+          return {
+            ...d,
+            programs: d.programs.map((x) => (x.id === id ? { ...x, ...patch, name: (patch.name ?? x.name).trim() || x.name, updatedAt: at } : x)),
+            templates: renamed.size ? d.templates.map((t) => (renamed.has(t.id) ? { ...t, name: renamed.get(t.id)!, updatedAt: at } : t)) : d.templates,
+          }
+        })
+      },
+
+      addProgramDay(programId, name) {
+        const p = get().data.programs.find((x) => x.id === programId)
+        if (!p) return null
+        const at = nowIso()
+        const dayName = name.trim() || `Tag ${p.days.length + 1}`
+        const t: Template = { id: newId('tpl-'), name: dayName, entries: [], programId, createdAt: at, updatedAt: at }
+        const day: ProgramDay = { id: newId('day-'), name: dayName, templateId: t.id }
+        update((d) => ({
+          ...d,
+          templates: [...d.templates, t],
+          programs: d.programs.map((x) => (x.id === programId ? { ...x, days: [...x.days, day], updatedAt: at } : x)),
+        }))
+        return day
+      },
+
+      removeProgramDay(programId, dayId) {
+        const p = get().data.programs.find((x) => x.id === programId)
+        const day = p?.days.find((x) => x.id === dayId)
+        if (!p || !day) return
+        const at = nowIso()
+        update((d) => ({
+          ...d,
+          templates: d.templates.filter((t) => t.id !== day.templateId),
+          programs: d.programs.map((x) => (x.id === programId ? { ...x, days: x.days.filter((y) => y.id !== dayId), updatedAt: at } : x)),
+        }))
+      },
+
+      duplicateProgram(id) {
+        const r = duplicateProgramData(get().data, id, nowIso())
+        if (!r) return null
+        update(() => r.data)
+        return r.program
+      },
+
+      deleteProgram(id) {
+        update((d) => deleteProgramData(d, id))
+      },
+
+      setActiveProgram(id) {
+        update((d) => ({ ...d, settings: { ...d.settings, activeProgramId: id } }))
       },
 
       markBackupDone() {
