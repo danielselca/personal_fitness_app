@@ -537,10 +537,21 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
       },
 
       updateTemplate(id, patch) {
-        update((d) => ({
-          ...d,
-          templates: d.templates.map((t) => (t.id === id ? { ...t, ...patch, updatedAt: nowIso() } : t)),
-        }))
+        const at = nowIso()
+        update((d) => {
+          const t = d.templates.find((x) => x.id === id)
+          // Tages-Vorlage umbenannt → Name des Programm-Tags zieht mit
+          const renamed = t?.programId && patch.name !== undefined && patch.name !== t.name ? patch.name : null
+          return {
+            ...d,
+            templates: d.templates.map((x) => (x.id === id ? { ...x, ...patch, updatedAt: at } : x)),
+            programs: renamed
+              ? d.programs.map((p) =>
+                  p.id === t!.programId ? { ...p, days: p.days.map((day) => (day.templateId === id ? { ...day, name: renamed } : day)), updatedAt: at } : p,
+                )
+              : d.programs,
+          }
+        })
       },
 
       deleteTemplate(id) {

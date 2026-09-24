@@ -66,7 +66,8 @@ export function WorkoutExerciseCard({
     else if (p.currentIndex !== currentIndex) scrollIntoViewSoft(cardRef.current?.querySelector('.setrow-current'), 'nearest')
   }, [isCurrent, currentIndex, expanded])
 
-  const sourceLine = last
+  const target = entry.repMin !== undefined && entry.repMax !== undefined ? `Ziel ${entry.sets.length} × ${entry.repMin}–${entry.repMax} · ` : ''
+  const sourceLine = target + (last
     ? `Letztes Mal: ${formatRelativeDay(last.date)} · ${count(last.sets.length, 'Satz', 'Sätze')}`
     : hold
       ? `${entry.sets.length} × ${holdSecFor(exercise)} s halten`
@@ -74,7 +75,7 @@ export function WorkoutExerciseCard({
       ? noWeight
         ? `Vorgabe: ${exercise.planTarget.sets} × ${exercise.planTarget.reps}`
         : `Vorgabe: ${exercise.planTarget.sets} × ${exercise.planTarget.reps} × ${formatKg(exercise.planTarget.weightKg)}`
-      : 'Keine früheren Werte'
+      : 'Keine früheren Werte')
 
   const lastDone = [...entry.sets].reverse().find((s) => s.done && s.reps !== null)
   const collapsedLine =

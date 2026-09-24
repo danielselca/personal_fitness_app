@@ -117,20 +117,24 @@ Nach dem ersten Feedback („kein cooles Design, zu große Schrift“) wurde das
 ```
 Exercise  { id, name, aliases[], machineNo?, hint?, defaultRestSec?, weightStep?, noWeight?, mode?: "reps"|"hold", holdSec?,
             planTarget? { sets, reps, weightKg, source: "Fit7.11-Plan" },
-            libraryId?, equipment?, muscles? { primary[], secondary[] }, category?, pattern?,   // Schema 8
+            libraryId?, equipment?, muscles? { primary[], secondary[] }, category?, pattern?, loads[]?,   // Schema 8/9
             archived, createdAt, updatedAt }
-Template  { id, name, entries[ { exerciseId, sets } ], createdAt, updatedAt }
-Workout   { id, startedAt, finishedAt?, status: "active" | "done", templateId?, note?,
-            entries[ { exerciseId, note?, sets[ { id, weightKg?, reps, done, doneAt? } ], hold? { setIndex, phase, endsAt?, durationSec, pausedRemainingSec? } } ], updatedAt }
+Template  { id, name, entries[ { exerciseId, sets, repMin?, repMax?, restSec?, note? } ], programId?, createdAt, updatedAt }
+Program   { id, name, goal: "muskelaufbau"|"fitness", sessionsPerWeek, days[ { id, name, templateId } ], copiedFrom?, createdAt, updatedAt }   // Schema 9
+Restriction { id, bodyParts[], muscles[], note?, until?, createdAt, updatedAt }                                                           // Schema 9
+Workout   { id, startedAt, finishedAt?, status: "active" | "done", templateId?, programId?, programDayId?, note?,
+            entries[ { exerciseId, repMin?, repMax?, restSec?, note?, sets[ { id, weightKg?, reps, done, doneAt? } ], hold? { setIndex, phase, endsAt?, durationSec, pausedRemainingSec? } } ], updatedAt }
 Timer     { endsAt, durationSec, exerciseId? }           // nur während aktivem Training
 Settings  { defaultRestSec: 90, autoStartTimer: true, sound: true, vibration: false,
-            keepScreenOn: true, weightStep: 2.5, theme: "system" | "light" | "dark" }
-Backup    { schemaVersion, app, exportedAt, exercises[], templates[], workouts[], settings }
+            keepScreenOn: true, weightStep: 2.5, theme: "system" | "light" | "dark", activeProgramId?, weeklyGoal: 3 }
+Backup    { schemaVersion, app, exportedAt, exercises[], templates[], workouts[], programs[], restrictions[], settings }
 ```
 
-Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punkt. Wdh. ganzzahlig ≥ 1. `noWeight = true` blendet Gewicht in Training, Verlauf und Katalog aus (Werte bleiben `null`). Aktuelles Schema: 8 (Schema 5: „Aufdehnen seitlich“ mit Vorgabe 2 × 10; Schema 6: Serratusstütz und Stütz auf Step als Halteübungen 4 × 60 s; Schema 7: Kopfheben als Halteübung 10 × 10 s, 10 s Pause, Name „Kopfheben (Doppelkinn)“; Schema 8: Bibliotheks-Verknüpfung und Zuordnung, siehe unten). Volumen = Σ (Gewicht × Wdh.) über Sätze mit `done = true`; Sätze ohne Gewicht zählen 0 kg.
+Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punkt. Wdh. ganzzahlig ≥ 1. `noWeight = true` blendet Gewicht in Training, Verlauf und Katalog aus (Werte bleiben `null`). Aktuelles Schema: 9 (Schema 5: „Aufdehnen seitlich“ mit Vorgabe 2 × 10; Schema 6: Serratusstütz und Stütz auf Step als Halteübungen 4 × 60 s; Schema 7: Kopfheben als Halteübung 10 × 10 s, 10 s Pause, Name „Kopfheben (Doppelkinn)“; Schema 8: Bibliotheks-Verknüpfung und Zuordnung, siehe unten). Volumen = Σ (Gewicht × Wdh.) über Sätze mit `done = true`; Sätze ohne Gewicht zählen 0 kg.
 
 **Übungsbibliothek (Schema 8, Schritt 17):** Die kuratierte Bibliothek ist Teil des App-Codes (`src/library/`), nicht der Nutzerdaten; eine eigene Übung zeigt über `libraryId` auf einen Eintrag. `exerciseMeta` liefert die Zuordnung: eigene Felder (`equipment`, `muscles`, `category`, `pattern`) haben Vorrang, sonst gelten die Werte des Eintrags. „Zu meinen Übungen“ legt eine Übung mit fester ID `ex-lib-<id>` an (Name, Pause, ohne Gewicht/Halten übernommen) oder verknüpft nach Rückfrage eine gleichnamige eigene Übung. Migration 7 → 8 füllt nur leere Felder und ändert `updatedAt` nicht: Lat-Zug, Rudern, Butterfly Maschine, Reverse Butterfly, Facepulls, Seitheben Kurzhantel und Schrägbank Kurzhantel werden verknüpft, die Physio-Übungen erhalten Kategorie und Ausrüstung; Adduktion, Überzüge, Incline Frontraise und Kreuzheben bleiben unzugeordnet.
+
+**Programme (Schema 9, Schritt 18):** Ein Programm ist immer die Kopie des Nutzers; jeder Tag verweist auf eine eigene Vorlage mit `programId` (erscheint nicht in der Vorlagen-Liste). Beim Übernehmen eines mitgelieferten Programms (`src/programs/builtin.ts`) werden zuerst vorhandene Übungen genutzt (verknüpft → `ex-lib-<id>` → gleicher Name), nur fehlende aus der Bibliothek übernommen. „Nächstes Training“ wird aus dem zuletzt abgeschlossenen Training des Programms abgeleitet (Tag danach), gespeichert ist nur `settings.activeProgramId`. Beim Start kopiert das Training Satzzahl, Wdh.-Bereich und Pause aus der Vorlage; der Pausentimer nimmt die Vorlagen-Pause vor der Übungspause. Duplizieren legt neue Programm- und Vorlagen-IDs mit denselben Übungen an. Migration 8 → 9 hebt nur die Version; neue Listen beginnen leer, `weeklyGoal` = 3. `restrictions` (Körperbereiche schonen) folgt in Schritt 18b.
 
 ---
 

@@ -27,6 +27,13 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 - **Abschließen** speichert nur abgehakte Sätze. Ohne abgehakten Satz wird gefragt, ob verworfen werden soll.
 - Die App speichert jede Eingabe sofort. Wird sie unterbrochen, geht es beim nächsten Öffnen an derselben Stelle weiter, der Timer läuft korrekt weiter.
 
+**Programme und eigene Vorlagen**
+
+- Oben auf der Trainingsseite: **Programme** → Wochenziel wählen (z. B. 3×), einen Vorschlag übernehmen (Ganzkörper A/B, Oberkörper/Unterkörper, Push/Pull/Beine) mit Ziel **Muskelaufbau** (8–12 Wdh.) oder **Fitness & Abnehmen** (12–15) und optional deinen Physio-Übungen vorne. Deine vorhandenen Übungen (Lat-Zug, Rudern …) werden verwendet, dein Verlauf läuft weiter.
+- Danach zeigt die Startseite **„Nächstes: Ganzkörper B ▶“** und „2/3 diese Woche“; **„Anderen Tag wählen“** startet einen beliebigen Tag. Freies Training, deine Vorlagen und „Letztes wiederholen“ bleiben wie gewohnt.
+- Unter **Programme** lässt sich jedes Programm **duplizieren** und frei **bearbeiten** (Name, Ziel, Tage umbenennen/sortieren/hinzufügen/entfernen, je Tag die Übungen) – z. B. „Ganzkörper ohne Schulter“. Auch ein **eigenes Programm** ganz ohne Vorgabe ist möglich. Die Vorschläge bleiben unverändert zum erneuten Übernehmen.
+- **Vorlagen-Editor** (Stift an der Vorlage, „+ Neue Vorlage“): Übungen hinzufügen (auch aus der Bibliothek), je Übung Sätze, **Wdh. von–bis** und **Pause**, sortieren, entfernen, **duplizieren**.
+
 **Übungen und Bibliothek**
 
 - Tab **Übungen** → oben **Meine** (deine Übungen mit Verlauf) oder **Bibliothek** (60 Übungen mit Ausführungstipps und typischen Fehlern). Die Chips filtern nach Ausrüstung (Maschine, Seilzug, Freihantel, Kettlebell, Körpergewicht, Band, Calisthenics …) und Muskelgruppe; bei „Meine“ zeigt „Ohne Zuordnung“ Übungen ohne Angaben.

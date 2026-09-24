@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { BackupReminder } from '../components/BackupReminder.tsx'
 import { ExercisePicker } from '../components/ExercisePicker.tsx'
 import { InstallHint } from '../components/InstallHint.tsx'
+import { ProgramHero } from '../components/ProgramHero.tsx'
 import { ConfirmDialog, Sheet } from '../components/Sheet.tsx'
 import { SaveTemplateSheet, TemplateEditor } from '../components/TemplateEditor.tsx'
 import { TimerBar } from '../components/TimerBar.tsx'
@@ -17,6 +18,7 @@ import { unlockAudio } from '../lib/audio.ts'
 import { downloadJson } from '../lib/download.ts'
 import { count, formatRelativeDay, formatVolume } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
+import { ProgramsView } from './ProgramsView.tsx'
 
 export function TrainingScreen() {
   const active = useAppStore((s) => s.data.workouts.find((w) => w.status === 'active') ?? null)
@@ -31,8 +33,11 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
   const data = useAppStore((s) => s.data)
   const startWorkout = useAppStore((s) => s.startWorkout)
   const markBackupDone = useAppStore((s) => s.markBackupDone)
+  const createTemplate = useAppStore((s) => s.createTemplate)
+  const [showPrograms, setShowPrograms] = useState(false)
   const [reminderDismissed, setReminderDismissed] = useState(false)
   const [editTemplate, setEditTemplate] = useState<Template | null>(null)
+  const [newTemplateId, setNewTemplateId] = useState<string | null>(null)
   const [saveTemplate, setSaveTemplate] = useState(false)
   const [savedName, setSavedName] = useState<string | null>(null)
   const finished = useMemo(() => finishedWorkouts(data.workouts), [data.workouts])
@@ -47,6 +52,15 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
     unlockAudio()
     startWorkout(opts)
   }
+  // Tages-Vorlagen von Programmen stehen beim Programm, nicht in der Vorlagen-Liste
+  const templates = data.templates.filter((t) => !t.programId)
+  const newTemplate = () => {
+    const t = createTemplate('Neue Vorlage')
+    setNewTemplateId(t.id)
+    setEditTemplate(t)
+  }
+
+  if (showPrograms) return <ProgramsView onBack={() => setShowPrograms(false)} />
 
   return (
     <>
@@ -75,7 +89,21 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
           }}
         />
       )}
-      {editTemplate && <TemplateEditor template={editTemplate} onClose={() => setEditTemplate(null)} />}
+      {editTemplate && (
+        <TemplateEditor
+          key={editTemplate.id}
+          template={editTemplate}
+          discardOnCancel={editTemplate.id === newTemplateId}
+          onClose={() => {
+            setEditTemplate(null)
+            setNewTemplateId(null)
+          }}
+          onOpenTemplate={(t) => {
+            setNewTemplateId(null)
+            setEditTemplate(t)
+          }}
+        />
+      )}
       {!reminderDismissed && (
         <BackupReminder
           onExport={() => {
@@ -86,11 +114,16 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
         />
       )}
 
-      {data.templates.length > 0 ? (
+      <ProgramHero data={data} thisWeek={thisWeek} onStart={(programId, dayId) => start({ programId, dayId })} onOpenPrograms={() => setShowPrograms(true)} />
+
+      {templates.length > 0 ? (
         <>
-          <h2 className="section-title">Vorlagen</h2>
+          <div className="section-head">
+            <h2 className="section-title">Vorlagen</h2>
+            <button type="button" className="btn btn-sm btn-link" onClick={newTemplate}>+ Neue Vorlage</button>
+          </div>
           <ul className="list">
-            {data.templates.map((t) => {
+            {templates.map((t) => {
               const lastOfTemplate = finished.find((w) => w.templateId === t.id)
               return (
                 <li key={t.id} className="template-row">
@@ -127,6 +160,9 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
               Letztes Training wiederholen
             </button>
           )}
+          <button type="button" className="btn btn-block btn-link" style={{ marginTop: 6 }} onClick={newTemplate}>
+            + Eigene Vorlage anlegen
+          </button>
         </>
       )}
 
