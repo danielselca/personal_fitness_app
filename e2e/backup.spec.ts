@@ -6,7 +6,7 @@ test.describe('Sicherung', () => {
   test('Export enthält alle Daten; Import auf „Gerät B“ stellt sie her; Zusammenführen verliert nichts (AK21–AK23, AK28)', async ({ page, browser }) => {
     // Gerät A: ein Training erfassen
     await openApp(page)
-    await page.getByRole('button', { name: 'Training starten' }).click()
+    await page.getByRole('button', { name: 'Freies Training' }).click()
     await addExercises(page, ['Lat-Zug'])
     const lat = card(page, 'Lat-Zug')
     await lat.getByRole('button', { name: 'Satz 1 abhaken' }).click()

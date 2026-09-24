@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { weightProgression, workoutVolume, workoutsPerWeek } from './stats.ts'
+import { trainingDaysOfWeek, weightProgression, workoutVolume, workoutsPerWeek } from './stats.ts'
 import type { Workout } from './types.ts'
 import { isoWeekKey, lastWeeks, startOfIsoWeek } from './weeks.ts'
 
@@ -77,5 +77,16 @@ describe('Gewichtsverlauf (AK19)', () => {
   })
   it('leer ohne Historie', () => {
     expect(weightProgression([], 'ex-lat-zug')).toEqual([])
+  })
+})
+
+describe('Trainingstage der Woche', () => {
+  it('Mo … So der laufenden Woche, andere Wochen zählen nicht', () => {
+    const now = new Date(2026, 8, 10, 12) // Do
+    const days = trainingDaysOfWeek(
+      [wo('a', '2026-09-07T08:00:00', [{ w: 1, r: 1 }]), wo('b', '2026-09-09T21:30:00', [{ w: 1, r: 1 }]), wo('c', '2026-09-06T10:00:00', [{ w: 1, r: 1 }])],
+      now,
+    )
+    expect(days).toEqual([true, false, true, false, false, false, false])
   })
 })
