@@ -3,6 +3,7 @@ import { BackupReminder } from '../components/BackupReminder.tsx'
 import { ExercisePicker } from '../components/ExercisePicker.tsx'
 import { InstallHint } from '../components/InstallHint.tsx'
 import { ProgramHero } from '../components/ProgramHero.tsx'
+import { RatingChips } from '../components/RatingChips.tsx'
 import { ConfirmDialog, Sheet } from '../components/Sheet.tsx'
 import { SaveTemplateSheet, TemplateEditor } from '../components/TemplateEditor.tsx'
 import { SwapSheet } from '../components/SwapSheet.tsx'
@@ -10,7 +11,9 @@ import { TimerBar } from '../components/TimerBar.tsx'
 import { WorkoutExerciseCard } from '../components/WorkoutExerciseCard.tsx'
 import { currentEntryId, entryState } from '../domain/progress.ts'
 import { backupFileName, buildBackup } from '../domain/backup.ts'
+import { newRecords } from '../domain/coach/records.ts'
 import { restSecFor } from '../domain/hold.ts'
+import { exerciseMeta } from '../domain/library.ts'
 import { activeRestrictions, dayKey, exerciseHits, templateHitCount } from '../domain/restrictions.ts'
 import { doneSetCount, finishedWorkouts, trainingDaysOfWeek, workoutDurationMin, workoutVolume, workoutsPerWeek } from '../domain/stats.ts'
 import type { Template, Workout, WorkoutSet } from '../domain/types.ts'
@@ -49,6 +52,7 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
   const days = trainingDaysOfWeek(data.workouts, now)
   const todayIdx = (now.getDay() + 6) % 7
   const exerciseName = (id: string) => data.exercises.find((e) => e.id === id)?.name ?? 'Unbekannt'
+  const records = useMemo(() => (justFinished ? newRecords(data.workouts, justFinished, data.exercises) : []), [justFinished, data.workouts, data.exercises])
 
   const start = (opts?: Parameters<typeof startWorkout>[0]) => {
     unlockAudio()
@@ -79,6 +83,18 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
             <button type="button" className="btn btn-sm" onClick={onDismissSummary}>OK</button>
           </div>
           <WorkoutSummary workout={justFinished} exerciseName={exerciseName} />
+          {records.length > 0 && (
+            <div className="records-box" data-testid="new-records">
+              <strong>🏆 {records.length === 1 ? '1 neuer Bestwert' : `${records.length} neue Bestwerte`}</strong>
+              <ul className="records">
+                {records.map((r) => (
+                  <li key={r.exerciseId}>
+                    {r.name}: {r.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {savedName ? (
             <p className="ok" style={{ margin: '8px 0 0' }}>Vorlage „{savedName}“ gespeichert.</p>
           ) : (
@@ -249,6 +265,7 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
   const restrictions = useAppStore((s) => s.data.restrictions)
   const replaceInWorkout = useAppStore((s) => s.replaceExerciseInWorkout)
   const replaceInTemplate = useAppStore((s) => s.replaceExerciseInTemplate)
+  const setEntryRating = useAppStore((s) => s.setEntryRating)
   const [swapId, setSwapId] = useState<string | null>(null)
   const [dismissedHits, setDismissedHits] = useState<string[]>([])
   const active = useMemo(() => activeRestrictions(restrictions, dayKey()), [restrictions])
@@ -449,6 +466,31 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
           {workout.entries.some((e) => e.sets.some((s) => !s.done)) && (
             <p className="muted" style={{ fontSize: 14 }}>Nicht abgehakte Sätze werden verworfen.</p>
           )}
+          {(() => {
+            // „Wie war's?“ nur für Übungen mit Zielbereich (dort steuert es die nächste Steigerung)
+            const rateable = workout.entries.filter((e) => {
+              const ex = exById.get(e.exerciseId)
+              return e.repMin !== undefined && e.sets.some((s) => s.done) && !!ex && exerciseMeta(ex).category !== 'physio'
+            })
+            if (rateable.length === 0) return null
+            return (
+              <>
+                <h3 className="detail-sub">Wie war's? (optional)</h3>
+                <div aria-label="Bewertung je Übung">
+                  {rateable.map((e) => {
+                    const name = exById.get(e.exerciseId)!.name
+                    return (
+                      <div key={e.exerciseId} className="rating-row">
+                        <span className="row-title ellipsis">{name}</span>
+                        <RatingChips name={name} value={e.rating} onChange={(r) => setEntryRating(e.exerciseId, r)} />
+                      </div>
+                    )
+                  })}
+                </div>
+                <p className="muted" style={{ fontSize: 13, margin: '6px 0 0' }}>„schwer“ hält das Gewicht beim nächsten Mal, „leicht“ steigert früher.</p>
+              </>
+            )
+          })()}
         </Sheet>
       )}
 

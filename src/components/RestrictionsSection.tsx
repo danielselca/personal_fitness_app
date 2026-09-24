@@ -11,7 +11,7 @@ import { Sheet } from './Sheet.tsx'
  */
 export function RestrictionsSection() {
   const restrictions = useAppStore((s) => s.data.restrictions)
-  const remove = useAppStore((s) => s.removeRestriction)
+  const end = useAppStore((s) => s.endRestriction)
   const [adding, setAdding] = useState(false)
   const active = activeRestrictions(restrictions, dayKey())
 
@@ -31,7 +31,7 @@ export function RestrictionsSection() {
                   <span className="row-title" style={{ display: 'block' }}>{restrictionLabel(r)}</span>
                   {r.note && <span className="row-sub">{r.note}</span>}
                 </span>
-                <button type="button" className="btn btn-sm" aria-label={`Schonen beenden: ${restrictionLabel(r)}`} onClick={() => remove(r.id)}>
+                <button type="button" className="btn btn-sm" aria-label={`Schonen beenden: ${restrictionLabel(r)}`} onClick={() => end(r.id)}>
                   Beenden
                 </button>
               </li>

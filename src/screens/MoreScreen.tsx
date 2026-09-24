@@ -77,6 +77,12 @@ function SettingsSection() {
             }}
           />
         </label>
+        <Toggle
+          label="Steigerungsvorschläge (Coach)"
+          hint="In Programmen und Vorlagen mit Wdh.-Bereich: Gewicht oder Wdh. passend vorbelegen"
+          checked={settings.coachProgression}
+          onChange={(v) => updateSettings({ coachProgression: v })}
+        />
         <Toggle label="Pausentimer automatisch starten" hint="Beim Abhaken eines Satzes" checked={settings.autoStartTimer} onChange={(v) => updateSettings({ autoStartTimer: v })} />
         <Toggle label="Ton am Ende der Pause" hint="Nur, solange die App im Vordergrund ist" checked={settings.sound} onChange={(v) => updateSettings({ sound: v })} />
         {canVibrate ? (
