@@ -71,3 +71,43 @@ describe('Coach-Tab (Schritt 20b)', () => {
     expect(appStore.getState().data.bodyLog).toEqual([])
   })
 })
+
+describe('Wochencheck und Muskelkarte (Schritt 21)', () => {
+  it('ohne Training diese Woche: letzte Woche vorgewählt, leerer Zustand', () => {
+    render(<CoachScreen />)
+    const check = screen.getByRole('region', { name: 'Wochencheck' })
+    expect(within(check).getByRole('radio', { name: 'Letzte Woche' }).getAttribute('aria-checked')).toBe('true')
+    expect(within(check).getByText('Letzte Woche wurde nicht trainiert.')).toBeTruthy()
+    fireEvent.click(within(check).getByRole('radio', { name: 'Diese Woche' }))
+    expect(within(check).getByText(/Nach dem ersten Training dieser Woche/)).toBeTruthy()
+    expect(screen.queryByRole('img', { name: /Muskelkarte/ })).toBeNull()
+  })
+
+  it('Ampeln, Vorschlag mit Sprung zur Übung, Muskelkarte zum Antippen', () => {
+    const d = appStore.getState().data
+    appStore.setState({ data: { ...d, settings: { ...d.settings, weeklyGoal: 1 }, workouts: [w(0, 'ex-schraegbank-kurzhantel', [[20, 10], [20, 10], [20, 10], [20, 10]])] } })
+    const { container } = render(<CoachScreen />)
+    const check = screen.getByRole('region', { name: 'Wochencheck' })
+    expect(within(check).getByRole('radio', { name: 'Diese Woche' }).getAttribute('aria-checked')).toBe('true')
+    const lights = within(check).getByRole('list', { name: 'Ampeln' })
+    expect(lights.children).toHaveLength(4)
+    expect(lights.textContent).toContain('1 von 1 Trainings')
+    expect(lights.textContent).toContain('Drücken : Ziehen')
+    expect(within(check).getByText(/Gesamt:/)).toBeTruthy()
+
+    const suggestions = within(check).getByRole('list', { name: 'Vorschläge für nächste Woche' })
+    fireEvent.click(within(suggestions).getByRole('button', { name: /Rudern einplanen/ }))
+    expect(useNav.getState()).toMatchObject({ tab: 'exercises', target: { kind: 'exercise', id: 'ex-rudern' } })
+
+    expect(screen.getByRole('img', { name: /Muskelkarte: \d+ Muskeln trainiert/ })).toBeTruthy()
+    fireEvent.click(container.querySelector('.bm-muscle[data-status="unter"]')!)
+    expect(screen.getByRole('status').textContent).toMatch(/Brust: 4 Sätze · unter Ziel/)
+    cleanup()
+
+    // Übungen-Tab übernimmt das Ziel und öffnet die Übung
+    render(<ExercisesScreen />)
+    expect(screen.getByRole('heading', { name: 'Rudern' })).toBeTruthy()
+    expect(useNav.getState().target).toBeNull()
+  })
+})
+

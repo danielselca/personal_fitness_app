@@ -33,6 +33,12 @@
   --danger-soft: #fce7e4;
   --warning: #d38a00;
   --warning-soft: #fff1d6;
+  /* Muskelkarte (Coach II) */
+  --map-none: #e4e3de;
+  --map-under: #f3bd4a;
+  --map-target: #34b26a;
+  --map-over: #1a7c46;
+  --map-trained: #9ccdb0;
   --focus: #f0582a;
 
   --tabbar-bg: #161616;
@@ -88,6 +94,11 @@
     --danger-soft: #3d1a17;
     --warning: #ffb340;
     --warning-soft: #3a2a0c;
+    --map-none: #34332f;
+    --map-under: #d9a032;
+    --map-target: #2fa862;
+    --map-over: #7fdca5;
+    --map-trained: #4c7a60;
     --focus: #ff6a3d;
 
     --tabbar-bg: #1c1c1c;
@@ -125,6 +136,11 @@
   --danger-soft: #3d1a17;
   --warning: #ffb340;
   --warning-soft: #3a2a0c;
+  --map-none: #34332f;
+  --map-under: #d9a032;
+  --map-target: #2fa862;
+  --map-over: #7fdca5;
+  --map-trained: #4c7a60;
   --focus: #ff6a3d;
 
   --tabbar-bg: #1c1c1c;

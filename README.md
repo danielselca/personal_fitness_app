@@ -38,7 +38,7 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 
 - In Programmen und Vorlagen mit Wdh.-Bereich trägt der Coach die nächste Steigerung ein und sagt warum, z. B. **„↑ 47,5 kg – letztes Mal 3 × 12 × 45 kg“** oder „+1 Wdh. je Satz“. **„Wie letztes Mal“** setzt zurück. Freies Training bleibt unverändert; abschaltbar unter Mehr → Einstellungen.
 - Beim Abschließen optional **„Wie war's?“** (leicht / passend / schwer) – „schwer“ hält das Gewicht, „leicht“ steigert früher. Neue **Bestwerte** stehen in der Zusammenfassung und im Übungsdetail (inkl. geschätztem 1RM).
-- Tab **Coach**: Wochenziel als Ring, Serie in Wochen, nächstes Programm-Training, Fortschritt je Übung, letzte Bestwerte, geschonte Bereiche. **Mehr → Profil**: Ziel, Erfahrung, Körpergewicht mit Verlauf.
+- Tab **Coach**: Wochenziel als Ring, Serie in Wochen, nächstes Programm-Training, Fortschritt je Übung, letzte Bestwerte, geschonte Bereiche. Dazu der **Wochencheck** (diese oder letzte Woche) mit Ampeln für Regelmäßigkeit, Fortschritt, Volumen & Balance (Sätze je Muskelgruppe, Häufigkeit, Drücken : Ziehen) und Dichte (echte Pausen), einem Gesamturteil und bis zu drei Vorschlägen für die nächste Woche – ein Tipp öffnet den Programm-Tag oder die Übung – sowie eine **Muskelkarte** vorne/hinten. Alles Faustregeln, geschonte Bereiche werden nicht bewertet. **Mehr → Profil**: Ziel, Erfahrung, Körpergewicht mit Verlauf.
 
 **Ausführung mit Grafik**
 

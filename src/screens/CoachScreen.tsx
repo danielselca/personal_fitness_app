@@ -1,4 +1,8 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { BodyMap } from '../components/BodyMap.tsx'
+import { WeekCheck } from '../components/WeekCheck.tsx'
+import { weekCheck } from '../domain/coach/hints.ts'
+import { weekRange, workoutsInWeek } from '../domain/coach/week.ts'
 import { exerciseTrends, recentRecords, weekStatus, type TrendKind } from '../domain/coach/consistency.ts'
 import { nextProgramDay } from '../domain/programs.ts'
 import { activeRestrictions, dayKey, restrictionLabel } from '../domain/restrictions.ts'
@@ -11,8 +15,9 @@ const TREND_ICON: Record<TrendKind, string> = { gesteigert: '↑', gleich: '→'
 const TREND_LABEL: Record<TrendKind, string> = { gesteigert: 'gesteigert', gleich: 'gleich', weniger: 'weniger', stagniert: 'steht' }
 
 /**
- * Coach I: Wochenziel und Serie, nächstes Programm-Training, Fortschritt je Übung, letzte
- * Bestwerte und geschonte Bereiche. Jede Aussage mit Begründung; Faustregeln sind gekennzeichnet.
+ * Coach: Wochenziel und Serie, nächstes Programm-Training, Wochencheck mit Muskelkarte (Coach II),
+ * Fortschritt je Übung, letzte Bestwerte und geschonte Bereiche. Jede Aussage mit Begründung;
+ * Faustregeln sind gekennzeichnet.
  */
 export default function CoachScreen() {
   const data = useAppStore((s) => s.data)
@@ -25,6 +30,9 @@ export default function CoachScreen() {
   const program = data.programs.find((p) => p.id === data.settings.activeProgramId)
   const next = program ? nextProgramDay(program, data.workouts) : null
   const hasWorkouts = finishedWorkouts(data.workouts).length > 0
+  // Solange diese Woche noch kein Training hat, zeigt der Wochencheck die letzte Woche
+  const [offset, setOffset] = useState<0 | -1>(() => (workoutsInWeek(data.workouts, weekRange(now)).length > 0 ? 0 : -1))
+  const check = useMemo(() => weekCheck(data, now, offset), [data, now, offset])
   const pct = Math.min(1, week.thisWeek / week.goal)
   const R = 34
   const C = 2 * Math.PI * R
@@ -56,6 +64,19 @@ export default function CoachScreen() {
           </span>
           <span className="muted" aria-hidden="true">›</span>
         </button>
+      )}
+
+      <div style={{ marginTop: 12 }}>
+        <WeekCheck check={check} offset={offset} onOffset={setOffset} />
+      </div>
+
+      {check.workouts > 0 && (
+        <>
+          <h2 className="section-title">Muskelkarte {check.range.label}</h2>
+          <div className="card">
+            <BodyMap perMuscle={check.perMuscle} volumes={check.volumes} target={check.target} />
+          </div>
+        </>
       )}
 
       <h2 className="section-title">Fortschritt</h2>
