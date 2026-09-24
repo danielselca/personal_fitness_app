@@ -1,4 +1,4 @@
-import { AUFDEHNEN_PLAN, buildStandardEntries, HOLD_SEED, LEGACY_KOPFHEBEN_NAME, LEGACY_TEMPLATE_NAME, SEED_HINTS, SEED_NO_WEIGHT_IDS, SEED_TEMPLATE_ID, SEED_TEMPLATE_NAME } from './seed.ts'
+import { applySeedLibrary, AUFDEHNEN_PLAN, buildStandardEntries, HOLD_SEED, LEGACY_KOPFHEBEN_NAME, LEGACY_TEMPLATE_NAME, SEED_HINTS, SEED_NO_WEIGHT_IDS, SEED_TEMPLATE_ID, SEED_TEMPLATE_NAME } from './seed.ts'
 import { normalizeMeta, normalizeSettings, normalizeTimer } from './normalize.ts'
 import { SCHEMA_VERSION, type AppData, type Exercise, type Template, type Workout } from './types.ts'
 
@@ -91,6 +91,12 @@ const MIGRATIONS: Record<number, (d: Record<string, unknown>) => Record<string, 
       return next
     })
     return { ...d, schemaVersion: 7, exercises }
+  },
+  // 7 → 8: Übungsbibliothek. Eindeutige Studio-Übungen werden verknüpft, Physio-Übungen zugeordnet;
+  // nur leere Felder, kein updatedAt (Historie und Nutzerwerte bleiben unberührt).
+  7: (d) => {
+    const exercises = (Array.isArray(d.exercises) ? (d.exercises as Exercise[]) : []).map(applySeedLibrary)
+    return { ...d, schemaVersion: 8, exercises }
   },
 }
 

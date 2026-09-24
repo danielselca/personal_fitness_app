@@ -1,0 +1,46 @@
+import type { LibraryEntry } from '../types.ts'
+
+export const KETTLEBELL: LibraryEntry[] = [
+  {
+    id: 'kettlebell-swing',
+    name: 'Kettlebell-Swing',
+    en: 'Kettlebell Swing',
+    aliases: ['Swing', 'KB-Swing'],
+    equipment: 'kettlebell',
+    category: 'kraft',
+    pattern: 'hueftstreckung',
+    muscles: { primary: ['gesaess', 'beinbeuger'], secondary: ['unterer-ruecken', 'bauch', 'schulter-vorne'] },
+    loads: ['unterer-ruecken', 'huefte'],
+    level: 'fortgeschritten',
+    restSec: 90,
+    media: { source: 'workout-guide', ref: 'kettlebell-swing' },
+    cues: [
+      'Etwas mehr als hüftbreit stehen, Kettlebell vor den Füßen.',
+      'Hüfte nach hinten, die Kettlebell zwischen den Beinen nach hinten schwingen.',
+      'Hüfte explosiv nach vorn strecken – die Arme führen nur, sie heben nicht.',
+      'Kettlebell bis etwa Brusthöhe, oben aufrecht mit festem Bauch und Gesäß.',
+    ],
+    mistakes: ['Kniebeuge statt Hüftbewegung.', 'Mit den Armen heben.', 'Runder Rücken am unteren Punkt.'],
+  },
+  {
+    id: 'kettlebell-rumaenisches-kreuzheben',
+    name: 'Rumänisches Kreuzheben (Kettlebell)',
+    en: 'Kettlebell Romanian Deadlift',
+    aliases: ['Kettlebell-Kreuzheben'],
+    equipment: 'kettlebell',
+    category: 'kraft',
+    pattern: 'hueftstreckung',
+    muscles: { primary: ['beinbeuger', 'gesaess'], secondary: ['unterer-ruecken'] },
+    loads: ['unterer-ruecken', 'huefte'],
+    level: 'einsteiger',
+    restSec: 90,
+    media: { source: 'workout-guide', ref: 'kettlebell-romanian-deadlift' },
+    cues: [
+      'Kettlebell mit beiden Händen vor den Oberschenkeln, Knie leicht gebeugt.',
+      'Hüfte nach hinten schieben, die Kettlebell dicht am Körper nach unten führen.',
+      'Rücken gerade, bis die hinteren Oberschenkel ziehen.',
+      'Hüfte nach vorn strecken und oben das Gesäß anspannen.',
+    ],
+    mistakes: ['Runder Rücken.', 'Knie beugen zu stark.', 'Kettlebell weit vor dem Körper.'],
+  },
+]

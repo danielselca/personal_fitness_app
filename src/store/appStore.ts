@@ -2,6 +2,7 @@ import { createStore, type StoreApi } from 'zustand/vanilla'
 import { useStore } from 'zustand'
 import { applyImport, type ImportMode, type ImportResult } from '../domain/backup.ts'
 import { newId, nowIso } from '../domain/ids.ts'
+import { libraryEntry } from '../domain/library.ts'
 import { migrateAppData } from '../domain/migrate.ts'
 import { advanceHold, holdSecFor, pauseHold, restSecFor, resumeHold, startHold } from '../domain/hold.ts'
 import { noWeightFirst } from '../domain/progress.ts'
@@ -13,6 +14,16 @@ import { idbStorage, type DataStorage } from './persistence.ts'
 export type ExerciseInput = Omit<Exercise, 'id' | 'createdAt' | 'updatedAt' | 'archived' | 'aliases'> & {
   aliases?: string[]
 }
+
+/**
+ * Ergebnis von `adoptFromLibrary`: vorhandene oder neu angelegte eigene Übung. `name-match` heißt:
+ * Es gibt schon eine eigene, nicht verknüpfte Übung mit gleichem Namen – die Oberfläche fragt, ob
+ * sie verknüpft (`linkTo`) oder eine neue angelegt werden soll (`createNew`).
+ */
+export type AdoptResult =
+  | { status: 'existing' | 'linked' | 'created'; exercise: Exercise }
+  | { status: 'name-match'; exercise: Exercise }
+  | { status: 'unknown' }
 
 export type StartOptions = { templateId?: string } | { exerciseIds: string[] } | { repeatLast: true } | undefined
 
@@ -27,6 +38,10 @@ export interface AppStore {
   addExercise(input: ExerciseInput): { ok: true; exercise: Exercise } | { ok: false; error: string }
   updateExercise(id: string, patch: Partial<Omit<Exercise, 'id' | 'createdAt'>>): { ok: true } | { ok: false; error: string }
   setExerciseArchived(id: string, archived: boolean): void
+  /** Bibliotheksübung in „Meine Übungen“ holen: Verknüpfung → feste ID → gleicher Name (Rückfrage) → neu. */
+  adoptFromLibrary(entryId: string, opts?: { linkTo?: string; createNew?: boolean }): AdoptResult
+  /** Eigene Übung mit einem Bibliothekseintrag verknüpfen (`null` löst die Verknüpfung). */
+  linkExercise(exerciseId: string, entryId: string | null): void
 
   // Aktives Training
   activeWorkout(): Workout | null
@@ -197,6 +212,49 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         update((d) => ({
           ...d,
           exercises: d.exercises.map((e) => (e.id === id ? { ...e, archived, updatedAt: nowIso() } : e)),
+        }))
+      },
+
+      adoptFromLibrary(entryId, opts = {}) {
+        const entry = libraryEntry(entryId)
+        if (!entry) return { status: 'unknown' }
+        const exercises = get().data.exercises
+        const fixedId = `ex-lib-${entry.id}`
+        const existing = exercises.find((e) => e.libraryId === entry.id) ?? exercises.find((e) => e.id === fixedId)
+        if (existing) {
+          if (existing.archived) get().setExerciseArchived(existing.id, false)
+          return { status: 'existing', exercise: get().data.exercises.find((e) => e.id === existing.id)! }
+        }
+        if (opts.linkTo) {
+          get().linkExercise(opts.linkTo, entry.id)
+          const linked = get().data.exercises.find((e) => e.id === opts.linkTo)
+          return linked ? { status: 'linked', exercise: linked } : { status: 'unknown' }
+        }
+        const sameName = exercises.find((e) => !e.libraryId && normalizeName(e.name) === normalizeName(entry.name))
+        if (sameName && !opts.createNew) return { status: 'name-match', exercise: sameName }
+        const taken = (n: string) => exercises.some((e) => normalizeName(e.name) === normalizeName(n))
+        const at = nowIso()
+        const exercise: Exercise = {
+          id: fixedId,
+          name: taken(entry.name) ? `${entry.name} (Bibliothek)` : entry.name,
+          aliases: [],
+          libraryId: entry.id,
+          defaultRestSec: entry.restSec,
+          noWeight: entry.noWeight,
+          mode: entry.mode,
+          holdSec: entry.holdSec,
+          archived: false,
+          createdAt: at,
+          updatedAt: at,
+        }
+        update((d) => ({ ...d, exercises: [...d.exercises, exercise] }))
+        return { status: 'created', exercise }
+      },
+
+      linkExercise(exerciseId, entryId) {
+        update((d) => ({
+          ...d,
+          exercises: d.exercises.map((e) => (e.id === exerciseId ? { ...e, libraryId: entryId ?? undefined, updatedAt: nowIso() } : e)),
         }))
       },
 

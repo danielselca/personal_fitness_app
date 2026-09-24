@@ -1,6 +1,8 @@
 /** Datenmodell der App (SPEC.md Abschnitt 5). Alle Zeitstempel sind ISO-8601-Strings. */
 
-export const SCHEMA_VERSION = 7 as const
+import type { Category, Equipment, MuscleSet, Pattern } from './taxonomy.ts'
+
+export const SCHEMA_VERSION = 8 as const
 
 export type ExerciseMode = 'reps' | 'hold'
 
@@ -39,6 +41,13 @@ export interface Exercise {
   mode?: ExerciseMode
   /** Haltedauer je Satz in Sekunden (nur mode 'hold'); fehlt → 60. */
   holdSec?: number
+  /** Verknüpfter Bibliothekseintrag (Tipps, Muskeln, Ausrüstung kommen von dort). */
+  libraryId?: string
+  /** Eigene Zuordnung; überschreibt die Werte des Bibliothekseintrags. */
+  equipment?: Equipment
+  muscles?: MuscleSet
+  category?: Category
+  pattern?: Pattern
   archived: boolean
   createdAt: string
   updatedAt: string

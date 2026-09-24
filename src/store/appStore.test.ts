@@ -213,3 +213,41 @@ describe('Store: Sicherung (F15, AK27)', () => {
     expect(store.getState().data.meta.lastBackupAt).toBeTruthy()
   })
 })
+
+describe('Store: Übungen aus der Bibliothek (Schritt 17)', () => {
+  it('verwendet eine verknüpfte eigene Übung statt ein Duplikat anzulegen', async () => {
+    const { store } = await freshStore()
+    const r = store.getState().adoptFromLibrary('latzug-breit')
+    expect(r).toMatchObject({ status: 'existing', exercise: { id: 'ex-lat-zug' } })
+    expect(store.getState().data.exercises).toHaveLength(21)
+  })
+
+  it('legt neu an mit fester ID und übernimmt das Verhalten; ein zweites Mal liefert dieselbe Übung', async () => {
+    const { store } = await freshStore()
+    const r = store.getState().adoptFromLibrary('unterarmstuetz')
+    expect(r).toMatchObject({ status: 'created', exercise: { id: 'ex-lib-unterarmstuetz', name: 'Unterarmstütz', libraryId: 'unterarmstuetz', mode: 'hold', holdSec: 30, noWeight: true, defaultRestSec: 60 } })
+    expect(store.getState().adoptFromLibrary('unterarmstuetz')).toMatchObject({ status: 'existing', exercise: { id: 'ex-lib-unterarmstuetz' } })
+    expect(store.getState().data.exercises).toHaveLength(22)
+  })
+
+  it('holt eine archivierte übernommene Übung zurück', async () => {
+    const { store } = await freshStore()
+    store.getState().adoptFromLibrary('beinpresse')
+    store.getState().setExerciseArchived('ex-lib-beinpresse', true)
+    const r = store.getState().adoptFromLibrary('beinpresse')
+    expect(r.status).toBe('existing')
+    expect(store.getState().data.exercises.find((e) => e.id === 'ex-lib-beinpresse')!.archived).toBe(false)
+  })
+
+  it('gleicher Name: fragt nach, verknüpft auf Wunsch oder legt mit Zusatz neu an', async () => {
+    const { store } = await freshStore()
+    const own = store.getState().addExercise({ name: 'Beinpresse' })
+    if (!own.ok) throw new Error(own.error)
+    expect(store.getState().adoptFromLibrary('beinpresse')).toMatchObject({ status: 'name-match', exercise: { id: own.exercise.id } })
+    expect(store.getState().adoptFromLibrary('beinpresse', { linkTo: own.exercise.id })).toMatchObject({ status: 'linked', exercise: { libraryId: 'beinpresse' } })
+    store.getState().linkExercise(own.exercise.id, null)
+    expect(store.getState().data.exercises.find((e) => e.id === own.exercise.id)!.libraryId).toBeUndefined()
+    const created = store.getState().adoptFromLibrary('beinpresse', { createNew: true })
+    expect(created).toMatchObject({ status: 'created', exercise: { name: 'Beinpresse (Bibliothek)' } })
+  })
+})

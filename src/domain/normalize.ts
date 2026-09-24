@@ -1,3 +1,4 @@
+import { isCategory, isEquipment, isMuscle, isPattern, type MuscleSet } from './taxonomy.ts'
 import {
   DEFAULT_SETTINGS,
   type Exercise,
@@ -81,10 +82,21 @@ export function normalizeExercise(e: Record<string, unknown>): Exercise {
     noWeight: isBool(e.noWeight) ? e.noWeight : undefined,
     mode: e.mode === 'hold' || e.mode === 'reps' ? e.mode : undefined,
     holdSec: isNum(e.holdSec) && e.holdSec > 0 ? e.holdSec : undefined,
+    libraryId: isStr(e.libraryId) && e.libraryId ? e.libraryId : undefined,
+    equipment: isEquipment(e.equipment) ? e.equipment : undefined,
+    muscles: normalizeMuscles(e.muscles),
+    category: isCategory(e.category) ? e.category : undefined,
+    pattern: isPattern(e.pattern) ? e.pattern : undefined,
     archived: e.archived === true,
     createdAt: at,
     updatedAt: isIso(e.updatedAt) ? e.updatedAt : at,
   }
+}
+
+function normalizeMuscles(v: unknown): MuscleSet | undefined {
+  if (!isObj(v)) return undefined
+  const list = (x: unknown) => (Array.isArray(x) ? x.filter(isMuscle) : [])
+  return { primary: list(v.primary), secondary: list(v.secondary) }
 }
 
 /** Vorlage aus einer geprüften Sicherung. */

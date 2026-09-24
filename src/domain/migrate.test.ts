@@ -135,3 +135,44 @@ describe('Migration Schema 1 → 2 (ohne Gewicht)', () => {
     expect(out.exercises.find((e) => e.id === 'ex-bear-hug')!.noWeight).toBe(false)
   })
 })
+
+describe('Migration Schema 7 → 8 (Übungsbibliothek)', () => {
+  const AT = '2026-09-01T00:00:00.000Z'
+  const v7 = (): Record<string, unknown> => {
+    const d = createSeedData(AT) as unknown as Record<string, unknown>
+    const exercises = (d.exercises as Exercise[]).map(({ libraryId: _l, equipment: _e, muscles: _m, category: _c, pattern: _p, ...rest }) => rest)
+    return { ...d, schemaVersion: 7, exercises }
+  }
+
+  it('migrierter Seed entspricht einem frisch angelegten', () => {
+    expect(migrateAppData(v7())).toEqual(createSeedData(AT))
+  })
+
+  it('verknüpft eindeutige Studio-Übungen, ordnet Physio-Übungen zu, lässt unklare offen', () => {
+    const out = migrateAppData(v7())
+    const ex = (id: string) => out.exercises.find((e) => e.id === id)!
+    expect(ex('ex-lat-zug').libraryId).toBe('latzug-breit')
+    expect(ex('ex-rudern').libraryId).toBe('rudern-kabel-sitzend')
+    expect(ex('ex-serratusstuetz')).toMatchObject({ category: 'physio', equipment: 'koerpergewicht', muscles: { primary: ['serratus'], secondary: [] } })
+    for (const id of ['ex-adduktion', 'ex-ueberzuege', 'ex-incline-frontraise', 'ex-kreuzheben']) {
+      expect(ex(id).libraryId).toBeUndefined()
+      expect(ex(id).category).toBeUndefined()
+    }
+  })
+
+  it('überschreibt keine eigenen Werte, setzt kein updatedAt und lässt Trainings unberührt', () => {
+    const d = v7()
+    d.exercises = (d.exercises as Exercise[]).map((e) =>
+      e.id === 'ex-lat-zug' ? { ...e, libraryId: 'latzug-eng', updatedAt: '2026-09-10T00:00:00.000Z' } : e.id === 'ex-kopfheben' ? { ...e, category: 'kraft' as const } : e,
+    )
+    const workout = { id: 'wo-1', startedAt: AT, finishedAt: AT, status: 'done', updatedAt: AT, entries: [{ exerciseId: 'ex-lat-zug', sets: [{ id: 's1', weightKg: 45, reps: 10, done: true }] }] }
+    d.workouts = [workout]
+    const out = migrateAppData(d)
+    const lat = out.exercises.find((e) => e.id === 'ex-lat-zug')!
+    expect(lat.libraryId).toBe('latzug-eng')
+    expect(lat.updatedAt).toBe('2026-09-10T00:00:00.000Z')
+    expect(out.exercises.find((e) => e.id === 'ex-kopfheben')!.category).toBe('kraft')
+    expect(out.exercises.find((e) => e.id === 'ex-rudern')!.updatedAt).toBe(AT)
+    expect(out.workouts).toEqual([workout])
+  })
+})
