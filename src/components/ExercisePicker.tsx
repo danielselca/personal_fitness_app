@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { mediaFor } from '../domain/media.ts'
 import { EQUIPMENT_FILTER_OPTIONS, exerciseMeta, exerciseSearchTexts, matchesFilter, muscleText, searchLibrary, type EquipmentFilter } from '../domain/library.ts'
 import { noWeightFirst, sortForPicker } from '../domain/progress.ts'
 import { matchesQuery } from '../domain/search.ts'
@@ -6,6 +7,7 @@ import { normalizeName } from '../domain/suggestions.ts'
 import { activeRestrictions, dayKey, exerciseHits } from '../domain/restrictions.ts'
 import { EQUIPMENT_LABEL } from '../domain/taxonomy.ts'
 import { appStore, useAppStore } from '../store/appStore.ts'
+import { ExerciseMedia } from './ExerciseMedia.tsx'
 import { FilterChips } from './FilterChips.tsx'
 import { Sheet } from './Sheet.tsx'
 
@@ -126,6 +128,7 @@ export function ExercisePicker({ excludeIds, onAdd, onClose }: { excludeIds: str
       {libList.length > 0 && (
         <ul className="list" style={{ marginTop: 8 }} aria-label="Aus der Bibliothek">
           {libList.map((l, i) => {
+            const m = mediaFor(l)
             const key = LIB + l.id
             const on = selected.includes(key)
             return (
@@ -138,6 +141,7 @@ export function ExercisePicker({ excludeIds, onAdd, onClose }: { excludeIds: str
                   className={`card card-tap row picker-row ${on ? 'picker-on' : ''}`}
                   onClick={() => toggle(key)}
                 >
+                  {m && <ExerciseMedia media={m} name={l.name} size="thumb" />}
                   <span className="row-main">
                     <span className="row-title ellipsis" style={{ display: 'block' }}>{l.name}</span>
                     <span className="row-sub" id={`pick-lib-${l.id}`}>{[EQUIPMENT_LABEL[l.equipment], muscleText(l.muscles.primary)].join(' · ')}</span>

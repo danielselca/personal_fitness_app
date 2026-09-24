@@ -511,3 +511,56 @@ ul.list > li.program-card { display: flex; }
 .restrict-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
 .restrict-row + .restrict-row { border-top: 1px solid var(--border); }
 ul.list > li.restrict-row { display: flex; }
+
+/* ---------- Bewegungsgrafiken (Schritt 19) ---------- */
+.media { margin: 0; }
+.media-stage {
+  position: relative; aspect-ratio: 1; width: 100%;
+  background: var(--surface-2); border-radius: var(--radius-sm); overflow: hidden;
+}
+.media-large .media-stage { max-width: 320px; margin: 0 auto; }
+.media-small .media-stage { width: 56px; border-radius: 10px; }
+.media-frame {
+  position: absolute; inset: 6%; width: 88%; height: 88%; object-fit: contain;
+  filter: var(--media-filter); opacity: 0;
+  /* Jede Phase ist 1/n der Zeit sichtbar, Übergänge weich */
+  animation: media-phase calc(var(--frames) * 0.9s) infinite ease-in-out;
+}
+.media-frame:first-child { opacity: 1; }
+@keyframes media-phase {
+  0% { opacity: 0; }
+  8% { opacity: 1; }
+  33% { opacity: 1; }
+  41% { opacity: 0; }
+  100% { opacity: 0; }
+}
+/* Zwei Phasen (Everkinetic): je die Hälfte der Zeit */
+.media-2 .media-frame { animation-name: media-phase-2; }
+@keyframes media-phase-2 {
+  0% { opacity: 0; }
+  8% { opacity: 1; }
+  50% { opacity: 1; }
+  58% { opacity: 0; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .media-stage { display: grid; grid-template-columns: repeat(var(--frames), 1fr); aspect-ratio: auto; }
+  .media-large .media-stage { max-width: none; }
+  .media-frame { position: static; inset: auto; width: 100%; height: auto; aspect-ratio: 1; opacity: 1; animation: none; }
+}
+.media-credit { margin-top: 6px; font-size: 11px; color: var(--text-3); text-align: center; }
+.media-missing {
+  display: flex; align-items: center; justify-content: center; text-align: center; aspect-ratio: 1; max-width: 320px; margin: 0 auto;
+  background: var(--surface-2); border-radius: var(--radius-sm); color: var(--text-2); font-size: 13px; padding: 12px;
+}
+.media-small .media-missing { width: 56px; font-size: 9px; padding: 4px; }
+.media-thumb {
+  flex: none; width: 44px; height: 44px; border-radius: 10px; background: var(--surface-2); overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.media-thumb img { width: 90%; height: 90%; object-fit: contain; filter: var(--media-filter); }
+.exec-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.exec-row .btn { flex: 1; min-height: 44px; }
+.licenses { font-size: 14px; }
+.licenses ul { margin: 0 0 10px; padding-left: 20px; }
+.licenses a { color: var(--primary); }

@@ -34,6 +34,12 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 - Unter **Programme** lässt sich jedes Programm **duplizieren** und frei **bearbeiten** (Name, Ziel, Tage umbenennen/sortieren/hinzufügen/entfernen, je Tag die Übungen) – z. B. „Ganzkörper ohne Schulter“. Auch ein **eigenes Programm** ganz ohne Vorgabe ist möglich. Die Vorschläge bleiben unverändert zum erneuten Übernehmen.
 - **Vorlagen-Editor** (Stift an der Vorlage, „+ Neue Vorlage“): Übungen hinzufügen (auch aus der Bibliothek), je Übung Sätze, **Wdh. von–bis** und **Pause**, sortieren, entfernen, **duplizieren**.
 
+**Ausführung mit Grafik**
+
+- Übungen aus der Bibliothek (und deine verknüpften) zeigen eine **animierte Grafik** der Bewegung. Im Training öffnet **„Ausführung“** auf der Übungskarte Grafik, Tipps, typische Fehler und Muskeln.
+- Die Grafiken deiner Übungen lädt die App still vor, damit sie im Studio auch ohne Netz da sind; jede einmal angesehene Grafik bleibt offline verfügbar.
+- Passt eine Grafik nicht zu deinem Gerät: im Übungsdetail **„Grafik passt nicht? Andere Bibliotheksübung verknüpfen“**. Quellen und Lizenzen stehen unter **Mehr**.
+
 **Übung tauschen und Körperbereiche schonen**
 
 - Gerät besetzt oder etwas zwickt? Im Training bei der Übung **Bearbeiten → Übung tauschen**: Vorschläge für dieselben Muskeln, erst deine Übungen, dann aus der Bibliothek, mit Ausrüstungs-Chips und Suche; **„Nur heute“** oder **„Auch in der Vorlage“**. Im Vorlagen-Editor tauscht ⇄ eine Übung dauerhaft.
@@ -69,6 +75,7 @@ npm run preview    # gebauten Stand lokal ansehen (inkl. Service Worker)
 npm run icons      # PNG-Icons aus scripts/make-icons.mjs neu erzeugen
 npm run size       # Größenbudget des Builds prüfen (läuft auch in CI)
 npm run library    # Übungsbibliothek aus src/library/curation neu erzeugen
+npm run media      # Bewegungsgrafiken laden und aufbereiten (Netz nötig, Ergebnis wird eingecheckt)
 ```
 
 Einmalig für die E2E-Tests: `npx playwright install chromium`.

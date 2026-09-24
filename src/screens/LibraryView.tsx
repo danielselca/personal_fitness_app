@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
+import { ExerciseMedia } from '../components/ExerciseMedia.tsx'
 import { HowTo, MetaRows } from '../components/LibraryInfo.tsx'
+import { mediaFor } from '../domain/media.ts'
 import { libraryEntry, muscleText, searchLibrary, type LibraryFilter } from '../domain/library.ts'
 import { EQUIPMENT_LABEL } from '../domain/taxonomy.ts'
 import type { Exercise } from '../domain/types.ts'
@@ -26,9 +28,11 @@ export function LibraryList({ query, filter, onSelect }: { query: string; filter
     <ul className="list" aria-label="Bibliothek">
       {list.map((e) => {
         const own = ownFor(exercises, e.id)
+        const m = mediaFor(e)
         return (
           <li key={e.id}>
             <button type="button" className="card card-tap row" aria-label={e.name} aria-describedby={own ? `lib-sub-${e.id} lib-own-${e.id}` : `lib-sub-${e.id}`} onClick={() => onSelect(e.id)}>
+              {m && <ExerciseMedia media={m} name={e.name} size="thumb" />}
               <span className="row-main">
                 <span className="row-title ellipsis" style={{ display: 'block' }}>{e.name}</span>
                 <span className="row-sub" id={`lib-sub-${e.id}`}>
@@ -52,6 +56,7 @@ export function LibraryDetail({ id, onBack, onOpenOwn }: { id: string; onBack: (
   const [nameMatch, setNameMatch] = useState<Exercise | null>(null)
   const [added, setAdded] = useState(false)
   const own = ownFor(exercises, id)
+  const media = mediaFor(entry)
 
   if (!entry) {
     return (
@@ -75,7 +80,8 @@ export function LibraryDetail({ id, onBack, onOpenOwn }: { id: string; onBack: (
         ‹ Bibliothek
       </button>
       <div className="card">
-        <h2 style={{ margin: '0 0 4px', fontSize: 22 }}>{entry.name}</h2>
+        {media && <ExerciseMedia media={media} name={entry.name} />}
+        <h2 style={{ margin: media ? '12px 0 4px' : '0 0 4px', fontSize: 22 }}>{entry.name}</h2>
         {entry.en.toLowerCase() !== entry.name.toLowerCase() && <p className="muted en-name" lang="en">{entry.en}</p>}
         <dl className="kv">
           <MetaRows meta={{ ...entry, tags: entry.tags ?? [] }} />
