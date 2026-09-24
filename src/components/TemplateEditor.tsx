@@ -3,6 +3,7 @@ import type { Template, TemplateEntry } from '../domain/types.ts'
 import { useAppStore } from '../store/appStore.ts'
 import { ExercisePicker } from './ExercisePicker.tsx'
 import { ConfirmDialog, Sheet } from './Sheet.tsx'
+import { SwapSheet } from './SwapSheet.tsx'
 
 /** Zahl aus einem Eingabefeld: leer → undefined, sonst ganze Zahl (ungültig → NaN). */
 const parseInt0 = (v: string): number | undefined => (v.trim() === '' ? undefined : /^\d+$/.test(v.trim()) ? Number(v) : Number.NaN)
@@ -75,6 +76,7 @@ export function TemplateEditor({
   const [rows, setRows] = useState<Row[]>(template.entries.map(toRow))
   const [error, setError] = useState<string | null>(null)
   const [picking, setPicking] = useState(false)
+  const [swapId, setSwapId] = useState<string | null>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const exById = new Map(exercises.map((e) => [e.id, e]))
   const nameOf = (id: string) => exById.get(id)?.name ?? 'Unbekannt'
@@ -132,6 +134,7 @@ export function TemplateEditor({
                 <span className="row-title tpl-entry-name">{n}</span>
                 <button type="button" className="btn btn-icon btn-sm" aria-label={`${n} nach oben`} disabled={i === 0} onClick={() => move(i, -1)}>↑</button>
                 <button type="button" className="btn btn-icon btn-sm" aria-label={`${n} nach unten`} disabled={i === rows.length - 1} onClick={() => move(i, 1)}>↓</button>
+                <button type="button" className="btn btn-icon btn-sm" aria-label={`${n} tauschen`} onClick={() => setSwapId(r.exerciseId)}>⇄</button>
                 <button type="button" className="btn btn-icon btn-sm" aria-label={`${n} entfernen`} onClick={() => setRows(rows.filter((_, k) => k !== i))}>✕</button>
               </div>
               <div className="tpl-fields">
@@ -197,6 +200,18 @@ export function TemplateEditor({
             setPicking(false)
           }}
           onClose={() => setPicking(false)}
+        />
+      )}
+      {swapId && (
+        <SwapSheet
+          exerciseId={swapId}
+          excludeIds={rows.map((r) => r.exerciseId)}
+          onPick={(newId) => {
+            // Sätze und Wdh.-Bereich bleiben, die Pause gehörte zur alten Übung
+            setRows(rows.map((r) => (r.exerciseId === swapId ? { ...r, exerciseId: newId, restSec: '' } : r)))
+            setSwapId(null)
+          }}
+          onClose={() => setSwapId(null)}
         />
       )}
       {confirmDelete && (

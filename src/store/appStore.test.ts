@@ -302,3 +302,43 @@ describe('Store: Programme (Schritt 18)', () => {
     expect(c.name).toBe('Beine zuhause (Kopie)')
   })
 })
+
+describe('Store: Übung tauschen und Schonen (Schritt 18b)', () => {
+  it('tauscht im Training an gleicher Position mit gleicher Satzzahl; nicht nach abgehakten Sätzen oder bei Doppelten', async () => {
+    const { store } = await freshStore()
+    const s = () => store.getState()
+    s().startWorkout({ exerciseIds: ['ex-rudern', 'ex-lat-zug', 'ex-facepulls'] })
+    expect(s().replaceExerciseInWorkout('ex-lat-zug', 'ex-facepulls')).toBe(false) // schon im Training
+    expect(s().replaceExerciseInWorkout('ex-lat-zug', 'ex-reverse-butterfly')).toBe(true)
+    const w = s().activeWorkout()!
+    expect(w.entries.map((e) => e.exerciseId)).toEqual(['ex-rudern', 'ex-reverse-butterfly', 'ex-facepulls'])
+    expect(w.entries[1].sets).toHaveLength(4) // Satzzahl des Lat-Zugs
+    const setId = w.entries[0].sets[0].id
+    s().updateSet('ex-rudern', setId, { weightKg: 40, reps: 10 })
+    s().setSetDone('ex-rudern', setId, true)
+    expect(s().replaceExerciseInWorkout('ex-rudern', 'ex-butterfly-maschine')).toBe(false)
+  })
+
+  it('tauscht in der Vorlage: Sätze und Bereich bleiben, Pause fällt weg', async () => {
+    const { store } = await freshStore()
+    const s = () => store.getState()
+    const t = s().data.templates[0]
+    s().updateTemplate(t.id, { entries: t.entries.map((e) => (e.exerciseId === 'ex-lat-zug' ? { ...e, repMin: 8, repMax: 12, restSec: 120 } : e)) })
+    s().replaceExerciseInTemplate(t.id, 'ex-lat-zug', 'ex-lib-klimmzug')
+    expect(s().data.templates[0].entries.at(-1)).toEqual({ exerciseId: 'ex-lib-klimmzug', sets: 4, repMin: 8, repMax: 12 })
+    // Ist die neue Übung schon drin, wird die alte nur entfernt
+    s().replaceExerciseInTemplate(t.id, 'ex-rudern', 'ex-lib-klimmzug')
+    expect(s().data.templates[0].entries.filter((e) => e.exerciseId === 'ex-lib-klimmzug')).toHaveLength(1)
+    expect(s().data.templates[0].entries.some((e) => e.exerciseId === 'ex-rudern')).toBe(false)
+  })
+
+  it('Schonen anlegen und beenden; leer wird abgelehnt', async () => {
+    const { store } = await freshStore()
+    const s = () => store.getState()
+    expect(s().addRestriction({ bodyParts: [], muscles: [] })).toBeNull()
+    const r = s().addRestriction({ bodyParts: ['schulter'], muscles: [], note: '  links ', until: '2026-10-15' })!
+    expect(r).toMatchObject({ bodyParts: ['schulter'], note: 'links', until: '2026-10-15' })
+    s().removeRestriction(r.id)
+    expect(s().data.restrictions).toEqual([])
+  })
+})

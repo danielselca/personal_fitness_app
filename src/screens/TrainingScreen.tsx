@@ -5,11 +5,13 @@ import { InstallHint } from '../components/InstallHint.tsx'
 import { ProgramHero } from '../components/ProgramHero.tsx'
 import { ConfirmDialog, Sheet } from '../components/Sheet.tsx'
 import { SaveTemplateSheet, TemplateEditor } from '../components/TemplateEditor.tsx'
+import { SwapSheet } from '../components/SwapSheet.tsx'
 import { TimerBar } from '../components/TimerBar.tsx'
 import { WorkoutExerciseCard } from '../components/WorkoutExerciseCard.tsx'
 import { currentEntryId, entryState } from '../domain/progress.ts'
 import { backupFileName, buildBackup } from '../domain/backup.ts'
 import { restSecFor } from '../domain/hold.ts'
+import { activeRestrictions, dayKey, exerciseHits, templateHitCount } from '../domain/restrictions.ts'
 import { doneSetCount, finishedWorkouts, trainingDaysOfWeek, workoutDurationMin, workoutVolume, workoutsPerWeek } from '../domain/stats.ts'
 import type { Template, Workout, WorkoutSet } from '../domain/types.ts'
 import { useNow } from '../hooks/useNow.ts'
@@ -54,6 +56,11 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
   }
   // Tages-Vorlagen von Programmen stehen beim Programm, nicht in der Vorlagen-Liste
   const templates = data.templates.filter((t) => !t.programId)
+  const activeRs = activeRestrictions(data.restrictions, dayKey())
+  const hitNote = (t: Template) => {
+    const n = templateHitCount(t, data.exercises, activeRs)
+    return n ? ` · ⚠ ${n} geschont` : ''
+  }
   const newTemplate = () => {
     const t = createTemplate('Neue Vorlage')
     setNewTemplateId(t.id)
@@ -133,6 +140,7 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
                       <span className="row-sub" style={{ display: 'block' }}>
                         {count(t.entries.length, 'Übung', 'Übungen')}
                         {lastOfTemplate ? ` · zuletzt ${formatRelativeDay(lastOfTemplate.finishedAt!)}` : ''}
+                        {hitNote(t)}
                       </span>
                       <span className="row-sub ellipsis" style={{ display: 'block' }}>{t.entries.map((e) => exerciseName(e.exerciseId)).join(', ')}</span>
                     </span>
@@ -237,6 +245,14 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
   const restoreSet = useAppStore((s) => s.restoreSet)
   const finishWorkout = useAppStore((s) => s.finishWorkout)
   const discardWorkout = useAppStore((s) => s.discardWorkout)
+  const templates = useAppStore((s) => s.data.templates)
+  const restrictions = useAppStore((s) => s.data.restrictions)
+  const replaceInWorkout = useAppStore((s) => s.replaceExerciseInWorkout)
+  const replaceInTemplate = useAppStore((s) => s.replaceExerciseInTemplate)
+  const [swapId, setSwapId] = useState<string | null>(null)
+  const [dismissedHits, setDismissedHits] = useState<string[]>([])
+  const active = useMemo(() => activeRestrictions(restrictions, dayKey()), [restrictions])
+  const template = workout.templateId ? templates.find((t) => t.id === workout.templateId) : undefined
   // 'auto': Auswahl öffnet sich von selbst, solange das Training leer ist
   const [pickerState, setPickerState] = useState<'auto' | 'open' | 'closed'>('auto')
   const picker = pickerState === 'open' || (pickerState === 'auto' && workout.entries.length === 0)
@@ -357,6 +373,9 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
                 onToggle={() => toggle(entry.exerciseId)}
                 onSetDone={() => onSetDone(entry.exerciseId)}
                 onDeleteSet={(set, index) => setUndo({ exerciseId: entry.exerciseId, set, index })}
+                restrictionHits={dismissedHits.includes(ex.id) ? [] : exerciseHits(ex, active)}
+                onSwap={() => setSwapId(ex.id)}
+                onDismissHits={() => setDismissedHits([...dismissedHits, ex.id])}
               />
             )
           })}
@@ -369,6 +388,19 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
           Abschließen
         </button>
       </div>
+
+      {swapId && (
+        <SwapSheet
+          exerciseId={swapId}
+          excludeIds={workout.entries.map((e) => e.exerciseId)}
+          templateName={template?.entries.some((e) => e.exerciseId === swapId) ? template.name : undefined}
+          onPick={(newId, alsoTemplate) => {
+            if (replaceInWorkout(swapId, newId) && alsoTemplate && template) replaceInTemplate(template.id, swapId, newId)
+            setSwapId(null)
+          }}
+          onClose={() => setSwapId(null)}
+        />
+      )}
 
       <TimerBar defaultSec={settings.defaultRestSec} presetsOpen={presetsOpen} onClosePresets={() => setPresetsOpen(false)} />
       {timer && <div style={{ height: 8 }} />}

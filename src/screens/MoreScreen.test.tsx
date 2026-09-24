@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { buildBackup } from '../domain/backup.ts'
 import { createSeedData } from '../domain/seed.ts'
@@ -94,5 +94,29 @@ describe('Sicherung (AK21–AK23, AK27)', () => {
     expect(download.downloadJson).toHaveBeenCalledTimes(1)
     expect(vi.mocked(download.downloadJson).mock.calls[0][0]).toMatch(/-vor-import\.json$/)
     expect(appStore.getState().data.workouts.map((w) => w.id)).toEqual(['w-a'])
+  })
+})
+
+describe('Körperbereiche schonen (Schritt 18b)', () => {
+  it('anlegen mit Bereich, Datum und Notiz; beenden', () => {
+    render(<MoreScreen />)
+    fireEvent.click(screen.getByRole('button', { name: '+ Bereich schonen' }))
+    const sheet = screen.getByRole('dialog', { name: 'Bereich schonen' })
+    expect((within(sheet).getByRole('button', { name: 'Bereich wählen' }) as HTMLButtonElement).disabled).toBe(true)
+    fireEvent.click(within(within(sheet).getByRole('group', { name: 'Körperbereiche' })).getByRole('button', { name: 'Schulter' }))
+    fireEvent.change(within(sheet).getByLabelText('Schonen bis'), { target: { value: '2099-12-31' } })
+    fireEvent.change(within(sheet).getByLabelText('Notiz'), { target: { value: 'links' } })
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Schonen' }))
+    expect(appStore.getState().data.restrictions[0]).toMatchObject({ bodyParts: ['schulter'], until: '2099-12-31', note: 'links' })
+    const list = screen.getByRole('list', { name: 'Geschonte Bereiche' })
+    expect(list.textContent).toContain('Schulter · bis 31.12.2099')
+    fireEvent.click(within(list).getByRole('button', { name: /Schonen beenden/ }))
+    expect(appStore.getState().data.restrictions).toEqual([])
+  })
+
+  it('abgelaufene Einträge werden nicht angezeigt', () => {
+    appStore.setState({ data: { ...appStore.getState().data, restrictions: [{ id: 'alt', bodyParts: ['knie'], muscles: [], until: '2020-01-01', createdAt: '2020-01-01T00:00:00.000Z', updatedAt: '2020-01-01T00:00:00.000Z' }] } })
+    render(<MoreScreen />)
+    expect(screen.queryByRole('list', { name: 'Geschonte Bereiche' })).toBeNull()
   })
 })

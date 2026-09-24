@@ -459,3 +459,51 @@ describe('Übungsauswahl mit Bibliothek (Schritt 17)', () => {
     expect(card('Kettlebell-Swing')).toBeTruthy()
   })
 })
+
+describe('Übung tauschen und Schonen im Training (Schritt 18b)', () => {
+  const AT = '2026-09-01T00:00:00.000Z'
+
+  it('„Übung tauschen“ unter Bearbeiten: nur heute oder auch in der Vorlage', () => {
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: 'Vorlage Oberkörper starten' }))
+    const lat = card('Lat-Zug')
+    fireEvent.click(within(lat).getByRole('button', { expanded: false }))
+    fireEvent.click(within(lat).getByRole('button', { name: 'Lat-Zug: Sätze bearbeiten' }))
+    fireEvent.click(within(lat).getByRole('button', { name: 'Lat-Zug tauschen' }))
+    const sheet = screen.getByRole('dialog', { name: '„Lat-Zug“ tauschen' })
+    fireEvent.click(within(sheet).getByRole('radio', { name: 'Auch in der Vorlage' }))
+    fireEvent.click(within(within(sheet).getByRole('list', { name: 'Aus der Bibliothek' })).getByRole('button', { name: 'Latzug eng' }))
+    expect(active().entries.at(-1)?.exerciseId).toBe('ex-lib-latzug-eng')
+    expect(data().templates[0].entries.at(-1)?.exerciseId).toBe('ex-lib-latzug-eng')
+    expect(card('Latzug eng')).toBeTruthy()
+  })
+
+  it('geschonte Schulter: Karte markiert, Alternative wählen, heute auslassen, trotzdem', () => {
+    appStore.setState({ data: { ...data(), restrictions: [{ id: 'rs', bodyParts: ['schulter'], muscles: [], createdAt: AT, updatedAt: AT }] } })
+    render(<TrainingScreen />)
+    expect(screen.getByRole('button', { name: 'Vorlage Oberkörper starten' }).textContent).toContain('⚠ 4 geschont')
+    fireEvent.click(screen.getByRole('button', { name: 'Vorlage Oberkörper starten' }))
+    const open = (name: string) => {
+      const c = card(name)
+      const toggle = within(c).queryByRole('button', { expanded: false })
+      if (toggle) fireEvent.click(toggle)
+      return c
+    }
+    // Alternative (nur heute) – Vorschläge ohne Schulterbelastung
+    const rb = open('Reverse Butterfly')
+    expect(within(rb).getByRole('note').textContent).toContain('Belastet Schulter')
+    fireEvent.click(within(rb).getByRole('button', { name: 'Alternative' }))
+    const sheet = screen.getByRole('dialog', { name: '„Reverse Butterfly“ tauschen' })
+    expect(within(sheet).getByRole('radio', { name: 'Nur heute' }).getAttribute('aria-checked')).toBe('true')
+    expect(sheet.textContent).toContain('ohne Übungen, die geschonte Bereiche belasten')
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Schließen' }))
+    // Heute auslassen
+    fireEvent.click(within(open('Butterfly Maschine')).getByRole('button', { name: 'Heute auslassen' }))
+    expect(active().entries.some((e) => e.exerciseId === 'ex-butterfly-maschine')).toBe(false)
+    // Trotzdem: Hinweis verschwindet, Übung bleibt
+    const lat = open('Lat-Zug')
+    fireEvent.click(within(lat).getByRole('button', { name: 'Trotzdem' }))
+    expect(within(lat).queryByRole('note')).toBeNull()
+    expect(data().templates[0].entries.some((e) => e.exerciseId === 'ex-butterfly-maschine')).toBe(true) // Vorlage unverändert
+  })
+})
