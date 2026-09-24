@@ -15,7 +15,7 @@ export async function addExercises(page: Page, names: string[]) {
 }
 
 /** Tab der Hauptnavigation, exakt nach Namen (kein Treffer auf andere Knöpfe mit ähnlichem Text). */
-export function tab(page: Page, name: 'Training' | 'Übungen' | 'Verlauf' | 'Mehr') {
+export function tab(page: Page, name: 'Training' | 'Übungen' | 'Coach' | 'Verlauf' | 'Mehr') {
   return page.getByRole('navigation', { name: 'Hauptnavigation' }).getByRole('button', { name, exact: true })
 }
 

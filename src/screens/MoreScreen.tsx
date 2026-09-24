@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { BackupReminder } from '../components/BackupReminder.tsx'
 import { LicensesSection } from '../components/LicensesSection.tsx'
+import { ProfileSection } from '../components/ProfileSection.tsx'
 import { RestrictionsSection } from '../components/RestrictionsSection.tsx'
 import { ConfirmDialog } from '../components/Sheet.tsx'
 import { Toggle } from '../components/Toggle.tsx'
@@ -17,6 +18,7 @@ export function MoreScreen() {
   return (
     <>
       <BackupSection />
+      <ProfileSection />
       <RestrictionsSection />
       <SettingsSection />
       <HintsSection />

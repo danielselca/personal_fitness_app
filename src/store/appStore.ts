@@ -138,6 +138,11 @@ export interface AppStore {
   removeRestriction(id: string): void
   /** Schonen beenden: gilt ab heute nicht mehr, bleibt aber für den Wiedereinstieg erhalten. */
   endRestriction(id: string): void
+
+  // Profil
+  /** Körpergewicht für einen Tag eintragen (ersetzt einen Eintrag vom selben Tag). */
+  addBodyWeight(date: string, weightKg: number): boolean
+  removeBodyWeight(id: string): void
   markBackupDone(): void
   importBackup(backup: Backup, mode: ImportMode): ImportResult
   markHintSeen(id: string): void
@@ -738,6 +743,23 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         }
         update((d) => ({ ...d, restrictions: [...d.restrictions, r] }))
         return r
+      },
+
+      addBodyWeight(date, weightKg) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !(weightKg > 20 && weightKg < 400)) return false
+        const at = nowIso()
+        update((d) => {
+          const same = d.bodyLog.find((b) => b.date === date)
+          const bodyLog = same
+            ? d.bodyLog.map((b) => (b.id === same.id ? { ...b, weightKg, updatedAt: at } : b))
+            : [...d.bodyLog, { id: newId('bw-'), date, weightKg, createdAt: at, updatedAt: at }]
+          return { ...d, bodyLog: bodyLog.sort((a, b) => (a.date < b.date ? -1 : 1)) }
+        })
+        return true
+      },
+
+      removeBodyWeight(id) {
+        update((d) => ({ ...d, bodyLog: d.bodyLog.filter((b) => b.id !== id) }))
       },
 
       endRestriction(id) {

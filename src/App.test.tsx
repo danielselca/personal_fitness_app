@@ -32,11 +32,11 @@ describe('App-Gerüst', () => {
     expect(screen.getByRole('button', { name: 'Freies Training' })).toBeTruthy()
   })
 
-  it('zeigt die vier Tabs in fester Reihenfolge', () => {
+  it('zeigt die fünf Tabs in fester Reihenfolge', () => {
     render(<App />)
     const nav = screen.getByRole('navigation', { name: 'Hauptnavigation' })
     const labels = Array.from(nav.querySelectorAll('button')).map((b) => b.textContent)
-    expect(labels).toEqual(['Training', 'Übungen', 'Verlauf', 'Mehr'])
+    expect(labels).toEqual(['Training', 'Übungen', 'Coach', 'Verlauf', 'Mehr'])
   })
 
   it('wechselt den Tab, tauscht Titel und Inhalt', () => {

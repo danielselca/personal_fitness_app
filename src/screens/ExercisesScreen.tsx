@@ -14,6 +14,7 @@ import {
   regionFilterOptions,
   type LibraryFilter,
 } from '../domain/library.ts'
+import { exerciseRecords } from '../domain/coach/records.ts'
 import { mediaForExercise } from '../domain/media.ts'
 import { weightProgression } from '../domain/stats.ts'
 import { matchesQuery } from '../domain/search.ts'
@@ -206,6 +207,7 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
   const [linking, setLinking] = useState(false)
   const [confirmArchive, setConfirmArchive] = useState(false)
   const history = useMemo(() => weightProgression(workouts, id), [workouts, id])
+  const records = useMemo(() => exerciseRecords(workouts, id), [workouts, id])
 
   if (!exercise) {
     return (
@@ -275,6 +277,20 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
         </div>
       </div>
 
+
+      {history.length > 0 && (records.maxWeight || records.maxReps) && (
+        <>
+          <h2 className="section-title">Bestwerte</h2>
+          <div className="card">
+            <dl className="kv" style={{ margin: 0 }} aria-label="Bestwerte">
+              {records.maxWeight && (<><dt>Höchstgewicht</dt><dd>{formatKg(records.maxWeight.value)} <span className="muted">· {formatDate(records.maxWeight.date)}</span></dd></>)}
+              {records.best1RM && (<><dt>1RM geschätzt</dt><dd>~{formatKg(Math.round(records.best1RM.value * 2) / 2)} <span className="muted">· Epley, aus Sätzen ≤ 10 Wdh.</span></dd></>)}
+              {records.maxReps && (<><dt>{exercise.mode === 'hold' ? 'Längste Haltezeit' : 'Meiste Wdh.'}</dt><dd>{records.maxReps.value}{exercise.mode === 'hold' ? ' s' : ''} <span className="muted">· {formatDate(records.maxReps.date)}</span></dd></>)}
+              {records.bestVolume && (<><dt>Bestes Volumen</dt><dd>{formatKg(records.bestVolume.value)} <span className="muted">· {formatDate(records.bestVolume.date)}</span></dd></>)}
+            </dl>
+          </div>
+        </>
+      )}
 
       <h2 className="section-title">Verlauf</h2>
       {history.length === 0 ? (

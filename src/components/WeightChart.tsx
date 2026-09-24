@@ -5,14 +5,15 @@ import { formatDate, formatNumber } from '../lib/format.ts'
  * Liniendiagramm: Höchstgewicht je Training mit Wdh.-Beschriftung (F11, AK19).
  * Eigenes SVG, keine Bibliothek; Farben aus den Design-Tokens.
  */
-export function WeightChart({ points, mode = 'weight' }: { points: WeightPoint[]; mode?: 'weight' | 'reps' | 'seconds' }) {
+export function WeightChart({ points, mode = 'weight' }: { points: WeightPoint[]; mode?: 'weight' | 'reps' | 'seconds' | 'body' }) {
   const data = points
-    .map((p) => ({ ...p, value: mode !== 'weight' ? Math.max(...p.sets.map((s) => s.reps)) : p.maxWeightKg }))
+    .map((p) => ({ ...p, value: mode === 'weight' || mode === 'body' ? p.maxWeightKg : Math.max(...p.sets.map((s) => s.reps)) }))
     .filter((p): p is typeof p & { value: number } => p.value !== null)
   if (data.length === 0) {
     return <p className="muted" style={{ margin: 0 }}>Alle Sätze ohne Gewicht, kein Gewichtsverlauf.</p>
   }
-  const title = mode === 'reps' ? 'Wiederholungsverlauf' : mode === 'seconds' ? 'Haltezeitverlauf' : 'Gewichtsverlauf'
+  const title = mode === 'reps' ? 'Wiederholungsverlauf' : mode === 'seconds' ? 'Haltezeitverlauf' : mode === 'body' ? 'Körpergewicht' : 'Gewichtsverlauf'
+  const kgScale = mode === 'weight' || mode === 'body'
   const W = 320
   const H = 160
   const padL = 36
@@ -24,8 +25,8 @@ export function WeightChart({ points, mode = 'weight' }: { points: WeightPoint[]
   let min = Math.min(...ys)
   let max = Math.max(...ys)
   if (min === max) {
-    min -= mode === 'weight' ? 2.5 : 2
-    max += mode === 'weight' ? 2.5 : 2
+    min -= kgScale ? 2.5 : 2
+    max += kgScale ? 2.5 : 2
   }
   const span = max - min
   min -= span * 0.1
@@ -41,7 +42,7 @@ export function WeightChart({ points, mode = 'weight' }: { points: WeightPoint[]
         {ticks.map((t, i) => (
           <g key={i}>
             <line x1={padL} x2={W - padR} y1={y(t)} y2={y(t)} className="chart-grid" />
-            <text x={padL - 6} y={y(t) + 4} textAnchor="end" className="chart-tick">{mode !== 'weight' ? Math.round(t) : formatNumber(Math.round(t * 2) / 2)}</text>
+            <text x={padL - 6} y={y(t) + 4} textAnchor="end" className="chart-tick">{!kgScale ? Math.round(t) : formatNumber(Math.round(t * 2) / 2)}</text>
           </g>
         ))}
         <path d={path} className="chart-line" />
@@ -61,7 +62,7 @@ export function WeightChart({ points, mode = 'weight' }: { points: WeightPoint[]
         )}
       </svg>
       <figcaption className="muted" style={{ fontSize: 13 }}>
-        {mode === 'reps' ? 'Meiste Wiederholungen je Training' : mode === 'seconds' ? 'Längste Haltezeit je Training (s)' : 'Höchstgewicht je Training, Beschriftung = Wiederholungen'}{data.length > 20 ? ` (letzte 20 von ${data.length})` : ''}
+        {mode === 'reps' ? 'Meiste Wiederholungen je Training' : mode === 'seconds' ? 'Längste Haltezeit je Training (s)' : mode === 'body' ? 'Körpergewicht in kg je Eintrag' : 'Höchstgewicht je Training, Beschriftung = Wiederholungen'}{data.length > 20 ? ` (letzte 20 von ${data.length})` : ''}
       </figcaption>
     </figure>
   )
