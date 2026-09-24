@@ -61,4 +61,41 @@ test.describe('Persistenz, Offline, Timer', () => {
     await page.getByRole('button', { name: 'OK' }).click()
     await expect(page.getByTestId('timer')).toHaveCount(0)
   })
+
+  test('Grafiken: nicht im Precache, einmal gesehen oder vorgeladen offline verfügbar (Schritt 19)', async ({ page, context }) => {
+    await openApp(page)
+    await waitForPrecache(page)
+    const precached = await page.evaluate(async () => {
+      const key = (await caches.keys()).find((k) => k.includes('precache'))!
+      return (await (await caches.open(key)).keys()).map((r) => r.url)
+    })
+    expect(precached.some((u) => u.includes('/media/'))).toBe(false)
+
+    // Deine verknüpften Übungen werden still vorgeladen (z. B. Lat-Zug → latzug-breit)
+    const cached = (name: string) =>
+      page.evaluate(async (n) => {
+        if (!(await caches.keys()).includes('media-v1')) return false
+        return (await (await caches.open('media-v1')).keys()).some((r) => r.url.endsWith(n))
+      }, name)
+    await expect.poll(() => cached('latzug-breit-3.svg'), { timeout: 20_000 }).toBe(true)
+
+    // Bibliotheksübung ansehen → landet im Cache
+    await tab(page, 'Übungen').click()
+    await page.getByRole('radio', { name: 'Bibliothek' }).click()
+    await page.getByRole('button', { name: 'Goblet Squat', exact: true }).click()
+    await expect(page.getByRole('img', { name: /Bewegungsablauf Goblet Squat/ })).toBeVisible()
+    await expect.poll(() => cached('goblet-squat-3.svg'), { timeout: 10_000 }).toBe(true)
+
+    await context.setOffline(true)
+    await page.reload()
+    await tab(page, 'Übungen').click()
+    await page.getByRole('radio', { name: 'Bibliothek' }).click()
+    await page.getByRole('button', { name: 'Goblet Squat', exact: true }).click()
+    await expect(page.getByRole('img', { name: /Bewegungsablauf Goblet Squat/ })).toBeVisible()
+    await expect
+      .poll(() => page.evaluate(() => [...document.querySelectorAll<HTMLImageElement>('img.media-frame')].every((i) => i.complete && i.naturalWidth > 0)))
+      .toBe(true)
+    await page.screenshot({ path: 'test-results/shots/50-media-offline.png' })
+    await context.setOffline(false)
+  })
 })

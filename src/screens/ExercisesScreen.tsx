@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { ExerciseForm } from '../components/ExerciseForm.tsx'
+import { ExerciseMedia } from '../components/ExerciseMedia.tsx'
 import { FilterChips } from '../components/FilterChips.tsx'
 import { HowTo, MetaRows } from '../components/LibraryInfo.tsx'
 import { LinkLibrarySheet } from '../components/LinkLibrarySheet.tsx'
@@ -13,6 +14,7 @@ import {
   regionFilterOptions,
   type LibraryFilter,
 } from '../domain/library.ts'
+import { mediaForExercise } from '../domain/media.ts'
 import { weightProgression } from '../domain/stats.ts'
 import { matchesQuery } from '../domain/search.ts'
 import type { Exercise } from '../domain/types.ts'
@@ -215,13 +217,22 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
   }
 
   const meta = exerciseMeta(exercise)
+  const media = mediaForExercise(exercise)
   return (
     <>
       <button type="button" className="btn btn-sm" onClick={onBack} style={{ marginBottom: 12 }}>
         ‹ Alle Übungen
       </button>
       <div className="card">
-        <h2 style={{ margin: '0 0 4px', fontSize: 22 }}>{exercise.name}</h2>
+        {media && (
+          <>
+            <ExerciseMedia media={media} name={exercise.name} />
+            <button type="button" className="btn btn-sm btn-link" style={{ display: 'block', margin: '2px auto 0' }} onClick={() => setLinking(true)}>
+              Grafik passt nicht? Andere Bibliotheksübung verknüpfen
+            </button>
+          </>
+        )}
+        <h2 style={{ margin: media ? '10px 0 4px' : '0 0 4px', fontSize: 22 }}>{exercise.name}</h2>
         {exercise.archived && <p className="muted" style={{ margin: 0 }}>Archiviert</p>}
         <dl className="kv">
           {exercise.machineNo && (<><dt>Gerät</dt><dd>{exercise.machineNo}</dd></>)}

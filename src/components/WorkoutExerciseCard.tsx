@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { holdSecFor, isHold } from '../domain/hold.ts'
+import { mediaForExercise } from '../domain/media.ts'
 import { entryState } from '../domain/progress.ts'
 import { lastValuesFor } from '../domain/suggestions.ts'
 import type { Exercise, WorkoutEntry, WorkoutSet } from '../domain/types.ts'
 import { count, formatKg, formatRelativeDay, formatSetFor } from '../lib/format.ts'
 import { scrollIntoViewSoft } from '../lib/scroll.ts'
 import { useAppStore } from '../store/appStore.ts'
+import { ExecutionSheet } from './ExecutionSheet.tsx'
+import { ExerciseMedia } from './ExerciseMedia.tsx'
 import { HoldDonut } from './HoldDonut.tsx'
 import { SetRow } from './SetRow.tsx'
 
@@ -53,6 +56,8 @@ export function WorkoutExerciseCard({
   const remove = useAppStore((s) => s.removeExerciseFromWorkout)
   const [noteOpen, setNoteOpen] = useState(!!entry.note)
   const [editing, setEditing] = useState(false)
+  const [showExecution, setShowExecution] = useState(false)
+  const media = mediaForExercise(exercise)
   const last = useMemo(() => lastValuesFor(workouts, exercise.id, workoutId), [workouts, exercise.id, workoutId])
   const currentIndex = entry.sets.findIndex((s) => !s.done)
   const weightStep = exercise.weightStep ?? settings.weightStep
@@ -123,6 +128,14 @@ export function WorkoutExerciseCard({
               </div>
             </div>
           )}
+          {exercise.libraryId && (
+            <div className="exec-row">
+              {media && <ExerciseMedia media={media} name={exercise.name} size="small" credit={false} />}
+              <button type="button" className="btn btn-sm" aria-label={`Ausführung ${exercise.name}`} onClick={() => setShowExecution(true)}>
+                Ausführung
+              </button>
+            </div>
+          )}
           {exercise.hint && <p className="muted wcard-hint ellipsis" title={exercise.hint}>{exercise.hint}</p>}
 
           {hold ? (
@@ -190,6 +203,7 @@ export function WorkoutExerciseCard({
               </button>
             </div>
           )}
+          {showExecution && <ExecutionSheet exercise={exercise} onClose={() => setShowExecution(false)} />}
           {noteOpen && (
             <input
               className="input"

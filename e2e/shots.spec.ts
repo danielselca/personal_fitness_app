@@ -1,5 +1,5 @@
 import { test } from '@playwright/test'
-import { card, openApp, tab } from './helpers.ts'
+import { addExercises, card, openApp, tab } from './helpers.ts'
 
 const OUT = process.env.SHOT_DIR ?? 'test-results/shots'
 
@@ -137,4 +137,27 @@ test('Screenshots: Schonen und Tauschen (hell/dunkel)', async ({ page }) => {
   await page.screenshot({ path: `${OUT}/43-banner-dark.png` })
   await rb.getByRole('button', { name: 'Alternative' }).click()
   await page.screenshot({ path: `${OUT}/44-swap-dark.png` })
+})
+
+test('Screenshots: Grafiken und Ausführung (hell/dunkel)', async ({ page }) => {
+  await openApp(page)
+  await page.getByRole('button', { name: 'Freies Training' }).click()
+  await addExercises(page, ['Lat-Zug'])
+  await page.waitForTimeout(800)
+  await page.screenshot({ path: `${OUT}/51-card-exec-light.png` })
+  await page.getByRole('button', { name: 'Ausführung Lat-Zug' }).click()
+  await page.getByRole('list', { name: 'Ausführung' }).waitFor()
+  await page.waitForTimeout(600)
+  await page.screenshot({ path: `${OUT}/52-exec-sheet-light.png` })
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await page.waitForTimeout(1000)
+  await page.screenshot({ path: `${OUT}/53-exec-sheet-dark.png` })
+  await page.getByRole('dialog', { name: 'Lat-Zug' }).getByRole('button', { name: 'Schließen' }).click()
+  await tab(page, 'Übungen').click()
+  await page.getByRole('radio', { name: 'Bibliothek' }).click()
+  await page.waitForTimeout(800)
+  await page.screenshot({ path: `${OUT}/54-library-thumbs-dark.png` })
+  await page.getByRole('button', { name: 'Überzug (Kurzhantel)', exact: true }).click()
+  await page.waitForTimeout(800)
+  await page.screenshot({ path: `${OUT}/55-everkinetic-dark.png` })
 })

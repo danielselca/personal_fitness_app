@@ -39,8 +39,21 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
-        // Übungsgrafiken nicht beim Installieren laden, sondern bei Bedarf (Laufzeit-Cache, ab Schritt 19)
+        // Übungsgrafiken nicht beim Installieren laden, sondern bei Bedarf: einmal gesehen oder still
+        // vorgeladen (deine Übungen) liegen sie im Laufzeit-Cache und sind offline da.
         globIgnores: ['**/media/**'],
+        runtimeCaching: [
+          {
+            // Regulärer Ausdruck statt Funktion: Workbox überträgt Funktionen ohne ihre Variablen
+            urlPattern: /\/media\/v1\//,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'media-v1',
+              expiration: { maxEntries: 800 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
         // Neue Service-Worker-Version übernimmt offene Seiten sofort, damit schon der erste Besuch offline-fähig ist.
         clientsClaim: true,
         navigateFallback: `${BASE}index.html`,

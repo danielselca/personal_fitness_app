@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { BackupReminder } from '../components/BackupReminder.tsx'
+import { LicensesSection } from '../components/LicensesSection.tsx'
 import { RestrictionsSection } from '../components/RestrictionsSection.tsx'
 import { ConfirmDialog } from '../components/Sheet.tsx'
 import { Toggle } from '../components/Toggle.tsx'
@@ -19,6 +20,7 @@ export function MoreScreen() {
       <RestrictionsSection />
       <SettingsSection />
       <HintsSection />
+      <LicensesSection />
       <div className="card">
         <strong>Version</strong>
         <p className="muted num" style={{ margin: '4px 0 0' }}>{__APP_VERSION__}</p>
