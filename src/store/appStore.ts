@@ -122,6 +122,11 @@ export interface AppStore {
   // Programme
   /** Mitgeliefertes Programm als eigene Kopie übernehmen und aktivieren. */
   installProgram(builtinId: string, opts: InstallOptions): Program | null
+  /**
+   * Programm aus einem geprüften Import (Claude) anlegen, wahlweise aktivieren. `build` legt es in
+   * den aktuellen Daten an (z. B. `importProgram` aus `programJson.ts`, das nachgeladen wird).
+   */
+  importProgram(build: (data: AppData, at: string) => { data: AppData; program: Program }, activate: boolean): Program
   createProgram(name: string): Program
   /** Name, Ziel, Tage/Woche oder Tage (Reihenfolge, Namen) ändern; Tagesnamen gehen an die Vorlagen. */
   updateProgram(id: string, patch: Partial<Pick<Program, 'name' | 'goal' | 'sessionsPerWeek' | 'days'>>): void
@@ -664,6 +669,12 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         if (!def) return null
         const r = installProgramData(get().data, def, opts, nowIso())
         update(() => ({ ...r.data, settings: { ...r.data.settings, activeProgramId: r.program.id } }))
+        return r.program
+      },
+
+      importProgram(build, activate) {
+        const r = build(get().data, nowIso())
+        update(() => (activate ? { ...r.data, settings: { ...r.data.settings, activeProgramId: r.program.id } } : r.data))
         return r.program
       },
 

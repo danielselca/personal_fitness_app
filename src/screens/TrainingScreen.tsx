@@ -40,7 +40,7 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
   const startWorkout = useAppStore((s) => s.startWorkout)
   const markBackupDone = useAppStore((s) => s.markBackupDone)
   const createTemplate = useAppStore((s) => s.createTemplate)
-  const [showPrograms, setShowPrograms] = useState(false)
+  const [showPrograms, setShowPrograms] = useState(() => initialTarget('programs') !== null)
   const [reminderDismissed, setReminderDismissed] = useState(false)
   // Sprung aus dem Coach: Vorlage direkt im Editor öffnen
   const [editTemplate, setEditTemplate] = useState<Template | null>(() => data.templates.find((t) => t.id === initialTarget('template')) ?? null)

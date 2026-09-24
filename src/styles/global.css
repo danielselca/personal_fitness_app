@@ -649,3 +649,22 @@ summary.wc-light::after { content: '›'; color: var(--text-3); margin-left: aut
 .bm-info { margin-top: 10px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 14px; }
 .bm-list { list-style: none; margin: 6px 0 0; padding: 0; font-size: 13px; }
 .bm-list li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; }
+
+/* ---------- Mit Claude besprechen, Programm-Import (Schritt 22) ---------- */
+.brief-preview {
+  margin: 8px 0 0; padding: 10px; max-height: 320px; overflow: auto; border-radius: var(--radius-sm);
+  background: var(--surface-2); font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.brief-manual, .import-text { width: 100%; font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; resize: vertical; }
+.brief-return { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 14px; }
+.import-errors { margin-top: 10px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--danger-soft); }
+.import-errors .error { margin: 2px 0; }
+.import-day h3 { font-size: 15px; margin: 14px 0 6px; }
+.import-list { list-style: none; margin: 0; padding: 0; }
+.import-list li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-top: 1px solid var(--border); }
+.import-list .row-main { flex: 1; min-width: 0; }
+.import-kind { flex: none; }
+.import-kind[data-kind="eigene"] { background: var(--success-soft); color: var(--success); }
+.import-kind[data-kind="bibliothek"] { background: var(--primary-soft); color: var(--primary); }
+.import-kind[data-kind="neu"] { background: var(--warning-soft); color: var(--warning); }
+.import-warn { display: block; margin-top: 2px; font-size: 13px; font-weight: 600; color: var(--warning); }
