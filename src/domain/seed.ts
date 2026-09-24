@@ -210,6 +210,8 @@ export function createSeedData(at = new Date().toISOString()): AppData {
     exercises,
     templates: [buildSeedTemplate(at, exercises)],
     workouts: [],
+    programs: [],
+    restrictions: [],
     settings: { ...DEFAULT_SETTINGS },
     timer: null,
     meta: { workoutsSinceBackup: 0, hintsSeen: [], seededAt: at },

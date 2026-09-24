@@ -1,4 +1,4 @@
-import { SCHEMA_VERSION, type AppData, type Exercise, type Meta, type Settings, type Template, type TemplateEntry, type TimerState, type Workout, type WorkoutEntry, type WorkoutSet } from '../domain/types.ts'
+import { SCHEMA_VERSION, type AppData, type Exercise, type Meta, type Program, type ProgramDay, type Restriction, type Settings, type Template, type TemplateEntry, type TimerState, type Workout, type WorkoutEntry, type WorkoutSet } from '../domain/types.ts'
 
 /**
  * Vollständig befüllte Daten für Rundreise-Tests: jedes optionale Feld ist gesetzt.
@@ -27,6 +27,7 @@ const exerciseFull: Required<Exercise> = {
   muscles: { primary: ['lat'], secondary: ['bizeps'] },
   category: 'kraft',
   pattern: 'ziehen-vertikal',
+  loads: ['schulter', 'ellbogen'],
   archived: false,
   createdAt: AT,
   updatedAt: LATER,
@@ -46,12 +47,13 @@ const exerciseHold: Exercise = {
   updatedAt: AT,
 }
 
-const entryFull: Required<TemplateEntry> = { exerciseId: exerciseFull.id, sets: 4 }
+const entryFull: Required<TemplateEntry> = { exerciseId: exerciseFull.id, sets: 4, repMin: 8, repMax: 12, restSec: 75, note: 'langsam ablassen' }
 
 const templateFull: Required<Template> = {
   id: 'tpl-voll',
   name: 'Vollständige Vorlage',
   entries: [entryFull, { exerciseId: exerciseHold.id, sets: 3 }],
+  programId: 'prg-voll',
   createdAt: AT,
   updatedAt: LATER,
 }
@@ -61,6 +63,9 @@ const setFull: Required<WorkoutSet> = { id: 'set-1', weightKg: 22.5, reps: 10, d
 /** `hold` ist flüchtig (nur im laufenden Training) und wird bewusst nicht exportiert. */
 const workoutEntryFull: Omit<Required<WorkoutEntry>, 'hold'> = {
   exerciseId: exerciseFull.id,
+  repMin: 8,
+  repMax: 12,
+  restSec: 75,
   note: 'Griff eng',
   sets: [setFull, { id: 'set-2', weightKg: null, reps: 12, done: true, doneAt: '2026-09-21T09:08:00.000Z' }],
 }
@@ -71,6 +76,8 @@ const workoutFull: Required<Workout> = {
   finishedAt: '2026-09-21T09:45:00.000Z',
   status: 'done',
   templateId: templateFull.id,
+  programId: 'prg-voll',
+  programDayId: 'day-a',
   note: 'Gutes Training',
   entries: [workoutEntryFull, { exerciseId: exerciseHold.id, sets: [{ id: 'set-3', weightKg: null, reps: 45, done: true, doneAt: '2026-09-21T09:20:00.000Z' }] }],
   updatedAt: '2026-09-21T09:45:00.000Z',
@@ -84,6 +91,31 @@ const settingsFull: Required<Settings> = {
   keepScreenOn: false,
   weightStep: 1.25,
   theme: 'dark',
+  activeProgramId: 'prg-voll',
+  weeklyGoal: 4,
+}
+
+const dayFull: Required<ProgramDay> = { id: 'day-a', name: 'Tag A', templateId: templateFull.id }
+
+const programFull: Required<Program> = {
+  id: 'prg-voll',
+  name: 'Vollständiges Programm',
+  goal: 'fitness',
+  sessionsPerWeek: 4,
+  days: [dayFull],
+  copiedFrom: 'builtin-ganzkoerper',
+  createdAt: AT,
+  updatedAt: LATER,
+}
+
+const restrictionFull: Required<Restriction> = {
+  id: 'rs-voll',
+  bodyParts: ['schulter'],
+  muscles: ['brust'],
+  note: 'Impingement',
+  until: '2026-10-15',
+  createdAt: AT,
+  updatedAt: LATER,
 }
 
 const metaFull: Required<Meta> = {
@@ -107,6 +139,8 @@ export function fullAppData(): Required<AppData> {
     exercises: [exerciseFull, exerciseHold],
     templates: [templateFull],
     workouts: [workoutFull],
+    programs: [programFull],
+    restrictions: [restrictionFull],
     settings: settingsFull,
     timer: timerFull,
     meta: metaFull,
