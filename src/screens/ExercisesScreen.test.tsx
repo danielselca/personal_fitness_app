@@ -99,3 +99,93 @@ describe('Übungskatalog (AK3, AK4)', () => {
     expect(screen.getByText('8 × 47,5 kg')).toBeTruthy()
   })
 })
+
+describe('Bibliothek im Übungen-Tab (Schritt 17)', () => {
+  const ex = (id: string) => appStore.getState().data.exercises.find((e) => e.id === id)
+
+  it('Meine: Filter nach Ausrüstung, Physio und „Ohne Zuordnung“', () => {
+    render(<ExercisesScreen />)
+    const equip = screen.getByRole('group', { name: 'Ausrüstung' })
+    fireEvent.click(within(equip).getByRole('button', { name: 'Freihantel' }))
+    expect(listNames()).toEqual(['Schrägbank Kurzhantel', 'Seitheben Kurzhantel'])
+    fireEvent.click(within(equip).getByRole('button', { name: 'Alle' }))
+    const region = screen.getByRole('group', { name: 'Muskelgruppe' })
+    fireEvent.click(within(region).getByRole('button', { name: 'Ohne Zuordnung' }))
+    expect(listNames()).toEqual(['Adduktion', 'Incline Frontraise', 'Kreuzheben', 'Überzüge'])
+    fireEvent.click(within(region).getByRole('button', { name: 'Physio' }))
+    expect(listNames()).toContain('Serratusstütz')
+    expect(listNames()).not.toContain('Lat-Zug')
+    // Suche findet auch über den Namen des verknüpften Eintrags
+    fireEvent.click(within(region).getByRole('button', { name: 'Alle' }))
+    fireEvent.change(screen.getByLabelText('Übungen suchen'), { target: { value: 'lat pulldown' } })
+    expect(listNames()).toEqual(['Lat-Zug'])
+  })
+
+  it('Bibliothek: filtern, Detail mit Tipps, zu meinen Übungen hinzufügen und öffnen', async () => {
+    render(<ExercisesScreen />)
+    fireEvent.click(screen.getByRole('radio', { name: 'Bibliothek' }))
+    fireEvent.click(within(screen.getByRole('group', { name: 'Ausrüstung' })).getByRole('button', { name: 'Seilzug' }))
+    const lib = screen.getByRole('list', { name: 'Bibliothek' })
+    expect(within(lib).getByRole('button', { name: 'Face Pull' }).getAttribute('aria-describedby')).toMatch(/lib-own-face-pull/)
+    expect(within(lib).queryByRole('button', { name: 'Beinpresse' })).toBeNull()
+
+    fireEvent.click(within(lib).getByRole('button', { name: 'Seitheben am Kabel' }))
+    expect(screen.getByRole('heading', { level: 2, name: 'Seitheben am Kabel' })).toBeTruthy()
+    expect(await screen.findByRole('list', { name: 'Ausführung' })).toBeTruthy()
+    expect(within(screen.getByRole('list', { name: 'Typische Fehler' })).getAllByRole('listitem').length).toBeGreaterThanOrEqual(2)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Zu meinen Übungen' }))
+    expect(ex('ex-lib-seitheben-kabel')).toMatchObject({ name: 'Seitheben am Kabel', libraryId: 'seitheben-kabel' })
+    fireEvent.click(screen.getByRole('button', { name: 'In Meine Übungen öffnen' }))
+    expect(screen.getByText('Seitheben am Kabel', { selector: 'dd' })).toBeTruthy() // Zuordnung „Bibliothek“
+    expect(screen.getByRole('button', { name: 'Verknüpfung lösen' })).toBeTruthy()
+  })
+
+  it('gleichnamige eigene Übung: verknüpfen statt doppelt anlegen', () => {
+    const r = appStore.getState().addExercise({ name: 'Crunch' })
+    if (!r.ok) throw new Error(r.error)
+    render(<ExercisesScreen />)
+    fireEvent.click(screen.getByRole('radio', { name: 'Bibliothek' }))
+    fireEvent.change(screen.getByLabelText('Bibliothek durchsuchen'), { target: { value: 'crunch' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Crunch' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Zu meinen Übungen' }))
+    fireEvent.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Mit „Crunch“ verknüpfen' }))
+    expect(ex(r.exercise.id)?.libraryId).toBe('crunch')
+    expect(appStore.getState().data.exercises.filter((e) => e.name.startsWith('Crunch'))).toHaveLength(1)
+  })
+
+  it('eigene Übung: Zuordnung, Tipps, verknüpfen und lösen', async () => {
+    render(<ExercisesScreen />)
+    fireEvent.click(screen.getByRole('button', { name: 'Lat-Zug' }))
+    expect(screen.getByText('Seilzug', { selector: 'dd' })).toBeTruthy()
+    expect(screen.getByText('Latissimus', { selector: 'dd' })).toBeTruthy()
+    expect(await screen.findByRole('list', { name: 'Ausführung' })).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: 'Verknüpfung lösen' }))
+    expect(ex('ex-lat-zug')?.libraryId).toBeUndefined()
+    expect(screen.getByText('nicht verknüpft')).toBeTruthy()
+    expect(screen.queryByRole('list', { name: 'Ausführung' })).toBeNull()
+
+    fireEvent.click(screen.getByRole('button', { name: '‹ Alle Übungen' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Überzüge' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Mit Bibliothek verknüpfen' }))
+    const sheet = screen.getByRole('dialog', { name: '„Überzüge“ verknüpfen' })
+    fireEvent.change(within(sheet).getByLabelText('Bibliothek durchsuchen'), { target: { value: 'überzug' } })
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Überzug (Kurzhantel)' }))
+    expect(ex('ex-ueberzuege')?.libraryId).toBe('ueberzug-kurzhantel')
+    expect(screen.getByText('Überzug (Kurzhantel)', { selector: 'dd' })).toBeTruthy()
+  })
+
+  it('Formular: eigene Ausrüstung, Kategorie und Muskeln', () => {
+    render(<ExercisesScreen />)
+    fireEvent.click(screen.getByRole('button', { name: 'Adduktion' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Bearbeiten' }))
+    const dialog = screen.getByRole('dialog', { name: 'Übung bearbeiten' })
+    fireEvent.change(within(dialog).getByLabelText('Ausrüstung'), { target: { value: 'seilzug' } })
+    fireEvent.change(within(dialog).getByLabelText('Kategorie'), { target: { value: 'physio' } })
+    fireEvent.click(within(within(dialog).getByRole('group', { name: 'Hauptmuskeln' })).getByRole('button', { name: 'Brust' }))
+    fireEvent.click(within(within(dialog).getByRole('group', { name: 'Mitbeteiligte Muskeln' })).getByRole('button', { name: 'Schulter vorne' }))
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Speichern' }))
+    expect(ex('ex-adduktion')).toMatchObject({ equipment: 'seilzug', category: 'physio', muscles: { primary: ['brust'], secondary: ['schulter-vorne'] } })
+    expect(screen.getByText('Brust', { selector: 'dd' })).toBeTruthy()
+  })
+})

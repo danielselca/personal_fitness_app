@@ -1,54 +1,139 @@
 import { useMemo, useState } from 'react'
 import { ExerciseForm } from '../components/ExerciseForm.tsx'
+import { FilterChips } from '../components/FilterChips.tsx'
+import { HowTo, MetaRows } from '../components/LibraryInfo.tsx'
+import { LinkLibrarySheet } from '../components/LinkLibrarySheet.tsx'
 import { ConfirmDialog } from '../components/Sheet.tsx'
 import { WeightChart } from '../components/WeightChart.tsx'
+import {
+  EQUIPMENT_FILTER_OPTIONS,
+  exerciseMeta,
+  exerciseSearchTexts,
+  matchesFilter,
+  regionFilterOptions,
+  type LibraryFilter,
+} from '../domain/library.ts'
 import { weightProgression } from '../domain/stats.ts'
 import { matchesQuery } from '../domain/search.ts'
 import type { Exercise } from '../domain/types.ts'
 import { formatDate, formatKg, formatMmSs, formatNumber, formatSetFor } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
+import { LibraryDetail, LibraryList } from './LibraryView.tsx'
+
+type View = 'meine' | 'bibliothek'
 
 export function ExercisesScreen() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  if (selectedId) return <ExerciseDetail id={selectedId} onBack={() => setSelectedId(null)} />
-  return <ExerciseList onSelect={setSelectedId} />
+  const [libraryId, setLibraryId] = useState<string | null>(null)
+  const [view, setView] = useState<View>('meine')
+  const [query, setQuery] = useState('')
+  const [filter, setFilter] = useState<LibraryFilter>({})
+  const [creating, setCreating] = useState(false)
+
+  if (selectedId) {
+    return <ExerciseDetail id={selectedId} onBack={() => setSelectedId(null)} />
+  }
+  if (libraryId) {
+    return (
+      <LibraryDetail
+        id={libraryId}
+        onBack={() => setLibraryId(null)}
+        onOpenOwn={(id) => {
+          setLibraryId(null)
+          setSelectedId(id)
+        }}
+      />
+    )
+  }
+
+  // „Ohne Zuordnung“ gibt es nur bei eigenen Übungen
+  const libFilter = filter.region === 'ohne' ? { ...filter, region: undefined } : filter
+  return (
+    <>
+      <div className="segment" role="radiogroup" aria-label="Übungen anzeigen">
+        <button type="button" role="radio" aria-checked={view === 'meine'} className={view === 'meine' ? 'on' : ''} onClick={() => setView('meine')}>Meine</button>
+        <button type="button" role="radio" aria-checked={view === 'bibliothek'} className={view === 'bibliothek' ? 'on' : ''} onClick={() => setView('bibliothek')}>Bibliothek</button>
+      </div>
+      <SearchRow view={view} query={query} setQuery={setQuery} onCreate={() => setCreating(true)} />
+      <FilterChips label="Ausrüstung" options={EQUIPMENT_FILTER_OPTIONS} value={filter.equipment} onChange={(equipment) => setFilter({ ...filter, equipment })} />
+      <FilterChips
+        label="Muskelgruppe"
+        options={regionFilterOptions(view === 'meine')}
+        value={view === 'meine' ? filter.region : libFilter.region}
+        onChange={(region) => setFilter({ ...filter, region })}
+      />
+      {view === 'meine' ? (
+        <ExerciseList query={query} setQuery={setQuery} filter={filter} creating={creating} setCreating={setCreating} onSelect={setSelectedId} onShowLibrary={() => setView('bibliothek')} />
+      ) : (
+        <LibraryList query={query} filter={libFilter} onSelect={setLibraryId} />
+      )}
+    </>
+  )
 }
 
-function ExerciseList({ onSelect }: { onSelect: (id: string) => void }) {
+function SearchRow({ view, query, setQuery, onCreate }: { view: View; query: string; setQuery: (q: string) => void; onCreate: () => void }) {
+  const mine = view === 'meine'
+  return (
+    <div className="input-inline" style={{ marginBottom: 8 }}>
+      <input
+        className="input"
+        type="search"
+        placeholder={mine ? 'Suchen (Name, Gerät-Nr.)' : 'Name, auch englisch'}
+        aria-label={mine ? 'Übungen suchen' : 'Bibliothek durchsuchen'}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        enterKeyHint="search"
+      />
+      {mine && (
+        <button type="button" className="btn btn-primary" onClick={onCreate} aria-label="Neue Übung">
+          +
+        </button>
+      )}
+    </div>
+  )
+}
+
+function ExerciseList({
+  query,
+  setQuery,
+  filter,
+  creating,
+  setCreating,
+  onSelect,
+  onShowLibrary,
+}: {
+  query: string
+  setQuery: (q: string) => void
+  filter: LibraryFilter
+  creating: boolean
+  setCreating: (v: boolean) => void
+  onSelect: (id: string) => void
+  onShowLibrary: () => void
+}) {
   const exercises = useAppStore((s) => s.data.exercises)
   const addExercise = useAppStore((s) => s.addExercise)
-  const [query, setQuery] = useState('')
   const [showArchived, setShowArchived] = useState(false)
-  const [creating, setCreating] = useState(false)
 
   const list = useMemo(() => {
     const q = query.trim()
     return exercises
       .filter((e) => (showArchived ? e.archived : !e.archived))
-      .filter((e) => matchesQuery(e, q))
+      .filter((e) => matchesQuery(e, q, exerciseSearchTexts(e)) && matchesFilter(exerciseMeta(e), filter))
       .sort((a, b) => a.name.localeCompare(b.name, 'de'))
-  }, [exercises, query, showArchived])
+  }, [exercises, query, showArchived, filter])
+  const filtered = !!(filter.equipment || filter.region)
   const archivedCount = exercises.filter((e) => e.archived).length
 
   return (
     <>
-      <div className="input-inline" style={{ marginBottom: 12 }}>
-        <input
-          className="input"
-          type="search"
-          placeholder="Suchen (Name, Gerät-Nr.)"
-          aria-label="Übungen suchen"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          enterKeyHint="search"
-        />
-        <button type="button" className="btn btn-primary" onClick={() => setCreating(true)} aria-label="Neue Übung">
-          +
-        </button>
-      </div>
       {list.length === 0 && (
         <div className="card empty">
           <strong>{showArchived ? 'Keine archivierten Übungen' : 'Nichts gefunden'}</strong>
+          {!showArchived && (query.trim() || filtered) && (
+            <button type="button" className="btn" style={{ marginTop: 8 }} onClick={onShowLibrary}>
+              In der Bibliothek suchen
+            </button>
+          )}
           {!showArchived && query.trim() && (
             <button type="button" className="btn" style={{ marginTop: 8 }} onClick={() => setCreating(true)}>
               „{query.trim()}“ als neue Übung anlegen
@@ -114,7 +199,9 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
   const settings = useAppStore((s) => s.data.settings)
   const updateExercise = useAppStore((s) => s.updateExercise)
   const setArchived = useAppStore((s) => s.setExerciseArchived)
+  const linkExercise = useAppStore((s) => s.linkExercise)
   const [editing, setEditing] = useState(false)
+  const [linking, setLinking] = useState(false)
   const [confirmArchive, setConfirmArchive] = useState(false)
   const history = useMemo(() => weightProgression(workouts, id), [workouts, id])
 
@@ -127,6 +214,7 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
     )
   }
 
+  const meta = exerciseMeta(exercise)
   return (
     <>
       <button type="button" className="btn btn-sm" onClick={onBack} style={{ marginBottom: 12 }}>
@@ -153,6 +241,12 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
           )}
           {exercise.hint && (<><dt>Hinweis</dt><dd>{exercise.hint}</dd></>)}
         </dl>
+        <h3 className="detail-sub">Zuordnung</h3>
+        <dl className="kv">
+          <MetaRows meta={meta} />
+          <dt>Bibliothek</dt>
+          <dd>{meta.library ? meta.library.name : 'nicht verknüpft'}</dd>
+        </dl>
         <div className="btn-row" style={{ marginTop: 12 }}>
           <button type="button" className="btn" onClick={() => setEditing(true)}>Bearbeiten</button>
           {exercise.archived ? (
@@ -161,7 +255,15 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
             <button type="button" className="btn" onClick={() => setConfirmArchive(true)}>Archivieren</button>
           )}
         </div>
+        <div className="btn-row" style={{ marginTop: 8 }}>
+          {exercise.libraryId ? (
+            <button type="button" className="btn" onClick={() => linkExercise(id, null)}>Verknüpfung lösen</button>
+          ) : (
+            <button type="button" className="btn" onClick={() => setLinking(true)}>Mit Bibliothek verknüpfen</button>
+          )}
+        </div>
       </div>
+
 
       <h2 className="section-title">Verlauf</h2>
       {history.length === 0 ? (
@@ -193,6 +295,8 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
         </>
       )}
 
+      {meta.library && <HowTo libraryId={meta.library.id} />}
+
       {editing && (
         <ExerciseForm
           title="Übung bearbeiten"
@@ -205,6 +309,16 @@ function ExerciseDetail({ id, onBack }: { id: string; onBack: () => void }) {
             return null
           }}
           onClose={() => setEditing(false)}
+        />
+      )}
+      {linking && (
+        <LinkLibrarySheet
+          exerciseName={exercise.name}
+          onPick={(entryId) => {
+            linkExercise(id, entryId)
+            setLinking(false)
+          }}
+          onClose={() => setLinking(false)}
         />
       )}
       {confirmArchive && (

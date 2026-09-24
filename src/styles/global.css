@@ -466,3 +466,4 @@ ul.list > li.sort-row { display: grid; }
 .form-section[open] > summary { margin-bottom: 10px; }
 .chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip-wrap .chip { min-height: 36px; padding: 0 12px; font-size: 13px; }
+.detail-sub { margin: 14px 0 0; font-size: 13px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; }

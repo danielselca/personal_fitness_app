@@ -116,7 +116,9 @@ Nach dem ersten Feedback („kein cooles Design, zu große Schrift“) wurde das
 
 ```
 Exercise  { id, name, aliases[], machineNo?, hint?, defaultRestSec?, weightStep?, noWeight?, mode?: "reps"|"hold", holdSec?,
-            planTarget? { sets, reps, weightKg, source: "Fit7.11-Plan" }, archived, createdAt, updatedAt }
+            planTarget? { sets, reps, weightKg, source: "Fit7.11-Plan" },
+            libraryId?, equipment?, muscles? { primary[], secondary[] }, category?, pattern?,   // Schema 8
+            archived, createdAt, updatedAt }
 Template  { id, name, entries[ { exerciseId, sets } ], createdAt, updatedAt }
 Workout   { id, startedAt, finishedAt?, status: "active" | "done", templateId?, note?,
             entries[ { exerciseId, note?, sets[ { id, weightKg?, reps, done, doneAt? } ], hold? { setIndex, phase, endsAt?, durationSec, pausedRemainingSec? } } ], updatedAt }
@@ -126,7 +128,9 @@ Settings  { defaultRestSec: 90, autoStartTimer: true, sound: true, vibration: fa
 Backup    { schemaVersion, app, exportedAt, exercises[], templates[], workouts[], settings }
 ```
 
-Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punkt. Wdh. ganzzahlig ≥ 1. `noWeight = true` blendet Gewicht in Training, Verlauf und Katalog aus (Werte bleiben `null`). Aktuelles Schema: 6 (Schema 5: „Aufdehnen seitlich“ mit Vorgabe 2 × 10; Schema 6: Serratusstütz und Stütz auf Step als Halteübungen 4 × 60 s; Schema 7: Kopfheben als Halteübung 10 × 10 s, 10 s Pause, Name „Kopfheben (Doppelkinn)“). Volumen = Σ (Gewicht × Wdh.) über Sätze mit `done = true`; Sätze ohne Gewicht zählen 0 kg.
+Regeln: Gewicht in kg mit bis zu 2 Nachkommastellen, Eingabe mit Komma oder Punkt. Wdh. ganzzahlig ≥ 1. `noWeight = true` blendet Gewicht in Training, Verlauf und Katalog aus (Werte bleiben `null`). Aktuelles Schema: 8 (Schema 5: „Aufdehnen seitlich“ mit Vorgabe 2 × 10; Schema 6: Serratusstütz und Stütz auf Step als Halteübungen 4 × 60 s; Schema 7: Kopfheben als Halteübung 10 × 10 s, 10 s Pause, Name „Kopfheben (Doppelkinn)“; Schema 8: Bibliotheks-Verknüpfung und Zuordnung, siehe unten). Volumen = Σ (Gewicht × Wdh.) über Sätze mit `done = true`; Sätze ohne Gewicht zählen 0 kg.
+
+**Übungsbibliothek (Schema 8, Schritt 17):** Die kuratierte Bibliothek ist Teil des App-Codes (`src/library/`), nicht der Nutzerdaten; eine eigene Übung zeigt über `libraryId` auf einen Eintrag. `exerciseMeta` liefert die Zuordnung: eigene Felder (`equipment`, `muscles`, `category`, `pattern`) haben Vorrang, sonst gelten die Werte des Eintrags. „Zu meinen Übungen“ legt eine Übung mit fester ID `ex-lib-<id>` an (Name, Pause, ohne Gewicht/Halten übernommen) oder verknüpft nach Rückfrage eine gleichnamige eigene Übung. Migration 7 → 8 füllt nur leere Felder und ändert `updatedAt` nicht: Lat-Zug, Rudern, Butterfly Maschine, Reverse Butterfly, Facepulls, Seitheben Kurzhantel und Schrägbank Kurzhantel werden verknüpft, die Physio-Übungen erhalten Kategorie und Ausrüstung; Adduktion, Überzüge, Incline Frontraise und Kreuzheben bleiben unzugeordnet.
 
 ---
 

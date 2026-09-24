@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { libraryEntry } from '../domain/library.ts'
+import { CATEGORIES, CATEGORY_LABEL, EQUIPMENT, EQUIPMENT_LABEL, MUSCLES, MUSCLE_INFO, isCategory, isEquipment, type Muscle, type MuscleSet } from '../domain/taxonomy.ts'
 import type { Exercise } from '../domain/types.ts'
 import { formatNumber, parseWeight } from '../lib/format.ts'
 import { Sheet } from './Sheet.tsx'
@@ -35,7 +37,19 @@ export function ExerciseForm({
   const [planSets, setPlanSets] = useState(initial?.planTarget ? String(initial.planTarget.sets) : '')
   const [planReps, setPlanReps] = useState(initial?.planTarget ? String(initial.planTarget.reps) : '')
   const [planWeight, setPlanWeight] = useState(initial?.planTarget?.weightKg != null ? formatNumber(initial.planTarget.weightKg) : '')
+  const [equipment, setEquipment] = useState(initial?.equipment ?? '')
+  const [category, setCategory] = useState(initial?.category ?? '')
+  // undefined: keine eigenen Muskeln (Werte der Bibliothek gelten, falls verknüpft)
+  const [muscles, setMuscles] = useState<MuscleSet | undefined>(initial?.muscles)
   const [error, setError] = useState<string | null>(null)
+  const lib = libraryEntry(initial?.libraryId)
+  const shownMuscles = muscles ?? lib?.muscles ?? { primary: [], secondary: [] }
+  const toggleMuscle = (kind: keyof MuscleSet, m: Muscle) => {
+    const without = { primary: shownMuscles.primary.filter((x) => x !== m), secondary: shownMuscles.secondary.filter((x) => x !== m) }
+    if (shownMuscles[kind].includes(m)) return setMuscles(without)
+    const added = [...without[kind], m].sort((a, b) => MUSCLES.indexOf(a) - MUSCLES.indexOf(b))
+    setMuscles({ ...without, [kind]: added })
+  }
 
   const submit = () => {
     const restN = rest.trim() ? Number(rest) : undefined
@@ -67,6 +81,9 @@ export function ExerciseForm({
       defaultRestSec: restN,
       weightStep: stepN ?? undefined,
       planTarget,
+      equipment: isEquipment(equipment) ? equipment : undefined,
+      category: isCategory(category) ? category : undefined,
+      muscles: muscles && (muscles.primary.length > 0 || muscles.secondary.length > 0) ? muscles : undefined,
     })
     if (err) setError(err)
   }
@@ -137,6 +154,43 @@ export function ExerciseForm({
           <span>Hinweis</span>
           <input className="input" value={hint} onChange={(e) => setHint(e.target.value)} placeholder="z. B. Gewicht pro Hantel" />
         </label>
+        <details className="form-section" open={!!(initial?.equipment || initial?.category || initial?.muscles)}>
+          <summary>Zuordnung (Ausrüstung, Muskeln)</summary>
+          {lib && <p className="muted" style={{ fontSize: 13, margin: '0 0 10px' }}>Verknüpft mit „{lib.name}“. Leere Felder übernehmen die Werte der Bibliothek.</p>}
+          <div className="btn-row" style={{ gap: 12 }}>
+            <label className="field" style={{ flex: 1 }}>
+              <span>Ausrüstung</span>
+              <select className="input" value={equipment} onChange={(e) => setEquipment(e.target.value)}>
+                <option value="">{lib ? `Wie Bibliothek (${EQUIPMENT_LABEL[lib.equipment]})` : 'Keine Angabe'}</option>
+                {EQUIPMENT.map((q) => <option key={q} value={q}>{EQUIPMENT_LABEL[q]}</option>)}
+              </select>
+            </label>
+            <label className="field" style={{ flex: 1 }}>
+              <span>Kategorie</span>
+              <select className="input" value={category} onChange={(e) => setCategory(e.target.value)}>
+                <option value="">{lib ? `Wie Bibliothek (${CATEGORY_LABEL[lib.category]})` : 'Keine Angabe'}</option>
+                {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABEL[c]}</option>)}
+              </select>
+            </label>
+          </div>
+          {(['primary', 'secondary'] as const).map((kind) => (
+            <div className="field" key={kind}>
+              <span>{kind === 'primary' ? 'Hauptmuskeln' : 'Mitbeteiligt'}</span>
+              <div className="chip-wrap" role="group" aria-label={kind === 'primary' ? 'Hauptmuskeln' : 'Mitbeteiligte Muskeln'}>
+                {MUSCLES.map((m) => (
+                  <button key={m} type="button" className="chip" aria-pressed={shownMuscles[kind].includes(m)} onClick={() => toggleMuscle(kind, m)}>
+                    {MUSCLE_INFO[m].label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+          {lib && muscles && (
+            <button type="button" className="btn btn-sm" onClick={() => setMuscles(undefined)}>
+              Muskeln wie Bibliothek
+            </button>
+          )}
+        </details>
         <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
           <legend className="muted" style={{ fontSize: 14, fontWeight: 600, marginBottom: 6 }}>
             Startvorgabe ohne Historie (optional)

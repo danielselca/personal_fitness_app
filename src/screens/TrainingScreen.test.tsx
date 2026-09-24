@@ -434,3 +434,28 @@ describe('Wiederaufnahme (AK11)', () => {
     expect(screen.getByTestId('timer-remaining').textContent).toMatch(/0:(49|50)/)
   })
 })
+
+describe('Übungsauswahl mit Bibliothek (Schritt 17)', () => {
+  it('Ausrüstungs-Chips filtern; Bibliothekstreffer werden beim Hinzufügen übernommen', () => {
+    render(<TrainingScreen />)
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
+    const dialog = screen.getByRole('dialog', { name: 'Übungen hinzufügen' })
+    fireEvent.click(within(within(dialog).getByRole('group', { name: 'Ausrüstung' })).getByRole('button', { name: 'Kettlebell' }))
+    // Keine eigene Kettlebell-Übung, aber Treffer aus der Bibliothek
+    const lib = within(dialog).getByRole('list', { name: 'Aus der Bibliothek' })
+    expect(within(lib).getAllByRole('listitem')[0].getAttribute('data-group')).toBe('Aus der Bibliothek')
+    expect(within(lib).getByRole('button', { name: 'Kettlebell-Swing' })).toBeTruthy()
+
+    fireEvent.click(within(within(dialog).getByRole('group', { name: 'Ausrüstung' })).getByRole('button', { name: 'Alle' }))
+    fireEvent.change(within(dialog).getByLabelText('Übung suchen'), { target: { value: 'face' } })
+    // Face Pull ist mit „Facepulls“ verknüpft → nur die eigene Übung, kein Doppel aus der Bibliothek
+    expect(within(dialog).getByRole('button', { name: 'Facepulls' })).toBeTruthy()
+    expect(within(dialog).queryByRole('list', { name: 'Aus der Bibliothek' })).toBeNull()
+
+    fireEvent.change(within(dialog).getByLabelText('Übung suchen'), { target: { value: 'swing' } })
+    addFromPicker(['Kettlebell-Swing'])
+    expect(active().entries.map((e) => e.exerciseId)).toEqual(['ex-lib-kettlebell-swing'])
+    expect(data().exercises.find((e) => e.id === 'ex-lib-kettlebell-swing')?.libraryId).toBe('kettlebell-swing')
+    expect(card('Kettlebell-Swing')).toBeTruthy()
+  })
+})
