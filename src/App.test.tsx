@@ -4,8 +4,12 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { App } from './App.tsx'
 import { createSeedData } from './domain/seed.ts'
 import { appStore } from './store/appStore.ts'
+import { useNav } from './store/navStore.ts'
 
-beforeEach(() => appStore.setState({ data: createSeedData(), hydrated: true, loadError: null }))
+beforeEach(() => {
+  appStore.setState({ data: createSeedData(), hydrated: true, loadError: null })
+  useNav.setState({ tab: 'training' })
+})
 afterEach(cleanup)
 
 function tab(name: string) {

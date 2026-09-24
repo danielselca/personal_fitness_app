@@ -20,7 +20,7 @@ const active = () => appStore.getState().activeWorkout()!
 
 function addFromPicker(names: string[]) {
   const dialog = screen.getByRole('dialog', { name: 'Übungen hinzufügen' })
-  for (const n of names) fireEvent.click(within(dialog).getByRole('button', { name: new RegExp(`^${n}`) }))
+  for (const n of names) fireEvent.click(within(dialog).getByRole('button', { name: n }))
   fireEvent.click(within(dialog).getByRole('button', { name: `${names.length} hinzufügen` }))
 }
 

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { noWeightFirst, sortForPicker } from '../domain/progress.ts'
-import { matchesQuery, normalizeName } from '../domain/suggestions.ts'
+import { matchesQuery } from '../domain/search.ts'
+import { normalizeName } from '../domain/suggestions.ts'
 import { useAppStore } from '../store/appStore.ts'
 import { Sheet } from './Sheet.tsx'
 
@@ -64,11 +65,18 @@ export function ExercisePicker({ excludeIds, onAdd, onClose }: { excludeIds: str
           const groupStart = !q && (i === 0 || !!list[i - 1].noWeight !== !!e.noWeight)
           return (
             <li key={e.id} className={groupStart ? 'picker-group' : undefined} data-group={groupStart ? (e.noWeight ? 'Ohne Gewicht' : 'Mit Gewicht') : undefined}>
-              <button type="button" aria-pressed={on} className={`card card-tap row picker-row ${on ? 'picker-on' : ''}`} onClick={() => toggle(e.id)}>
+              <button
+                type="button"
+                aria-pressed={on}
+                aria-label={e.name}
+                aria-describedby={e.machineNo || (q && e.noWeight) || e.mode === 'hold' ? `pick-sub-${e.id}` : undefined}
+                className={`card card-tap row picker-row ${on ? 'picker-on' : ''}`}
+                onClick={() => toggle(e.id)}
+              >
                 <span className="row-main">
                   <span className="row-title ellipsis" style={{ display: 'block' }}>{e.name}</span>
                   {(e.machineNo || (q && e.noWeight) || e.mode === 'hold') && (
-                    <span className="row-sub">{[e.machineNo && `Gerät ${e.machineNo}`, e.mode === 'hold' ? `Halten ${e.holdSec ?? 60} s` : q && e.noWeight && 'ohne Gewicht'].filter(Boolean).join(' · ')}</span>
+                    <span className="row-sub" id={`pick-sub-${e.id}`}>{[e.machineNo && `Gerät ${e.machineNo}`, e.mode === 'hold' ? `Halten ${e.holdSec ?? 60} s` : q && e.noWeight && 'ohne Gewicht'].filter(Boolean).join(' · ')}</span>
                   )}
                 </span>
                 <span className={`check-mark ${on ? 'check-on' : ''}`} aria-hidden="true">{on ? '✓' : ''}</span>

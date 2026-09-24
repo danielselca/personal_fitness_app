@@ -2,7 +2,7 @@
 
 Persönliche Fitness-App als PWA fürs Training im Studio: Übungen, Sätze mit Gewicht und Wiederholungen, Pausentimer, Verlauf, Statistik. Alle Daten bleiben lokal auf dem Gerät, Sicherung per JSON-Export. Kein Konto, kein Backend.
 
-Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [PROGRESS.md](PROGRESS.md)
+Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [PROGRESS.md](PROGRESS.md) · Weiterer Ausbau: [ROADMAP.md](ROADMAP.md)
 
 **Live:** https://danielselca.github.io/personal_fitness_app/
 
@@ -21,7 +21,7 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 - **Haken** tippen = Satz gespeichert. Der Pausentimer startet automatisch mit der Pause der Übung (Standard 90 s). Unten: **+30 s**, **Neu**, **Skip**. Ohne laufenden Timer ist die Leiste weg; das **Uhr-Symbol** oben im Trainingskopf öffnet 1:00 / 1:30 / 2:00 und eine eigene Dauer.
 - Nur die **aktuelle Übung** (orange umrandet) ist aufgeklappt, alle anderen stehen als eine Zeile darunter; antippen klappt sie auf. Erledigte Übungen werden grün. Ist eine Übung fertig, rückt die nächste von selbst nach oben, Scrollen ist nicht nötig. Oben steht eine schmale Kopfzeile, die beim Scrollen stehen bleibt: „Übung 2/8 · 5/24 Sätze · 18 min“ und ein Balken.
 - **Sortieren** (Pfeil-Symbol oben rechts im Kopf) zeigt alle Übungen als kurze Liste mit „ganz nach oben“, ↑, ↓, „ganz nach unten“ und ✕; **Ohne Gewicht zuerst** schiebt die Körpergewichts- und Bandübungen nach vorn, **Fertig** kehrt zurück. Die Übungsauswahl listet „Ohne Gewicht“ vor „Mit Gewicht“ und übernimmt Mehrfachauswahl in dieser Reihenfolge.
-- **+ Satz**, **Notiz**, **Bearbeiten** (Sätze löschen, **Ohne Gewicht** umschalten, Übung entfernen). **+ Übung** öffnet die Suche; steht die Übung nicht im Katalog, legt „… als neue Übung anlegen“ sie sofort an.
+- **+ Satz**, **Notiz**, **Bearbeiten** (Sätze löschen, **Ohne Gewicht** umschalten, Übung entfernen). **+ Übung** öffnet die Suche; steht die Übung nicht im Katalog, legt „… als neue Übung anlegen“ sie sofort an. Die Suche ist großzügig: „latzug“ findet „Lat-Zug“, „uberzuge“ oder „ueberzuege“ findet „Überzüge“, mehrere Wörter („kurzhantel schräg“) müssen alle vorkommen.
 - **Halteübungen** (Serratusstütz, Stütz auf Step) zeigen einen Donut: je Satz ein Stück „Halten“, dazwischen „Pause“. Tippen in die Mitte startet, der Countdown läuft rückwärts, Pause und nächster Satz folgen automatisch mit Ton. Nochmal tippen pausiert. „Satz fertig“ beendet die Haltezeit früher.
 - **Übungen ohne Gewicht** (Aufdehnen, Theraband usw.) zeigen nur ein Wdh.-Feld. Die Physio-Übungen sind so vorbelegt; jede andere Übung lässt sich im Katalog oder im Training umstellen.
 - **Abschließen** speichert nur abgehakte Sätze. Ohne abgehakten Satz wird gefragt, ob verworfen werden soll.
@@ -48,6 +48,7 @@ npm run lint       # oxlint
 npm run build      # tsc + vite build → dist/
 npm run preview    # gebauten Stand lokal ansehen (inkl. Service Worker)
 npm run icons      # PNG-Icons aus scripts/make-icons.mjs neu erzeugen
+npm run size       # Größenbudget des Builds prüfen (läuft auch in CI)
 ```
 
 Einmalig für die E2E-Tests: `npx playwright install chromium`.
