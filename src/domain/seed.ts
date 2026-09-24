@@ -128,8 +128,46 @@ export const SEED_TEMPLATE_ID = 'tpl-oberkoerper-fokus-schulter'
 export const LEGACY_TEMPLATE_NAME = 'Oberkörper Fokus Schulter'
 export const SEED_TEMPLATE_NAME = 'Oberkörper'
 
+/**
+ * Bibliotheks-Verknüpfung und Zuordnung der Seed-Übungen (Schema 8). Eindeutige Studio-Übungen
+ * werden verknüpft; Physio-Übungen bekommen Kategorie, Ausrüstung und nur eindeutige Muskeln.
+ * Adduktion (Arm am Kabel), Überzüge, Incline Frontraise und Kreuzheben verknüpft der Nutzer selbst.
+ */
+export const SEED_LIBRARY: Readonly<Record<string, Pick<Exercise, 'libraryId' | 'equipment' | 'muscles' | 'category'>>> = {
+  'ex-lat-zug': { libraryId: 'latzug-breit' },
+  'ex-rudern': { libraryId: 'rudern-kabel-sitzend' },
+  'ex-butterfly-maschine': { libraryId: 'butterfly-maschine' },
+  'ex-reverse-butterfly': { libraryId: 'reverse-butterfly-maschine' },
+  'ex-facepulls': { libraryId: 'face-pull' },
+  'ex-seitheben-kurzhantel': { libraryId: 'seitheben-kurzhantel' },
+  'ex-schraegbank-kurzhantel': { libraryId: 'schraegbank-kurzhantel' },
+  'ex-aufdehnen-seitlich': { category: 'physio', equipment: 'koerpergewicht' },
+  'ex-bein-absenken': { category: 'physio', equipment: 'koerpergewicht', muscles: { primary: ['bauch'], secondary: [] } },
+  'ex-serratusstuetz': { category: 'physio', equipment: 'koerpergewicht', muscles: { primary: ['serratus'], secondary: [] } },
+  'ex-stuetz-auf-step': { category: 'physio', equipment: 'koerpergewicht' },
+  'ex-kopfheben': { category: 'physio', equipment: 'koerpergewicht', muscles: { primary: ['nacken'], secondary: [] } },
+  'ex-uppercut-theraband': { category: 'physio', equipment: 'band' },
+  'ex-uppercut-tuch': { category: 'physio', equipment: 'sonstiges' },
+  'ex-holzhacken': { category: 'physio', equipment: 'sonstiges' },
+  'ex-tiefes-v': { category: 'physio' },
+  'ex-bear-hug': { category: 'physio' },
+}
+
+/** Ergänzt die Seed-Zuordnung, ohne vorhandene Werte zu überschreiben (Seed und Migration 7 → 8). */
+export function applySeedLibrary(e: Exercise): Exercise {
+  const s = SEED_LIBRARY[e.id]
+  if (!s) return e
+  return {
+    ...e,
+    libraryId: e.libraryId ?? s.libraryId,
+    equipment: e.equipment ?? s.equipment,
+    muscles: e.muscles ?? (s.muscles ? { primary: [...s.muscles.primary], secondary: [...s.muscles.secondary] } : undefined),
+    category: e.category ?? s.category,
+  }
+}
+
 export function buildSeedExercises(at: string): Exercise[] {
-  return SEED_EXERCISES.map((s) => ({
+  return SEED_EXERCISES.map((s) => applySeedLibrary({
     id: s.id,
     name: s.name,
     aliases: s.aliases ?? [],

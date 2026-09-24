@@ -34,12 +34,13 @@ export function matchesText(texts: string[], query: string): boolean {
 }
 
 /**
- * Suche über Name, Alias und Gerätenummer (F1, AK3). „latzug“ findet „Lat-Zug“,
+ * Suche über Name, Alias und Gerätenummer (F1, AK3), optional weitere Texte (z. B. Namen des
+ * verknüpften Bibliothekseintrags). „latzug“ findet „Lat-Zug“,
  * „uberzuge“ und „ueberzuege“ finden „Überzüge“, „kurzhantel schräg“ findet „Schrägbank Kurzhantel“.
  */
-export function matchesQuery(e: Exercise, query: string): boolean {
+export function matchesQuery(e: Exercise, query: string, extraTexts: string[] = []): boolean {
   const q = query.trim()
   if (!q) return true
   if (e.machineNo && (e.machineNo === q || `#${e.machineNo}` === q)) return true
-  return matchesText([e.name, ...e.aliases, ...(e.machineNo ? [e.machineNo] : [])], q)
+  return matchesText([e.name, ...e.aliases, ...(e.machineNo ? [e.machineNo] : []), ...extraTexts], q)
 }

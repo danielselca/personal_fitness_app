@@ -433,3 +433,36 @@ ul.list > li.sort-row { display: grid; }
 .hold-dot-work { background: var(--primary); }
 .hold-dot-rest { background: var(--text-2); }
 .hold .btn-row { width: 100%; }
+
+/* ---------- Filter-Chips (wischbar) ---------- */
+.chips {
+  display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+  margin: 0 calc(-1 * var(--space-4)) 8px; padding: 0 var(--space-4);
+  -webkit-overflow-scrolling: touch;
+}
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; min-height: 40px; padding: 0 14px; border-radius: 999px;
+  border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-2);
+  font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; touch-action: manipulation; white-space: nowrap;
+}
+.chip[aria-pressed="true"] { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+.chip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.sheet-body .chips { margin-left: calc(-1 * var(--space-4)); margin-right: calc(-1 * var(--space-4)); }
+
+/* ---------- Bibliothek ---------- */
+.badge {
+  display: inline-flex; align-items: center; min-height: 20px; padding: 0 8px; border-radius: 999px;
+  background: var(--success-soft); color: var(--success); font-size: 11px; font-weight: 700; letter-spacing: 0.02em; flex: none;
+}
+.howto { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 15px; }
+.howto li::marker { color: var(--primary); font-weight: 700; }
+.howto-mistakes { list-style: none; padding-left: 0; }
+.howto-mistakes li { display: flex; gap: 8px; }
+.howto-mistakes li::before { content: '✗'; color: var(--danger); font-weight: 700; flex: none; }
+.en-name { margin: 0 0 4px; font-size: 14px; }
+.form-section { margin: 4px 0 var(--space-4); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 10px 12px; }
+.form-section > summary { cursor: pointer; font-weight: 700; font-size: 15px; min-height: 28px; }
+.form-section[open] > summary { margin-bottom: 10px; }
+.chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-wrap .chip { min-height: 36px; padding: 0 12px; font-size: 13px; }
