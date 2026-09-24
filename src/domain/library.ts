@@ -3,6 +3,7 @@ import type { LibraryDetails, LibraryIndexEntry } from '../library/types.ts'
 import { matchesText } from './search.ts'
 import {
   EQUIPMENT_GROUPS,
+  MUSCLE_INFO,
   REGION_LABEL,
   REGIONS,
   equipmentGroupOf,
@@ -12,6 +13,7 @@ import {
   type Equipment,
   type EquipmentGroupId,
   type Level,
+  type Muscle,
   type MuscleSet,
   type Pattern,
   type Region,
@@ -126,4 +128,8 @@ export function regionFilterOptions(withUnassigned: boolean): ChipOption<RegionF
     { id: 'physio', label: 'Physio' },
     ...(withUnassigned ? [{ id: 'ohne' as const, label: 'Ohne Zuordnung' }] : []),
   ]
+}
+
+export function muscleText(muscles: Muscle[]): string {
+  return muscles.map((m) => MUSCLE_INFO[m].label).join(', ')
 }

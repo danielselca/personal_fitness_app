@@ -27,6 +27,13 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 - **Abschließen** speichert nur abgehakte Sätze. Ohne abgehakten Satz wird gefragt, ob verworfen werden soll.
 - Die App speichert jede Eingabe sofort. Wird sie unterbrochen, geht es beim nächsten Öffnen an derselben Stelle weiter, der Timer läuft korrekt weiter.
 
+**Übungen und Bibliothek**
+
+- Tab **Übungen** → oben **Meine** (deine Übungen mit Verlauf) oder **Bibliothek** (60 Übungen mit Ausführungstipps und typischen Fehlern). Die Chips filtern nach Ausrüstung (Maschine, Seilzug, Freihantel, Kettlebell, Körpergewicht, Band, Calisthenics …) und Muskelgruppe; bei „Meine“ zeigt „Ohne Zuordnung“ Übungen ohne Angaben.
+- In der Bibliothek holt **„Zu meinen Übungen“** eine Übung zu dir. Gibt es schon eine gleichnamige, fragt die App, ob sie verknüpft werden soll.
+- Bei deiner Übung: **„Mit Bibliothek verknüpfen“** zeigt danach Muskeln und Ausführungstipps (z. B. für Überzüge); **Bearbeiten → Zuordnung** legt Ausrüstung, Kategorie und Muskeln selbst fest.
+- Im Training filtert die Übungsauswahl nach Ausrüstung; bei Suche erscheinen zusätzlich Treffer **„Aus der Bibliothek“**, die beim Hinzufügen übernommen werden.
+
 **Hell oder dunkel:** Sonne/Mond oben rechts schaltet um. Unter **Mehr → Erscheinungsbild** lässt sich auch „System“ wählen, dann folgt die App dem iPhone.
 
 **Sicherung, wichtig**
@@ -49,6 +56,7 @@ npm run build      # tsc + vite build → dist/
 npm run preview    # gebauten Stand lokal ansehen (inkl. Service Worker)
 npm run icons      # PNG-Icons aus scripts/make-icons.mjs neu erzeugen
 npm run size       # Größenbudget des Builds prüfen (läuft auch in CI)
+npm run library    # Übungsbibliothek aus src/library/curation neu erzeugen
 ```
 
 Einmalig für die E2E-Tests: `npx playwright install chromium`.
@@ -57,7 +65,8 @@ Der Basis-Pfad ist auf `/personal_fitness_app/` eingestellt (GitHub Pages). Loka
 
 ## Aufbau
 
-- `src/domain/` reine Logik: Typen, Seed-Katalog, Vorschläge, Statistik, ISO-Wochen, Sicherung, Migration
+- `src/domain/` reine Logik: Typen, Seed-Katalog, Taxonomie, Bibliothekszugriff, Vorschläge, Statistik, ISO-Wochen, Sicherung, Migration
+- `src/library/` Übungsbibliothek: Quellen in `curation/`, daraus erzeugt `npm run library` die Dateien `*.generated.ts`
 - `src/store/` Zustand-Store und Persistenz (IndexedDB, Fallback localStorage)
 - `src/screens/` die vier Tabs, `src/components/` Bausteine, `src/hooks/` Wake Lock und Takt
 - `e2e/` Playwright-Tests, `scripts/` Icon-Generator
