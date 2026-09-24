@@ -200,6 +200,7 @@ export function BackupSection() {
             </p>
             <p className="muted" style={{ margin: '0 0 8px', fontSize: 15 }}>
               {count(preview.exercises, 'Übung', 'Übungen')} · {count(preview.templates, 'Vorlage', 'Vorlagen')} · {count(preview.workouts, 'Training', 'Trainings')}
+              {preview.programs > 0 && <> · {count(preview.programs, 'Programm', 'Programme')}</>}
             </p>
             {stage.kind === 'preview' && stage.warnings.length > 0 && (
               <p className="muted" style={{ fontSize: 14 }}>{stage.warnings.join(' ')}</p>
@@ -221,8 +222,8 @@ export function BackupSection() {
         {stage.kind === 'done' && (
           <p className="ok" role="status" style={{ marginTop: 12, marginBottom: 0 }}>
             {stage.mode === 'replace'
-              ? `Alle Daten ersetzt: ${stage.result.added.exercises} Übungen, ${stage.result.added.templates} Vorlagen, ${stage.result.added.workouts} Trainings.`
-              : `Zusammengeführt: ${stage.result.added.workouts} Trainings neu, ${stage.result.updated.workouts} aktualisiert; ${stage.result.added.exercises} Übungen neu, ${stage.result.updated.exercises} aktualisiert.`}
+              ? `Alle Daten ersetzt: ${stage.result.added.exercises} Übungen, ${stage.result.added.templates} Vorlagen, ${stage.result.added.workouts} Trainings${stage.result.added.programs ? `, ${stage.result.added.programs} Programme` : ''}.`
+              : `Zusammengeführt: ${stage.result.added.workouts} Trainings neu, ${stage.result.updated.workouts} aktualisiert; ${stage.result.added.exercises} Übungen neu, ${stage.result.updated.exercises} aktualisiert${stage.result.added.programs ? `; ${stage.result.added.programs} Programme neu` : ''}.`}
             {stage.result.skippedActiveWorkout && ' Ein laufendes Training aus der Datei wurde übersprungen, weil hier bereits eines läuft.'}
           </p>
         )}

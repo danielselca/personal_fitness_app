@@ -467,3 +467,38 @@ ul.list > li.sort-row { display: grid; }
 .chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip-wrap .chip { min-height: 36px; padding: 0 12px; font-size: 13px; }
 .detail-sub { margin: 14px 0 0; font-size: 13px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ---------- Vorlagen-Editor (Schritt 18) ---------- */
+.tpl-entry { padding: 10px 12px; }
+.tpl-entry-head { display: flex; align-items: center; gap: 4px; }
+.tpl-entry-name { flex: 1; min-width: 0; font-size: 16px; line-height: 1.25; }
+.tpl-fields { display: grid; grid-template-columns: 64px 1fr 76px; gap: 8px; margin-top: 8px; align-items: end; }
+.tpl-field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 600; color: var(--text-2); min-width: 0; }
+.tpl-field .input { min-height: 40px; padding: 4px; font-size: 17px; width: 100%; }
+.tpl-range { display: flex; align-items: center; gap: 4px; }
+.tpl-range .input { flex: 1; min-width: 0; }
+
+/* ---------- Programme (Schritt 18) ---------- */
+.eyebrow { font-size: 12px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; min-width: 0; }
+.btn-link { background: transparent; border-color: transparent; color: var(--primary); padding: 0 4px; }
+.program-teaser { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; margin-bottom: 4px; }
+.program-hero { display: flex; flex-direction: column; gap: 10px; }
+.program-hero-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.program-next { display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 56px; font-size: 17px; }
+.program-hero-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; font-size: 14px; color: var(--text-2); }
+.program-hero-meta strong { color: var(--text); }
+.program-hero-meta .btn-link { margin-left: auto; }
+.program-card { display: flex; flex-direction: column; gap: 8px; }
+.program-card-head { display: flex; align-items: center; gap: 8px; }
+.program-card-head .row-title { flex: 1; min-width: 0; }
+.program-days { margin: 0; padding: 0; list-style: none; font-size: 14px; color: var(--text-2); }
+.program-days li { padding: 2px 0; }
+.program-days b { color: var(--text); font-weight: 600; }
+.program-card .btn-row { flex-wrap: wrap; }
+.badge-accent { background: var(--primary-soft); color: var(--primary); }
+.day-row { display: flex; align-items: center; gap: 4px; }
+.day-row .input { flex: 1; min-width: 0; min-height: 40px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.section-head .btn-link { min-height: 36px; }
+.program-hero-name { display: block; font-size: 20px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; }
+ul.list > li.program-card { display: flex; }
