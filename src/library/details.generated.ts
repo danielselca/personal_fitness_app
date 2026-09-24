@@ -107,6 +107,92 @@ export const LIBRARY_DETAILS: Record<string, LibraryDetails> = {
       "Schwung aus den Beinen."
     ]
   },
+  "schraegbank-langhantel": {
+    "cues": [
+      "Bank auf etwa 30–45° stellen, Schulterblätter zusammen und nach unten.",
+      "Stange etwas breiter als schulterbreit greifen, Handgelenke gerade.",
+      "Stange kontrolliert zur oberen Brust senken, Ellbogen etwa 45° vom Körper.",
+      "Nach oben drücken, bis die Arme fast gestreckt sind."
+    ],
+    "mistakes": [
+      "Bank zu steil – es wird Schulterdrücken.",
+      "Stange prallt von der Brust ab.",
+      "Gesäß hebt von der Bank ab."
+    ]
+  },
+  "negativbankdruecken": {
+    "cues": [
+      "Beine sicher einhaken, Schulterblätter fest in die Bank.",
+      "Stange schulterbreit bis etwas breiter greifen.",
+      "Zur unteren Brust senken, kurz über der Brust anhalten.",
+      "Kontrolliert nach oben drücken; mit Sicherungspartner trainieren."
+    ],
+    "mistakes": [
+      "Stange zu weit Richtung Hals führen.",
+      "Ohne Sicherung schwer trainieren."
+    ]
+  },
+  "fliegende-kurzhantel": {
+    "cues": [
+      "Auf der Flachbank liegen, Hanteln über der Brust, Handflächen zueinander.",
+      "Ellbogen leicht gebeugt und in dieser Stellung fixieren.",
+      "Arme in einem weiten Bogen seitlich senken, bis die Brust dehnt.",
+      "Im gleichen Bogen zurück nach oben führen, oben nicht klacken."
+    ],
+    "mistakes": [
+      "Zu tief senken – die Schulter wird überdehnt.",
+      "Arme beugen und strecken wie beim Drücken.",
+      "Zu schweres Gewicht."
+    ]
+  },
+  "kabel-fliegende-unten": {
+    "cues": [
+      "Rollen unten einstellen, einen Schritt vor die Mitte stellen.",
+      "Griffe mit leicht gebeugten Ellbogen neben den Hüften halten.",
+      "Arme in einem Bogen nach vorn oben vor die obere Brust führen.",
+      "Kurz halten und langsam zurück, bis die Brust leicht dehnt."
+    ],
+    "mistakes": [
+      "Mit dem Oberkörper Schwung holen.",
+      "Ellbogen stark beugen – es wird ein Curl."
+    ]
+  },
+  "bankdruecken-multipresse": {
+    "cues": [
+      "Bank so stellen, dass die Stange über der mittleren Brust läuft.",
+      "Schulterblätter zusammen, Füße fest am Boden.",
+      "Stange ausklinken, kontrolliert zur Brust senken.",
+      "Nach oben drücken und am Ende wieder sicher einhaken."
+    ],
+    "mistakes": [
+      "Bank falsch positioniert – die Stange trifft Hals oder Bauch.",
+      "Sicherungshaken nicht einstellen."
+    ]
+  },
+  "liegestuetz-erhoeht": {
+    "cues": [
+      "Hände etwas breiter als schulterbreit auf Bank oder Kasten.",
+      "Körper von Kopf bis Ferse in einer Linie, Bauch fest.",
+      "Brust zur Kante senken, Ellbogen etwa 45° vom Körper.",
+      "Kräftig zurückdrücken; je niedriger die Auflage, desto schwerer."
+    ],
+    "mistakes": [
+      "Hüfte hängt durch.",
+      "Ellbogen weit nach außen."
+    ]
+  },
+  "liegestuetz-eng": {
+    "cues": [
+      "Hände unter der Brust, Daumen und Zeigefinger bilden eine Raute.",
+      "Körper gestreckt, Gesäß und Bauch fest.",
+      "Brust zu den Händen senken, Ellbogen nah am Körper.",
+      "Kraftvoll nach oben drücken, ohne die Hüfte hängen zu lassen."
+    ],
+    "mistakes": [
+      "Hüfte hängt oder knickt ein.",
+      "Handgelenke schmerzen – dann Hände etwas weiter auseinander."
+    ]
+  },
   "latzug-breit": {
     "cues": [
       "Oberschenkel fest unter die Polster, Oberkörper leicht zurückgelehnt.",
@@ -250,6 +336,139 @@ export const LIBRARY_DETAILS: Record<string, LibraryDetails> = {
       "Oben ins Hohlkreuz zurücklehnen."
     ]
   },
+  "langhantelrudern": {
+    "cues": [
+      "Hüftbreit stehen, Knie leicht gebeugt, Oberkörper mit geradem Rücken etwa 45° vorneigen.",
+      "Stange schulterbreit greifen, Arme hängen gestreckt.",
+      "Stange zum Bauchnabel ziehen, Ellbogen nah am Körper.",
+      "Kurz halten, kontrolliert senken, der Oberkörper bleibt ruhig."
+    ],
+    "mistakes": [
+      "Runder Rücken.",
+      "Mit dem Oberkörper Schwung holen.",
+      "Stange zur Brust statt zum Bauch ziehen."
+    ]
+  },
+  "t-bar-rudern": {
+    "cues": [
+      "Füße fest auf die Tritte, Brust gegen das Polster (falls vorhanden).",
+      "Griffe fassen, Rücken gerade.",
+      "Griffe zur Brust ziehen, Schulterblätter zusammen.",
+      "Langsam ablassen, bis die Arme gestreckt sind."
+    ],
+    "mistakes": [
+      "Rundrücken beim Ablassen.",
+      "Mit den Beinen nachhelfen."
+    ]
+  },
+  "rudern-kurzhantel-beidarmig": {
+    "cues": [
+      "Oberkörper mit geradem Rücken vorneigen, Knie leicht gebeugt.",
+      "Hanteln hängen unter den Schultern, Handflächen zueinander.",
+      "Hanteln zur Hüfte ziehen, Ellbogen nah am Körper.",
+      "Kontrolliert senken, Nacken lang."
+    ],
+    "mistakes": [
+      "Runder Rücken.",
+      "Oberkörper richtet sich beim Ziehen auf."
+    ]
+  },
+  "rudern-kabel-einarmig": {
+    "cues": [
+      "Rolle auf Brusthöhe, seitlich zum Turm stehen oder sitzen.",
+      "Griff mit gestrecktem Arm, Schulter nach vorn lassen.",
+      "Ellbogen am Körper nach hinten ziehen, Schulterblatt zurück.",
+      "Langsam nach vorn, ohne den Oberkörper zu drehen."
+    ],
+    "mistakes": [
+      "Mit dem ganzen Oberkörper mitdrehen.",
+      "Schulter zieht zum Ohr."
+    ]
+  },
+  "latzug-gestreckte-arme": {
+    "cues": [
+      "Rolle oben, Stange oder Seil schulterbreit greifen, ein Schritt zurück.",
+      "Leicht vorgebeugt, Arme fast gestreckt.",
+      "Stange in einem Bogen bis zu den Oberschenkeln ziehen.",
+      "Kurz halten und langsam zurück bis auf Kopfhöhe."
+    ],
+    "mistakes": [
+      "Arme beugen – es wird ein Trizepsdrücken.",
+      "Mit dem Oberkörper wippen."
+    ]
+  },
+  "klimmzug-untergriff": {
+    "cues": [
+      "Untergriff schulterbreit, aus dem ruhigen Hang starten.",
+      "Schulterblätter nach unten ziehen, dann die Brust zur Stange führen.",
+      "Kinn über die Stange, kurz halten.",
+      "Kontrolliert ganz nach unten."
+    ],
+    "mistakes": [
+      "Schwung aus den Beinen.",
+      "Nur halbe Wiederholungen."
+    ]
+  },
+  "klimmzug-neutral": {
+    "cues": [
+      "Parallelgriffe fassen, Handflächen zueinander.",
+      "Aus dem Hang die Schulterblätter nach unten ziehen.",
+      "Brust Richtung Griffe ziehen, Ellbogen nah am Körper.",
+      "Kontrolliert ablassen, bis die Arme gestreckt sind."
+    ],
+    "mistakes": [
+      "Kippen und Schwung holen.",
+      "Oben den Kopf nach vorn recken."
+    ]
+  },
+  "klimmzug-negativ": {
+    "cues": [
+      "Mit Kasten oder Sprung in die obere Position, Kinn über der Stange.",
+      "Schultern unten, Körper fest.",
+      "In 3–5 Sekunden langsam nach unten lassen.",
+      "Unten absetzen und neu nach oben steigen."
+    ],
+    "mistakes": [
+      "Einfach fallen lassen statt langsam zu senken.",
+      "Schultern hängen unten locker."
+    ]
+  },
+  "schulterheben-kurzhantel": {
+    "cues": [
+      "Aufrecht stehen, Hanteln neben dem Körper.",
+      "Schultern gerade nach oben zu den Ohren ziehen.",
+      "Oben kurz halten.",
+      "Langsam ganz nach unten lassen."
+    ],
+    "mistakes": [
+      "Schultern kreisen.",
+      "Kopf nach vorn schieben."
+    ]
+  },
+  "face-pull-band": {
+    "cues": [
+      "Band auf Kopfhöhe befestigen, Enden mit den Daumen nach hinten fassen.",
+      "Band Richtung Gesicht ziehen, Hände auseinander.",
+      "Ellbogen bleiben hoch, am Ende Schulterblätter zusammen.",
+      "Langsam zurück, Spannung halten."
+    ],
+    "mistakes": [
+      "Ellbogen sinken ab.",
+      "Zurücklehnen statt ziehen."
+    ]
+  },
+  "superman": {
+    "cues": [
+      "Bauchlage, Arme nach vorn gestreckt, Blick zum Boden.",
+      "Arme, Brust und Beine gleichzeitig leicht anheben.",
+      "Oben 1–2 Sekunden halten, Gesäß fest.",
+      "Langsam ablegen."
+    ],
+    "mistakes": [
+      "Kopf in den Nacken ziehen.",
+      "Zu hoch reißen – Hohlkreuz."
+    ]
+  },
   "schulterpresse-maschine": {
     "cues": [
       "Sitz so einstellen, dass die Griffe etwa auf Schulterhöhe sind.",
@@ -354,6 +573,102 @@ export const LIBRARY_DETAILS: Record<string, LibraryDetails> = {
       "Zu schwer, nur mit Schwung."
     ]
   },
+  "schulterdruecken-langhantel": {
+    "cues": [
+      "Stange auf Schulterhöhe, Griff etwas breiter als schulterbreit.",
+      "Gesäß und Bauch fest, Rippen unten.",
+      "Stange senkrecht nach oben drücken, Kopf leicht zurück und dann unter die Stange.",
+      "Oben Arme gestreckt, kontrolliert zur Schulter zurück."
+    ],
+    "mistakes": [
+      "Hohlkreuz statt fester Mitte.",
+      "Stange in einem Bogen vor dem Gesicht vorbeiführen."
+    ]
+  },
+  "arnold-press": {
+    "cues": [
+      "Aufrecht sitzen, Hanteln vor den Schultern, Handflächen zu dir.",
+      "Beim Drücken die Hände nach außen drehen.",
+      "Oben Arme fast gestreckt, Handflächen nach vorn.",
+      "Auf dem gleichen Weg zurückdrehen und senken."
+    ],
+    "mistakes": [
+      "Rücken ins Hohlkreuz.",
+      "Drehung zu schnell und ohne Kontrolle."
+    ]
+  },
+  "aufrechtes-rudern": {
+    "cues": [
+      "Stange schulterbreit oder etwas breiter greifen.",
+      "Stange nah am Körper bis etwa zur unteren Brust ziehen, Ellbogen führen.",
+      "Ellbogen höchstens auf Schulterhöhe.",
+      "Kontrolliert senken."
+    ],
+    "mistakes": [
+      "Zu enger Griff und zu hoch ziehen – belastet die Schulter.",
+      "Schwung aus den Beinen."
+    ]
+  },
+  "seitheben-maschine": {
+    "cues": [
+      "Sitz so einstellen, dass die Drehachse auf Schulterhöhe liegt.",
+      "Arme an die Polster, Oberkörper aufrecht.",
+      "Arme seitlich bis Schulterhöhe heben, kurz halten.",
+      "Langsam zurück, ohne das Gewicht abzulegen."
+    ],
+    "mistakes": [
+      "Schultern zu den Ohren ziehen.",
+      "Schwung und Abprallen unten."
+    ]
+  },
+  "frontheben-kabel": {
+    "cues": [
+      "Mit dem Rücken zum Kabelturm, Rolle unten, Griff zwischen den Beinen.",
+      "Arm gestreckt, Ellbogen leicht gebeugt.",
+      "Griff nach vorn bis etwa Schulterhöhe heben.",
+      "Kontrolliert senken, Oberkörper bleibt ruhig."
+    ],
+    "mistakes": [
+      "Zurücklehnen und Schwung holen.",
+      "Über Schulterhöhe heben."
+    ]
+  },
+  "reverse-fliegende-kabel": {
+    "cues": [
+      "Rollen auf Schulterhöhe, Kabel über Kreuz greifen.",
+      "Arme fast gestreckt, Ellbogen leicht gebeugt.",
+      "Arme weit nach außen hinten führen, Schulterblätter zusammen.",
+      "Kontrolliert zurück vor die Brust."
+    ],
+    "mistakes": [
+      "Mit dem Oberkörper nach hinten lehnen.",
+      "Arme stark beugen – es wird ein Rudern."
+    ]
+  },
+  "pike-liegestuetz": {
+    "cues": [
+      "Aus dem Liegestütz das Gesäß hochschieben, bis der Körper ein umgedrehtes V bildet.",
+      "Hände schulterbreit, Kopf zwischen den Armen.",
+      "Kopf kontrolliert zum Boden vor die Hände senken.",
+      "Zurück nach oben drücken, Gesäß bleibt oben."
+    ],
+    "mistakes": [
+      "Hüfte sinkt ab – es wird ein normaler Liegestütz.",
+      "Kopf zu weit hinter den Händen."
+    ]
+  },
+  "band-pull-apart": {
+    "cues": [
+      "Band schulterbreit vor der Brust halten, Arme gestreckt.",
+      "Band auseinanderziehen, bis es die Brust berührt.",
+      "Schulterblätter zusammen, Schultern unten.",
+      "Langsam zurück, Spannung bleibt."
+    ],
+    "mistakes": [
+      "Schultern zu den Ohren ziehen.",
+      "Arme stark beugen."
+    ]
+  },
   "bizepscurl-kurzhantel": {
     "cues": [
       "Aufrecht stehen, Ellbogen seitlich am Körper.",
@@ -417,6 +732,126 @@ export const LIBRARY_DETAILS: Record<string, LibraryDetails> = {
       "Ellbogen gehen weit auseinander.",
       "Hohlkreuz.",
       "Nur halbe Bewegung."
+    ]
+  },
+  "kabel-curl": {
+    "cues": [
+      "Rolle unten, Stange im Untergriff schulterbreit.",
+      "Ellbogen fest am Körper.",
+      "Stange zur Brust beugen, oben kurz anspannen.",
+      "Langsam senken, bis die Arme gestreckt sind."
+    ],
+    "mistakes": [
+      "Ellbogen wandern nach vorn.",
+      "Mit dem Oberkörper Schwung holen."
+    ]
+  },
+  "scott-curl": {
+    "cues": [
+      "Sitz so einstellen, dass die Achseln am Polsterrand liegen.",
+      "Oberarme flach auf dem Polster.",
+      "Griffe hochbeugen, oben kurz halten.",
+      "Langsam fast ganz strecken."
+    ],
+    "mistakes": [
+      "Arme unten ruckartig durchstrecken.",
+      "Gesäß hebt vom Sitz ab."
+    ]
+  },
+  "konzentrations-curl": {
+    "cues": [
+      "Sitzen, Ellbogen innen am Oberschenkel abstützen.",
+      "Hantel mit gestrecktem Arm, Handfläche nach oben.",
+      "Zur Schulter beugen, oben anspannen.",
+      "Langsam senken."
+    ],
+    "mistakes": [
+      "Mit dem Oberkörper mitgehen.",
+      "Ellbogen vom Bein lösen."
+    ]
+  },
+  "schraegbank-curl": {
+    "cues": [
+      "Bank auf etwa 45–60°, Rücken anlehnen, Arme hängen.",
+      "Ellbogen bleiben hinter dem Körper.",
+      "Hanteln zu den Schultern beugen.",
+      "Langsam ganz strecken."
+    ],
+    "mistakes": [
+      "Schultern nach vorn ziehen.",
+      "Zu schweres Gewicht – Schwung."
+    ]
+  },
+  "hammercurl-seil": {
+    "cues": [
+      "Rolle unten, Seil mit neutralem Griff (Daumen oben).",
+      "Ellbogen am Körper.",
+      "Seil zur Brust beugen, Hände oben leicht auseinander.",
+      "Langsam senken."
+    ],
+    "mistakes": [
+      "Ellbogen nach vorn schieben.",
+      "Oberkörper schwingt mit."
+    ]
+  },
+  "trizepsdruecken-seil": {
+    "cues": [
+      "Rolle oben, Seil mit neutralem Griff.",
+      "Ellbogen fest neben dem Körper.",
+      "Seil nach unten drücken, am Ende die Hände auseinander.",
+      "Langsam zurück bis etwa 90° im Ellbogen."
+    ],
+    "mistakes": [
+      "Ellbogen wandern nach vorn.",
+      "Oberkörper drückt mit."
+    ]
+  },
+  "stirndruecken-langhantel": {
+    "cues": [
+      "Auf der Flachbank liegen, Stange über der Brust mit engem Griff.",
+      "Oberarme senkrecht fixieren.",
+      "Stange zur Stirn bzw. hinter den Kopf senken.",
+      "Nur aus dem Ellbogen zurück nach oben strecken."
+    ],
+    "mistakes": [
+      "Ellbogen weit nach außen.",
+      "Oberarme bewegen sich mit."
+    ]
+  },
+  "trizeps-kickback": {
+    "cues": [
+      "Vorgebeugt, eine Hand und ein Knie auf der Bank.",
+      "Oberarm parallel zum Boden, eng am Körper.",
+      "Unterarm nach hinten strecken, oben anspannen.",
+      "Langsam zurück bis 90°."
+    ],
+    "mistakes": [
+      "Oberarm sinkt ab.",
+      "Mit Schwung arbeiten."
+    ]
+  },
+  "bankdruecken-eng": {
+    "cues": [
+      "Griff etwa schulterbreit, Handgelenke gerade.",
+      "Ellbogen beim Senken nah am Körper.",
+      "Stange zur unteren Brust führen.",
+      "Nach oben drücken, Trizeps anspannen."
+    ],
+    "mistakes": [
+      "Zu enger Griff – belastet die Handgelenke.",
+      "Ellbogen weit nach außen."
+    ]
+  },
+  "dips-maschine-unterstuetzt": {
+    "cues": [
+      "Knie auf das Polster, Griffe fassen, Arme gestreckt.",
+      "Oberkörper leicht vorgeneigt.",
+      "Senken, bis die Oberarme etwa waagerecht sind.",
+      "Nach oben drücken. Mehr Gewicht heißt mehr Unterstützung."
+    ],
+    "mistakes": [
+      "Zu tief senken – die Schulter wird überlastet.",
+      "Schultern ziehen zu den Ohren."
     ]
   },
   "beinpresse": {
@@ -641,6 +1076,186 @@ export const LIBRARY_DETAILS: Record<string, LibraryDetails> = {
       "Zu schnell zurück."
     ]
   },
+  "frontkniebeuge": {
+    "cues": [
+      "Stange vorn auf den Schultern, Ellbogen hoch.",
+      "Füße schulterbreit, Zehen leicht nach außen.",
+      "Aufrecht nach unten, Knie folgen den Zehen.",
+      "Über die ganze Fußsohle hochdrücken, Ellbogen bleiben oben."
+    ],
+    "mistakes": [
+      "Ellbogen fallen ab, die Stange rollt nach vorn.",
+      "Fersen heben ab."
+    ]
+  },
+  "sumo-kreuzheben": {
+    "cues": [
+      "Weiter Stand, Zehen nach außen, Stange über der Fußmitte.",
+      "Stange innerhalb der Beine schulterbreit greifen, Brust raus.",
+      "Knie nach außen drücken und die Stange nah am Körper hochziehen.",
+      "Oben Hüfte strecken, kontrolliert absetzen."
+    ],
+    "mistakes": [
+      "Runder Rücken.",
+      "Knie fallen nach innen."
+    ]
+  },
+  "rumaenisches-kreuzheben-kurzhantel": {
+    "cues": [
+      "Hüftbreit stehen, Hanteln vor den Oberschenkeln, Knie leicht gebeugt.",
+      "Hüfte nach hinten schieben, Hanteln nah an den Beinen senken.",
+      "Rücken bleibt gerade, bis die hinteren Oberschenkel ziehen.",
+      "Hüfte nach vorn strecken und aufrichten."
+    ],
+    "mistakes": [
+      "Runder Rücken.",
+      "Knie zu stark beugen."
+    ]
+  },
+  "ausfallschritt-rueckwaerts": {
+    "cues": [
+      "Aufrecht stehen, Hanteln neben dem Körper.",
+      "Einen großen Schritt nach hinten, hinteres Knie Richtung Boden.",
+      "Vorderes Knie über dem Fuß, Oberkörper aufrecht.",
+      "Über die vordere Ferse zurück in den Stand."
+    ],
+    "mistakes": [
+      "Vorderes Knie fällt nach innen.",
+      "Oberkörper kippt nach vorn."
+    ]
+  },
+  "split-squat": {
+    "cues": [
+      "Schrittstellung, Füße hüftbreit versetzt.",
+      "Gerade nach unten senken, bis das hintere Knie fast den Boden berührt.",
+      "Vorderes Knie zeigt Richtung Zehen.",
+      "Über die vordere Ferse hochdrücken, Stellung bleibt."
+    ],
+    "mistakes": [
+      "Zu schmaler Stand – wackelig.",
+      "Gewicht auf dem hinteren Bein."
+    ]
+  },
+  "ausfallschritt-seitlich": {
+    "cues": [
+      "Hantel vor der Brust, breiter Schritt zur Seite.",
+      "Hüfte nach hinten, das Schrittbein beugt, das andere bleibt gestreckt.",
+      "Knie über den Zehen, Rücken gerade.",
+      "Kräftig zurück in die Mitte drücken."
+    ],
+    "mistakes": [
+      "Knie schiebt weit über die Zehen hinaus.",
+      "Rundrücken."
+    ]
+  },
+  "kniebeuge-multipresse": {
+    "cues": [
+      "Stange auf dem oberen Rücken, Füße etwas vor der Stange.",
+      "Sicherungshaken knapp unter der tiefsten Position einstellen.",
+      "Kontrolliert tief gehen, Knie folgen den Zehen.",
+      "Über die ganze Fußsohle hochdrücken."
+    ],
+    "mistakes": [
+      "Füße direkt unter der Stange – die Knie schieben weit nach vorn.",
+      "Sicherung vergessen."
+    ]
+  },
+  "wadenheben-beinpresse": {
+    "cues": [
+      "Fußballen auf die untere Kante der Platte, Fersen frei.",
+      "Beine fast gestreckt, Knie nicht durchdrücken.",
+      "Platte über die Zehen wegdrücken, oben kurz halten.",
+      "Fersen langsam weit zurücklassen."
+    ],
+    "mistakes": [
+      "Mit gebeugten Knien wippen.",
+      "Füße rutschen von der Platte – Sicherung der Maschine nutzen."
+    ]
+  },
+  "wadenheben-einbeinig": {
+    "cues": [
+      "Auf einer Stufe stehen, Ferse frei, leicht festhalten.",
+      "Auf die Zehenspitze hochdrücken, oben halten.",
+      "Langsam unter die Stufe absenken.",
+      "Zum Steigern eine Kurzhantel in die Hand nehmen."
+    ],
+    "mistakes": [
+      "Wippen statt kontrolliert bewegen.",
+      "Nur kleine Bewegung."
+    ]
+  },
+  "nordic-curl": {
+    "cues": [
+      "Kniend, Fersen fixiert (Partner oder Polster), Körper aufrecht.",
+      "Langsam nach vorn kippen, Hüfte gestreckt.",
+      "So lange bremsen wie möglich, dann mit den Händen abfangen.",
+      "Mit den Händen leicht abstoßen und zurück nach oben."
+    ],
+    "mistakes": [
+      "In der Hüfte abknicken.",
+      "Unkontrolliert fallen lassen."
+    ]
+  },
+  "kickback-kabel": {
+    "cues": [
+      "Fußschlaufe an, Rolle unten, mit beiden Händen am Turm festhalten.",
+      "Oberkörper leicht vorgeneigt, Bauch fest.",
+      "Bein gestreckt nach hinten führen, Gesäß anspannen.",
+      "Langsam zurück, ohne ins Hohlkreuz zu gehen."
+    ],
+    "mistakes": [
+      "Hohlkreuz statt Hüftstreckung.",
+      "Mit Schwung arbeiten."
+    ]
+  },
+  "abduktion-kabel": {
+    "cues": [
+      "Fußschlaufe am äußeren Bein, seitlich zum Turm stehen.",
+      "Am Turm festhalten, Oberkörper aufrecht.",
+      "Bein gestreckt zur Seite führen, Fußspitze nach vorn.",
+      "Langsam zurück vor das Standbein."
+    ],
+    "mistakes": [
+      "Oberkörper kippt zur Seite.",
+      "Fuß dreht nach außen."
+    ]
+  },
+  "kniebeuge-koerpergewicht": {
+    "cues": [
+      "Füße schulterbreit, Zehen leicht nach außen, Arme nach vorn.",
+      "Hüfte nach hinten unten, Knie folgen den Zehen.",
+      "So tief es mit geradem Rücken geht.",
+      "Über die ganze Fußsohle hochdrücken."
+    ],
+    "mistakes": [
+      "Fersen heben ab.",
+      "Knie fallen nach innen."
+    ]
+  },
+  "beckenheben-einbeinig": {
+    "cues": [
+      "Rückenlage, ein Fuß aufgestellt, das andere Bein gestreckt in der Luft.",
+      "Über die Ferse das Becken hochdrücken.",
+      "Oben Gesäß fest, Becken bleibt waagerecht.",
+      "Langsam absenken, ohne abzulegen."
+    ],
+    "mistakes": [
+      "Becken kippt zur Seite.",
+      "Hohlkreuz statt Gesäßspannung."
+    ]
+  },
+  "wandsitzen": {
+    "cues": [
+      "Rücken an die Wand, Füße etwa einen Schritt vor der Wand.",
+      "Nach unten rutschen, bis die Knie etwa 90° gebeugt sind.",
+      "Knie über den Knöcheln, Gewicht auf den Fersen.",
+      "Position halten und ruhig atmen."
+    ],
+    "mistakes": [
+      "Knie weit vor den Zehen.",
+      "Hände auf die Oberschenkel stützen."
+    ]
+  },
   "unterarmstuetz": {
     "cues": [
       "Ellbogen unter den Schultern, Unterarme parallel.",
@@ -758,6 +1373,102 @@ export const LIBRARY_DETAILS: Record<string, LibraryDetails> = {
       "Nacken verspannt."
     ]
   },
+  "beinheben-liegend": {
+    "cues": [
+      "Rückenlage, Hände unter dem Gesäß oder neben dem Körper.",
+      "Unteren Rücken in den Boden drücken.",
+      "Gestreckte Beine bis senkrecht heben.",
+      "Langsam senken, nur so weit, wie der Rücken am Boden bleibt."
+    ],
+    "mistakes": [
+      "Hohlkreuz beim Absenken.",
+      "Mit Schwung arbeiten."
+    ]
+  },
+  "reverse-crunch": {
+    "cues": [
+      "Rückenlage, Knie 90° gebeugt über der Hüfte.",
+      "Becken einrollen und vom Boden heben, Knie Richtung Brust.",
+      "Kurz halten.",
+      "Langsam abrollen."
+    ],
+    "mistakes": [
+      "Schwung aus den Beinen.",
+      "Kopf und Nacken angespannt."
+    ]
+  },
+  "russian-twist": {
+    "cues": [
+      "Sitzen, Oberkörper leicht zurückgelehnt, Rücken gerade.",
+      "Füße am Boden oder leicht angehoben.",
+      "Oberkörper abwechselnd nach links und rechts drehen.",
+      "Bewegung aus dem Rumpf, nicht nur aus den Armen."
+    ],
+    "mistakes": [
+      "Rundrücken.",
+      "Nur die Arme schwingen."
+    ]
+  },
+  "mountain-climber": {
+    "cues": [
+      "Liegestützposition, Hände unter den Schultern.",
+      "Knie abwechselnd zügig zur Brust ziehen.",
+      "Hüfte bleibt tief, Rücken gerade.",
+      "Gleichmäßig atmen."
+    ],
+    "mistakes": [
+      "Gesäß zu hoch.",
+      "Schultern hinter den Händen."
+    ]
+  },
+  "holzhacker-kabel": {
+    "cues": [
+      "Rolle oben, seitlich zum Turm, Griff mit beiden Händen.",
+      "Arme fast gestreckt, Füße schulterbreit.",
+      "Griff diagonal nach unten zur anderen Seite ziehen, Oberkörper dreht mit.",
+      "Kontrolliert zurück."
+    ],
+    "mistakes": [
+      "Nur aus den Armen ziehen.",
+      "Rücken rundet sich."
+    ]
+  },
+  "knieheben-haengend": {
+    "cues": [
+      "An der Stange hängen, Schultern aktiv.",
+      "Knie zur Brust ziehen, Becken einrollen.",
+      "Kurz halten.",
+      "Langsam senken, ohne zu schaukeln."
+    ],
+    "mistakes": [
+      "Schwingen.",
+      "Nur die Beine heben, Becken bleibt starr."
+    ]
+  },
+  "ab-roller": {
+    "cues": [
+      "Kniend, Roller unter den Schultern.",
+      "Bauch fest, Becken leicht eingerollt.",
+      "Langsam nach vorn rollen, so weit der Rücken gerade bleibt.",
+      "Aus dem Bauch zurückziehen."
+    ],
+    "mistakes": [
+      "Hohlkreuz.",
+      "Zu weit rollen."
+    ]
+  },
+  "fahrrad-crunch": {
+    "cues": [
+      "Rückenlage, Hände locker an den Schläfen.",
+      "Schultern leicht anheben.",
+      "Ellbogen abwechselnd zum gegenüberliegenden Knie, anderes Bein strecken.",
+      "Ruhig und kontrolliert."
+    ],
+    "mistakes": [
+      "Am Kopf ziehen.",
+      "Zu schnell ohne Spannung."
+    ]
+  },
   "kettlebell-swing": {
     "cues": [
       "Etwas mehr als hüftbreit stehen, Kettlebell vor den Füßen.",
@@ -782,6 +1493,78 @@ export const LIBRARY_DETAILS: Record<string, LibraryDetails> = {
       "Runder Rücken.",
       "Knie beugen zu stark.",
       "Kettlebell weit vor dem Körper."
+    ]
+  },
+  "katze-kuh": {
+    "cues": [
+      "Vierfüßlerstand, Hände unter den Schultern, Knie unter der Hüfte.",
+      "Einatmen: Brust nach vorn, leichtes Hohlkreuz, Blick nach vorn.",
+      "Ausatmen: Rücken rund machen, Kinn zur Brust.",
+      "Langsam im Atemrhythmus wechseln."
+    ],
+    "mistakes": [
+      "Bewegung nur im Nacken.",
+      "Zu schnell und ruckartig."
+    ]
+  },
+  "hueftbeuger-dehnung": {
+    "cues": [
+      "Ein Knie am Boden (Polster), anderer Fuß vorn aufgestellt.",
+      "Becken leicht einrollen, Gesäß des hinteren Beins anspannen.",
+      "Hüfte nach vorn schieben, bis vorn in der Leiste gedehnt wird.",
+      "Halten, ruhig atmen, Seite wechseln."
+    ],
+    "mistakes": [
+      "Hohlkreuz statt Hüftstreckung.",
+      "Vorderes Knie weit über den Zehen."
+    ]
+  },
+  "brustdehnung-tuer": {
+    "cues": [
+      "Unterarme im Türrahmen, Ellbogen etwa auf Schulterhöhe.",
+      "Einen kleinen Schritt nach vorn.",
+      "Dehnung vorn in der Brust spüren, Schultern unten.",
+      "Halten und ruhig atmen."
+    ],
+    "mistakes": [
+      "Zu weit nach vorn – Schmerz vorn in der Schulter.",
+      "Hohlkreuz."
+    ]
+  },
+  "schulter-querdehnung": {
+    "cues": [
+      "Einen Arm gestreckt vor der Brust zur anderen Seite führen.",
+      "Mit dem anderen Arm oberhalb des Ellbogens leicht heranziehen.",
+      "Schulter bleibt unten.",
+      "Halten, Seite wechseln."
+    ],
+    "mistakes": [
+      "Am Ellbogengelenk ziehen.",
+      "Oberkörper dreht mit."
+    ]
+  },
+  "weltbeste-dehnung": {
+    "cues": [
+      "Großer Ausfallschritt nach vorn, Hände innen neben den vorderen Fuß.",
+      "Ellbogen der Innenseite Richtung Fußknöchel senken.",
+      "Den Arm zur Decke aufdrehen, Blick folgt der Hand.",
+      "Langsam zurück und Seite wechseln."
+    ],
+    "mistakes": [
+      "Hinteres Bein knickt ein.",
+      "Zu schnell, ohne zu halten."
+    ]
+  },
+  "kindhaltung": {
+    "cues": [
+      "Kniend auf die Fersen setzen, Knie leicht geöffnet.",
+      "Oberkörper nach vorn ablegen, Arme lang nach vorn.",
+      "Stirn ablegen, Schultern locker.",
+      "Ruhig in den unteren Rücken atmen."
+    ],
+    "mistakes": [
+      "Gesäß hebt weit von den Fersen ab.",
+      "Schultern hochziehen."
     ]
   }
 }

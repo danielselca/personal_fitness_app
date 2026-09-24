@@ -260,6 +260,234 @@ export const LIBRARY_INDEX: LibraryIndexEntry[] = [
     }
   },
   {
+    "id": "schraegbank-langhantel",
+    "name": "Schrägbankdrücken (Langhantel)",
+    "en": "Incline Bench Press",
+    "aliases": [
+      "Schrägbank Langhantel",
+      "Incline Bench"
+    ],
+    "equipment": "langhantel",
+    "category": "kraft",
+    "pattern": "druecken-horizontal",
+    "muscles": {
+      "primary": [
+        "brust"
+      ],
+      "secondary": [
+        "schulter-vorne",
+        "trizeps"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "ellbogen",
+      "handgelenk"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 120,
+    "media": {
+      "source": "workout-guide",
+      "ref": "incline-bench-press"
+    }
+  },
+  {
+    "id": "negativbankdruecken",
+    "name": "Negativbankdrücken (Langhantel)",
+    "en": "Decline Bench Press",
+    "aliases": [
+      "Decline Bench",
+      "Negativ-Bankdrücken"
+    ],
+    "equipment": "langhantel",
+    "category": "kraft",
+    "pattern": "druecken-horizontal",
+    "muscles": {
+      "primary": [
+        "brust"
+      ],
+      "secondary": [
+        "trizeps",
+        "schulter-vorne"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "ellbogen",
+      "handgelenk"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 120,
+    "media": {
+      "source": "workout-guide",
+      "ref": "decline-bench-press"
+    }
+  },
+  {
+    "id": "fliegende-kurzhantel",
+    "name": "Fliegende (Kurzhantel)",
+    "en": "Dumbbell Fly",
+    "aliases": [
+      "Kurzhantel-Flys",
+      "Flys"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "fliegende",
+    "muscles": {
+      "primary": [
+        "brust"
+      ],
+      "secondary": [
+        "schulter-vorne"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "dumbbell-fly"
+    }
+  },
+  {
+    "id": "kabel-fliegende-unten",
+    "name": "Fliegende am Kabel von unten",
+    "en": "Low-to-High Cable Fly",
+    "aliases": [
+      "Kabelzug von unten",
+      "Cable Fly low"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "fliegende",
+    "muscles": {
+      "primary": [
+        "brust"
+      ],
+      "secondary": [
+        "schulter-vorne"
+      ]
+    },
+    "loads": [
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "incline-cable-fly"
+    }
+  },
+  {
+    "id": "bankdruecken-multipresse",
+    "name": "Bankdrücken an der Multipresse",
+    "en": "Smith Machine Bench Press",
+    "aliases": [
+      "Smith-Maschine Bankdrücken",
+      "Multipresse Bank"
+    ],
+    "equipment": "maschine",
+    "category": "kraft",
+    "pattern": "druecken-horizontal",
+    "muscles": {
+      "primary": [
+        "brust"
+      ],
+      "secondary": [
+        "trizeps",
+        "schulter-vorne"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "ellbogen",
+      "handgelenk"
+    ],
+    "level": "einsteiger",
+    "restSec": 90,
+    "media": {
+      "source": "workout-guide",
+      "ref": "smith-machine-bench-press"
+    }
+  },
+  {
+    "id": "liegestuetz-erhoeht",
+    "name": "Liegestütz erhöht (Hände auf Bank)",
+    "en": "Incline Push-up",
+    "aliases": [
+      "Schräge Liegestütze",
+      "Incline Push-up"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "druecken-horizontal",
+    "muscles": {
+      "primary": [
+        "brust"
+      ],
+      "secondary": [
+        "trizeps",
+        "schulter-vorne",
+        "bauch"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "handgelenk"
+    ],
+    "level": "einsteiger",
+    "tags": [
+      "calisthenics"
+    ],
+    "restSec": 60,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "incline-push-up"
+    }
+  },
+  {
+    "id": "liegestuetz-eng",
+    "name": "Liegestütz eng (Diamant)",
+    "en": "Diamond Push-up",
+    "aliases": [
+      "Diamant-Liegestütz",
+      "Enge Liegestütze"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "druecken-horizontal",
+    "muscles": {
+      "primary": [
+        "trizeps",
+        "brust"
+      ],
+      "secondary": [
+        "schulter-vorne",
+        "bauch"
+      ]
+    },
+    "loads": [
+      "ellbogen",
+      "handgelenk",
+      "schulter"
+    ],
+    "level": "fortgeschritten",
+    "tags": [
+      "calisthenics"
+    ],
+    "restSec": 60,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "diamond-push-up"
+    }
+  },
+  {
     "id": "latzug-breit",
     "name": "Latzug breit",
     "en": "Lat Pulldown",
@@ -621,6 +849,360 @@ export const LIBRARY_INDEX: LibraryIndexEntry[] = [
     }
   },
   {
+    "id": "langhantelrudern",
+    "name": "Langhantelrudern vorgebeugt",
+    "en": "Barbell Row",
+    "aliases": [
+      "Rudern vorgebeugt",
+      "Bent-over Row"
+    ],
+    "equipment": "langhantel",
+    "category": "kraft",
+    "pattern": "ziehen-horizontal",
+    "muscles": {
+      "primary": [
+        "oberer-ruecken",
+        "lat"
+      ],
+      "secondary": [
+        "bizeps",
+        "schulter-hinten",
+        "unterer-ruecken"
+      ]
+    },
+    "loads": [
+      "unterer-ruecken",
+      "ellbogen"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 120,
+    "media": {
+      "source": "workout-guide",
+      "ref": "barbell-row"
+    }
+  },
+  {
+    "id": "t-bar-rudern",
+    "name": "T-Bar-Rudern",
+    "en": "T-Bar Row",
+    "aliases": [
+      "T-Stangen-Rudern",
+      "Landmine Row"
+    ],
+    "equipment": "maschine",
+    "category": "kraft",
+    "pattern": "ziehen-horizontal",
+    "muscles": {
+      "primary": [
+        "oberer-ruecken",
+        "lat"
+      ],
+      "secondary": [
+        "bizeps",
+        "schulter-hinten"
+      ]
+    },
+    "loads": [
+      "unterer-ruecken",
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "restSec": 90,
+    "media": {
+      "source": "workout-guide",
+      "ref": "t-bar-row"
+    }
+  },
+  {
+    "id": "rudern-kurzhantel-beidarmig",
+    "name": "Rudern vorgebeugt (Kurzhantel)",
+    "en": "Dumbbell Bent-over Row",
+    "aliases": [
+      "Kurzhantelrudern beidarmig"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "ziehen-horizontal",
+    "muscles": {
+      "primary": [
+        "oberer-ruecken",
+        "lat"
+      ],
+      "secondary": [
+        "bizeps",
+        "schulter-hinten"
+      ]
+    },
+    "loads": [
+      "unterer-ruecken",
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "restSec": 90,
+    "media": {
+      "source": "workout-guide",
+      "ref": "dumbbell-bent-over-row"
+    }
+  },
+  {
+    "id": "rudern-kabel-einarmig",
+    "name": "Rudern am Kabel, einarmig",
+    "en": "Single-Arm Cable Row",
+    "aliases": [
+      "Einarmiges Kabelrudern"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "ziehen-horizontal",
+    "muscles": {
+      "primary": [
+        "lat",
+        "oberer-ruecken"
+      ],
+      "secondary": [
+        "bizeps",
+        "schulter-hinten",
+        "seitliche-bauchmuskeln"
+      ]
+    },
+    "loads": [
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "single-arm-cable-row"
+    }
+  },
+  {
+    "id": "latzug-gestreckte-arme",
+    "name": "Latzug mit gestreckten Armen",
+    "en": "Straight-Arm Pulldown",
+    "aliases": [
+      "Pullover am Kabel",
+      "Straight-Arm Pulldown"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "ueberzug",
+    "muscles": {
+      "primary": [
+        "lat"
+      ],
+      "secondary": [
+        "schulter-hinten",
+        "trizeps",
+        "bauch"
+      ]
+    },
+    "loads": [
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "straight-arm-pulldown"
+    }
+  },
+  {
+    "id": "klimmzug-untergriff",
+    "name": "Klimmzug Untergriff (Chin-up)",
+    "en": "Chin-up",
+    "aliases": [
+      "Chin-up",
+      "Klimmzug eng Untergriff"
+    ],
+    "equipment": "klimmzugstange",
+    "category": "kraft",
+    "pattern": "ziehen-vertikal",
+    "muscles": {
+      "primary": [
+        "lat",
+        "bizeps"
+      ],
+      "secondary": [
+        "oberer-ruecken",
+        "unterarme"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "ellbogen"
+    ],
+    "level": "fortgeschritten",
+    "tags": [
+      "calisthenics"
+    ],
+    "restSec": 120,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "chin-up"
+    }
+  },
+  {
+    "id": "klimmzug-neutral",
+    "name": "Klimmzug neutraler Griff",
+    "en": "Neutral-Grip Pull-up",
+    "aliases": [
+      "Hammergriff-Klimmzug",
+      "Parallelgriff-Klimmzug"
+    ],
+    "equipment": "klimmzugstange",
+    "category": "kraft",
+    "pattern": "ziehen-vertikal",
+    "muscles": {
+      "primary": [
+        "lat"
+      ],
+      "secondary": [
+        "bizeps",
+        "oberer-ruecken",
+        "unterarme"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "ellbogen"
+    ],
+    "level": "fortgeschritten",
+    "tags": [
+      "calisthenics"
+    ],
+    "restSec": 120,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "neutral-grip-pull-up"
+    }
+  },
+  {
+    "id": "klimmzug-negativ",
+    "name": "Negativ-Klimmzug",
+    "en": "Negative Pull-up",
+    "aliases": [
+      "Exzentrischer Klimmzug",
+      "Negativer Klimmzug"
+    ],
+    "equipment": "klimmzugstange",
+    "category": "kraft",
+    "pattern": "ziehen-vertikal",
+    "muscles": {
+      "primary": [
+        "lat"
+      ],
+      "secondary": [
+        "bizeps",
+        "oberer-ruecken"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "tags": [
+      "calisthenics"
+    ],
+    "restSec": 90,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "negative-pull-up"
+    }
+  },
+  {
+    "id": "schulterheben-kurzhantel",
+    "name": "Schulterheben (Kurzhantel)",
+    "en": "Dumbbell Shrug",
+    "aliases": [
+      "Shrugs",
+      "Nackenheben"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "ziehen-vertikal",
+    "muscles": {
+      "primary": [
+        "oberer-trapez"
+      ],
+      "secondary": [
+        "unterarme"
+      ]
+    },
+    "loads": [
+      "nacken"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "dumbbell-shrug"
+    }
+  },
+  {
+    "id": "face-pull-band",
+    "name": "Face Pull mit Band",
+    "en": "Banded Face Pull",
+    "aliases": [
+      "Band Face Pull"
+    ],
+    "equipment": "band",
+    "category": "kraft",
+    "pattern": "reverse-fliegende",
+    "muscles": {
+      "primary": [
+        "schulter-hinten",
+        "oberer-ruecken"
+      ],
+      "secondary": [
+        "rotatorenmanschette"
+      ]
+    },
+    "loads": [
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "restSec": 45,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "banded-face-pull"
+    }
+  },
+  {
+    "id": "superman",
+    "name": "Superman",
+    "en": "Superman",
+    "aliases": [
+      "Rückenheben liegend"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "rueckenstrecken",
+    "muscles": {
+      "primary": [
+        "unterer-ruecken"
+      ],
+      "secondary": [
+        "gesaess",
+        "oberer-ruecken"
+      ]
+    },
+    "loads": [
+      "unterer-ruecken"
+    ],
+    "level": "einsteiger",
+    "restSec": 45,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "superman"
+    }
+  },
+  {
     "id": "schulterpresse-maschine",
     "name": "Schulterpresse (Maschine)",
     "en": "Machine Shoulder Press",
@@ -859,6 +1441,255 @@ export const LIBRARY_INDEX: LibraryIndexEntry[] = [
     }
   },
   {
+    "id": "schulterdruecken-langhantel",
+    "name": "Schulterdrücken stehend (Langhantel)",
+    "en": "Overhead Press",
+    "aliases": [
+      "Military Press",
+      "Überkopfdrücken"
+    ],
+    "equipment": "langhantel",
+    "category": "kraft",
+    "pattern": "druecken-vertikal",
+    "muscles": {
+      "primary": [
+        "schulter-vorne"
+      ],
+      "secondary": [
+        "schulter-seitlich",
+        "trizeps",
+        "oberer-trapez"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "ellbogen",
+      "unterer-ruecken"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 120,
+    "media": {
+      "source": "workout-guide",
+      "ref": "overhead-press"
+    }
+  },
+  {
+    "id": "arnold-press",
+    "name": "Arnold Press (Kurzhantel)",
+    "en": "Arnold Press",
+    "aliases": [
+      "Arnold-Drücken"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "druecken-vertikal",
+    "muscles": {
+      "primary": [
+        "schulter-vorne",
+        "schulter-seitlich"
+      ],
+      "secondary": [
+        "trizeps"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "ellbogen"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 90,
+    "media": {
+      "source": "workout-guide",
+      "ref": "arnold-press"
+    }
+  },
+  {
+    "id": "aufrechtes-rudern",
+    "name": "Aufrechtes Rudern (Langhantel)",
+    "en": "Upright Row",
+    "aliases": [
+      "Upright Row",
+      "Kinnziehen"
+    ],
+    "equipment": "langhantel",
+    "category": "kraft",
+    "pattern": "seitheben",
+    "muscles": {
+      "primary": [
+        "schulter-seitlich"
+      ],
+      "secondary": [
+        "oberer-trapez",
+        "bizeps"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "handgelenk"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "upright-row"
+    }
+  },
+  {
+    "id": "seitheben-maschine",
+    "name": "Seitheben (Maschine)",
+    "en": "Machine Lateral Raise",
+    "aliases": [
+      "Seitheben Gerät"
+    ],
+    "equipment": "maschine",
+    "category": "kraft",
+    "pattern": "seitheben",
+    "muscles": {
+      "primary": [
+        "schulter-seitlich"
+      ],
+      "secondary": [
+        "oberer-trapez"
+      ]
+    },
+    "loads": [
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "machine-lateral-raise"
+    }
+  },
+  {
+    "id": "frontheben-kabel",
+    "name": "Frontheben am Kabel",
+    "en": "Cable Front Raise",
+    "aliases": [
+      "Frontheben Seilzug"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "frontheben",
+    "muscles": {
+      "primary": [
+        "schulter-vorne"
+      ],
+      "secondary": [
+        "schulter-seitlich",
+        "serratus"
+      ]
+    },
+    "loads": [
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "cable-front-raise"
+    }
+  },
+  {
+    "id": "reverse-fliegende-kabel",
+    "name": "Reverse Fliegende am Kabel",
+    "en": "Cable Rear Delt Fly",
+    "aliases": [
+      "Reverse Flys Kabel",
+      "Kabel Reverse Butterfly"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "reverse-fliegende",
+    "muscles": {
+      "primary": [
+        "schulter-hinten"
+      ],
+      "secondary": [
+        "oberer-ruecken",
+        "rotatorenmanschette"
+      ]
+    },
+    "loads": [
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "cable-rear-delt-fly"
+    }
+  },
+  {
+    "id": "pike-liegestuetz",
+    "name": "Pike-Liegestütz",
+    "en": "Pike Push-up",
+    "aliases": [
+      "Pike Push-up",
+      "Schulter-Liegestütz"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "druecken-vertikal",
+    "muscles": {
+      "primary": [
+        "schulter-vorne"
+      ],
+      "secondary": [
+        "trizeps",
+        "schulter-seitlich",
+        "serratus"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "handgelenk",
+      "ellbogen"
+    ],
+    "level": "fortgeschritten",
+    "tags": [
+      "calisthenics"
+    ],
+    "restSec": 90,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "pike-push-up"
+    }
+  },
+  {
+    "id": "band-pull-apart",
+    "name": "Band Pull-Apart",
+    "en": "Band Pull-Apart",
+    "aliases": [
+      "Pull-Apart",
+      "Band auseinanderziehen"
+    ],
+    "equipment": "band",
+    "category": "kraft",
+    "pattern": "reverse-fliegende",
+    "muscles": {
+      "primary": [
+        "schulter-hinten",
+        "oberer-ruecken"
+      ],
+      "secondary": [
+        "rotatorenmanschette"
+      ]
+    },
+    "loads": [
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "restSec": 45,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "band-pull-apart"
+    }
+  },
+  {
     "id": "bizepscurl-kurzhantel",
     "name": "Bizepscurl (Kurzhantel)",
     "en": "Dumbbell Biceps Curl",
@@ -997,6 +1828,290 @@ export const LIBRARY_INDEX: LibraryIndexEntry[] = [
     "media": {
       "source": "workout-guide",
       "ref": "overhead-tricep-extension"
+    }
+  },
+  {
+    "id": "kabel-curl",
+    "name": "Bizepscurl am Kabel",
+    "en": "Cable Curl",
+    "aliases": [
+      "Kabel-Curl",
+      "Curl am Seilzug"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "curl",
+    "muscles": {
+      "primary": [
+        "bizeps"
+      ],
+      "secondary": [
+        "unterarme"
+      ]
+    },
+    "loads": [
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "cable-curl"
+    }
+  },
+  {
+    "id": "scott-curl",
+    "name": "Scott-Curl (Maschine)",
+    "en": "Preacher Curl",
+    "aliases": [
+      "Preacher Curl",
+      "Bizepsmaschine"
+    ],
+    "equipment": "maschine",
+    "category": "kraft",
+    "pattern": "curl",
+    "muscles": {
+      "primary": [
+        "bizeps"
+      ],
+      "secondary": [
+        "unterarme"
+      ]
+    },
+    "loads": [
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "preacher-curl"
+    }
+  },
+  {
+    "id": "konzentrations-curl",
+    "name": "Konzentrations-Curl (Kurzhantel)",
+    "en": "Concentration Curl",
+    "aliases": [
+      "Konzentrationscurl"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "curl",
+    "muscles": {
+      "primary": [
+        "bizeps"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "concentration-curl"
+    }
+  },
+  {
+    "id": "schraegbank-curl",
+    "name": "Schrägbank-Curl (Kurzhantel)",
+    "en": "Incline Dumbbell Curl",
+    "aliases": [
+      "Incline Curl"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "curl",
+    "muscles": {
+      "primary": [
+        "bizeps"
+      ],
+      "secondary": [
+        "unterarme"
+      ]
+    },
+    "loads": [
+      "ellbogen",
+      "schulter"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "incline-dumbbell-curl"
+    }
+  },
+  {
+    "id": "hammercurl-seil",
+    "name": "Hammercurl am Seil",
+    "en": "Rope Hammer Curl",
+    "aliases": [
+      "Seil-Hammercurl"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "curl",
+    "muscles": {
+      "primary": [
+        "bizeps",
+        "unterarme"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "ellbogen",
+      "handgelenk"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "rope-hammer-curl"
+    }
+  },
+  {
+    "id": "trizepsdruecken-seil",
+    "name": "Trizepsdrücken am Seil",
+    "en": "Rope Triceps Pushdown",
+    "aliases": [
+      "Seil-Pushdown",
+      "Trizeps am Seil"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "trizeps-streckung",
+    "muscles": {
+      "primary": [
+        "trizeps"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "rope-tricep-pushdown"
+    }
+  },
+  {
+    "id": "stirndruecken-langhantel",
+    "name": "Stirndrücken (Langhantel/SZ)",
+    "en": "Skull Crusher",
+    "aliases": [
+      "French Press",
+      "Skull Crusher"
+    ],
+    "equipment": "langhantel",
+    "category": "kraft",
+    "pattern": "trizeps-streckung",
+    "muscles": {
+      "primary": [
+        "trizeps"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "ellbogen"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 90,
+    "media": {
+      "source": "workout-guide",
+      "ref": "skull-crusher"
+    }
+  },
+  {
+    "id": "trizeps-kickback",
+    "name": "Trizeps-Kickback (Kurzhantel)",
+    "en": "Triceps Kickback",
+    "aliases": [
+      "Kickbacks"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "trizeps-streckung",
+    "muscles": {
+      "primary": [
+        "trizeps"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "tricep-kickback"
+    }
+  },
+  {
+    "id": "bankdruecken-eng",
+    "name": "Bankdrücken eng (Langhantel)",
+    "en": "Close-Grip Bench Press",
+    "aliases": [
+      "Enges Bankdrücken"
+    ],
+    "equipment": "langhantel",
+    "category": "kraft",
+    "pattern": "druecken-horizontal",
+    "muscles": {
+      "primary": [
+        "trizeps"
+      ],
+      "secondary": [
+        "brust",
+        "schulter-vorne"
+      ]
+    },
+    "loads": [
+      "ellbogen",
+      "handgelenk",
+      "schulter"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 120,
+    "media": {
+      "source": "workout-guide",
+      "ref": "close-grip-bench-press"
+    }
+  },
+  {
+    "id": "dips-maschine-unterstuetzt",
+    "name": "Dips mit Unterstützung (Maschine)",
+    "en": "Assisted Dip",
+    "aliases": [
+      "Dipmaschine",
+      "Dips assistiert"
+    ],
+    "equipment": "maschine",
+    "category": "kraft",
+    "pattern": "druecken-vertikal",
+    "muscles": {
+      "primary": [
+        "trizeps",
+        "brust"
+      ],
+      "secondary": [
+        "schulter-vorne"
+      ]
+    },
+    "loads": [
+      "schulter",
+      "ellbogen"
+    ],
+    "level": "einsteiger",
+    "restSec": 90,
+    "assisted": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "assisted-dip"
     }
   },
   {
@@ -1503,6 +2618,469 @@ export const LIBRARY_INDEX: LibraryIndexEntry[] = [
     }
   },
   {
+    "id": "frontkniebeuge",
+    "name": "Frontkniebeuge (Langhantel)",
+    "en": "Front Squat",
+    "aliases": [
+      "Front Squat"
+    ],
+    "equipment": "langhantel",
+    "category": "kraft",
+    "pattern": "kniebeuge",
+    "muscles": {
+      "primary": [
+        "quadrizeps"
+      ],
+      "secondary": [
+        "gesaess",
+        "bauch",
+        "adduktoren"
+      ]
+    },
+    "loads": [
+      "knie",
+      "handgelenk",
+      "unterer-ruecken"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 150,
+    "media": {
+      "source": "workout-guide",
+      "ref": "front-squat"
+    }
+  },
+  {
+    "id": "sumo-kreuzheben",
+    "name": "Sumo-Kreuzheben (Langhantel)",
+    "en": "Sumo Deadlift",
+    "aliases": [
+      "Sumo Deadlift"
+    ],
+    "equipment": "langhantel",
+    "category": "kraft",
+    "pattern": "hueftstreckung",
+    "muscles": {
+      "primary": [
+        "gesaess",
+        "adduktoren"
+      ],
+      "secondary": [
+        "beinbeuger",
+        "quadrizeps",
+        "unterer-ruecken",
+        "unterarme"
+      ]
+    },
+    "loads": [
+      "unterer-ruecken",
+      "huefte",
+      "knie"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 150,
+    "media": {
+      "source": "workout-guide",
+      "ref": "sumo-deadlift"
+    }
+  },
+  {
+    "id": "rumaenisches-kreuzheben-kurzhantel",
+    "name": "Rumänisches Kreuzheben (Kurzhantel)",
+    "en": "Dumbbell Romanian Deadlift",
+    "aliases": [
+      "RDL Kurzhantel"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "hueftstreckung",
+    "muscles": {
+      "primary": [
+        "beinbeuger",
+        "gesaess"
+      ],
+      "secondary": [
+        "unterer-ruecken",
+        "unterarme"
+      ]
+    },
+    "loads": [
+      "unterer-ruecken",
+      "huefte"
+    ],
+    "level": "einsteiger",
+    "restSec": 90,
+    "media": {
+      "source": "workout-guide",
+      "ref": "dumbbell-romanian-deadlift"
+    }
+  },
+  {
+    "id": "ausfallschritt-rueckwaerts",
+    "name": "Ausfallschritt rückwärts (Kurzhantel)",
+    "en": "Reverse Lunge",
+    "aliases": [
+      "Reverse Lunge",
+      "Rückwärts-Ausfallschritt"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "ausfallschritt",
+    "muscles": {
+      "primary": [
+        "quadrizeps",
+        "gesaess"
+      ],
+      "secondary": [
+        "beinbeuger",
+        "adduktoren"
+      ]
+    },
+    "loads": [
+      "knie",
+      "huefte"
+    ],
+    "level": "einsteiger",
+    "restSec": 90,
+    "media": {
+      "source": "workout-guide",
+      "ref": "reverse-lunge"
+    }
+  },
+  {
+    "id": "split-squat",
+    "name": "Split Squat (Kurzhantel)",
+    "en": "Split Squat",
+    "aliases": [
+      "Statischer Ausfallschritt"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "ausfallschritt",
+    "muscles": {
+      "primary": [
+        "quadrizeps",
+        "gesaess"
+      ],
+      "secondary": [
+        "adduktoren",
+        "beinbeuger"
+      ]
+    },
+    "loads": [
+      "knie",
+      "huefte"
+    ],
+    "level": "einsteiger",
+    "restSec": 90,
+    "media": {
+      "source": "workout-guide",
+      "ref": "split-squat"
+    }
+  },
+  {
+    "id": "ausfallschritt-seitlich",
+    "name": "Seitlicher Ausfallschritt (Kurzhantel)",
+    "en": "Lateral Lunge",
+    "aliases": [
+      "Seitausfallschritt",
+      "Side Lunge"
+    ],
+    "equipment": "kurzhantel",
+    "category": "kraft",
+    "pattern": "ausfallschritt",
+    "muscles": {
+      "primary": [
+        "quadrizeps",
+        "adduktoren"
+      ],
+      "secondary": [
+        "gesaess"
+      ]
+    },
+    "loads": [
+      "knie",
+      "huefte"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "dumbbell-lateral-lunge"
+    }
+  },
+  {
+    "id": "kniebeuge-multipresse",
+    "name": "Kniebeuge an der Multipresse",
+    "en": "Smith Machine Squat",
+    "aliases": [
+      "Smith-Maschine Kniebeuge"
+    ],
+    "equipment": "maschine",
+    "category": "kraft",
+    "pattern": "kniebeuge",
+    "muscles": {
+      "primary": [
+        "quadrizeps",
+        "gesaess"
+      ],
+      "secondary": [
+        "adduktoren",
+        "beinbeuger"
+      ]
+    },
+    "loads": [
+      "knie",
+      "huefte"
+    ],
+    "level": "einsteiger",
+    "restSec": 120,
+    "media": {
+      "source": "workout-guide",
+      "ref": "smith-machine-squat"
+    }
+  },
+  {
+    "id": "wadenheben-beinpresse",
+    "name": "Wadenheben an der Beinpresse",
+    "en": "Leg Press Calf Raise",
+    "aliases": [
+      "Wadendrücken Beinpresse"
+    ],
+    "equipment": "maschine",
+    "category": "kraft",
+    "pattern": "wadenheben",
+    "muscles": {
+      "primary": [
+        "waden"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "sprunggelenk"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "leg-press-calf-raise"
+    }
+  },
+  {
+    "id": "wadenheben-einbeinig",
+    "name": "Wadenheben einbeinig",
+    "en": "Single-Leg Calf Raise",
+    "aliases": [
+      "Einbeiniges Wadenheben"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "wadenheben",
+    "muscles": {
+      "primary": [
+        "waden"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "sprunggelenk"
+    ],
+    "level": "einsteiger",
+    "restSec": 45,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "single-leg-calf-raise"
+    }
+  },
+  {
+    "id": "nordic-curl",
+    "name": "Nordic Curl",
+    "en": "Nordic Hamstring Curl",
+    "aliases": [
+      "Nordic Hamstring Curl"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "beinbeugen",
+    "muscles": {
+      "primary": [
+        "beinbeuger"
+      ],
+      "secondary": [
+        "gesaess",
+        "waden"
+      ]
+    },
+    "loads": [
+      "knie"
+    ],
+    "level": "fortgeschritten",
+    "tags": [
+      "calisthenics"
+    ],
+    "restSec": 120,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "nordic-hamstring-curl"
+    }
+  },
+  {
+    "id": "kickback-kabel",
+    "name": "Kickback am Kabel",
+    "en": "Cable Glute Kickback",
+    "aliases": [
+      "Glute Kickback",
+      "Beinstrecken nach hinten"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "hueftstreckung",
+    "muscles": {
+      "primary": [
+        "gesaess"
+      ],
+      "secondary": [
+        "beinbeuger"
+      ]
+    },
+    "loads": [
+      "huefte",
+      "unterer-ruecken"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "cable-kickback"
+    }
+  },
+  {
+    "id": "abduktion-kabel",
+    "name": "Abduktion am Kabel, stehend",
+    "en": "Cable Hip Abduction",
+    "aliases": [
+      "Bein seitlich abspreizen"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "abduktion",
+    "muscles": {
+      "primary": [
+        "abduktoren",
+        "gesaess"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "huefte"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "cable-standing-hip-abduction"
+    }
+  },
+  {
+    "id": "kniebeuge-koerpergewicht",
+    "name": "Kniebeuge (Körpergewicht)",
+    "en": "Bodyweight Squat",
+    "aliases": [
+      "Air Squat",
+      "Kniebeuge ohne Gewicht"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "kniebeuge",
+    "muscles": {
+      "primary": [
+        "quadrizeps",
+        "gesaess"
+      ],
+      "secondary": [
+        "adduktoren"
+      ]
+    },
+    "loads": [
+      "knie",
+      "huefte"
+    ],
+    "level": "einsteiger",
+    "tags": [
+      "calisthenics"
+    ],
+    "restSec": 45,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "bodyweight-squat"
+    }
+  },
+  {
+    "id": "beckenheben-einbeinig",
+    "name": "Beckenheben einbeinig",
+    "en": "Single-Leg Glute Bridge",
+    "aliases": [
+      "Einbeinige Glute Bridge"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "hueftstreckung",
+    "muscles": {
+      "primary": [
+        "gesaess"
+      ],
+      "secondary": [
+        "beinbeuger",
+        "bauch"
+      ]
+    },
+    "loads": [
+      "huefte",
+      "unterer-ruecken"
+    ],
+    "level": "einsteiger",
+    "restSec": 45,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "single-leg-glute-bridge"
+    }
+  },
+  {
+    "id": "wandsitzen",
+    "name": "Wandsitzen",
+    "en": "Wall Sit",
+    "aliases": [
+      "Wall Sit",
+      "Stuhl an der Wand"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "kniebeuge",
+    "muscles": {
+      "primary": [
+        "quadrizeps"
+      ],
+      "secondary": [
+        "gesaess"
+      ]
+    },
+    "loads": [
+      "knie"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "noWeight": true,
+    "mode": "hold",
+    "holdSec": 30,
+    "media": {
+      "source": "workout-guide",
+      "ref": "wall-sit"
+    }
+  },
+  {
     "id": "unterarmstuetz",
     "name": "Unterarmstütz",
     "en": "Plank",
@@ -1774,6 +3352,246 @@ export const LIBRARY_INDEX: LibraryIndexEntry[] = [
     }
   },
   {
+    "id": "beinheben-liegend",
+    "name": "Beinheben liegend",
+    "en": "Lying Leg Raise",
+    "aliases": [
+      "Leg Raise"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "rumpfbeuge",
+    "muscles": {
+      "primary": [
+        "bauch"
+      ],
+      "secondary": [
+        "seitliche-bauchmuskeln"
+      ]
+    },
+    "loads": [
+      "unterer-ruecken"
+    ],
+    "level": "einsteiger",
+    "restSec": 45,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "lying-leg-raise"
+    }
+  },
+  {
+    "id": "reverse-crunch",
+    "name": "Reverse Crunch",
+    "en": "Reverse Crunch",
+    "aliases": [
+      "Umgekehrter Crunch"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "rumpfbeuge",
+    "muscles": {
+      "primary": [
+        "bauch"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "unterer-ruecken"
+    ],
+    "level": "einsteiger",
+    "restSec": 45,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "reverse-crunch"
+    }
+  },
+  {
+    "id": "russian-twist",
+    "name": "Russian Twist",
+    "en": "Russian Twist",
+    "aliases": [
+      "Russische Drehung"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "rumpfrotation",
+    "muscles": {
+      "primary": [
+        "seitliche-bauchmuskeln"
+      ],
+      "secondary": [
+        "bauch"
+      ]
+    },
+    "loads": [
+      "unterer-ruecken"
+    ],
+    "level": "einsteiger",
+    "restSec": 45,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "russian-twist"
+    }
+  },
+  {
+    "id": "mountain-climber",
+    "name": "Mountain Climber",
+    "en": "Mountain Climber",
+    "aliases": [
+      "Bergsteiger"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "rumpf-stabilitaet",
+    "muscles": {
+      "primary": [
+        "bauch"
+      ],
+      "secondary": [
+        "schulter-vorne",
+        "quadrizeps"
+      ]
+    },
+    "loads": [
+      "handgelenk",
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "restSec": 45,
+    "noWeight": true,
+    "mode": "hold",
+    "holdSec": 30,
+    "media": {
+      "source": "workout-guide",
+      "ref": "mountain-climber"
+    }
+  },
+  {
+    "id": "holzhacker-kabel",
+    "name": "Holzhacker am Kabel",
+    "en": "Cable Woodchop",
+    "aliases": [
+      "Woodchopper",
+      "Holzhacken am Kabel"
+    ],
+    "equipment": "seilzug",
+    "category": "kraft",
+    "pattern": "rumpfrotation",
+    "muscles": {
+      "primary": [
+        "seitliche-bauchmuskeln"
+      ],
+      "secondary": [
+        "bauch",
+        "schulter-vorne"
+      ]
+    },
+    "loads": [
+      "unterer-ruecken"
+    ],
+    "level": "einsteiger",
+    "restSec": 60,
+    "media": {
+      "source": "workout-guide",
+      "ref": "cable-woodchop"
+    }
+  },
+  {
+    "id": "knieheben-haengend",
+    "name": "Knieheben hängend",
+    "en": "Hanging Knee Raise",
+    "aliases": [
+      "Knee Raise"
+    ],
+    "equipment": "klimmzugstange",
+    "category": "kraft",
+    "pattern": "rumpfbeuge",
+    "muscles": {
+      "primary": [
+        "bauch"
+      ],
+      "secondary": [
+        "unterarme"
+      ]
+    },
+    "loads": [
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "tags": [
+      "calisthenics"
+    ],
+    "restSec": 60,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "hanging-knee-raise"
+    }
+  },
+  {
+    "id": "ab-roller",
+    "name": "Ab-Roller",
+    "en": "Ab Wheel Rollout",
+    "aliases": [
+      "Bauchroller",
+      "Ab Wheel"
+    ],
+    "equipment": "sonstiges",
+    "category": "kraft",
+    "pattern": "rumpf-stabilitaet",
+    "muscles": {
+      "primary": [
+        "bauch"
+      ],
+      "secondary": [
+        "lat",
+        "schulter-vorne"
+      ]
+    },
+    "loads": [
+      "unterer-ruecken",
+      "schulter"
+    ],
+    "level": "fortgeschritten",
+    "restSec": 60,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "ab-wheel"
+    }
+  },
+  {
+    "id": "fahrrad-crunch",
+    "name": "Fahrrad-Crunch",
+    "en": "Bicycle Crunch",
+    "aliases": [
+      "Bicycle Crunch"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "kraft",
+    "pattern": "rumpfrotation",
+    "muscles": {
+      "primary": [
+        "bauch",
+        "seitliche-bauchmuskeln"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "nacken"
+    ],
+    "level": "einsteiger",
+    "restSec": 45,
+    "noWeight": true,
+    "media": {
+      "source": "workout-guide",
+      "ref": "bicycle-crunch"
+    }
+  },
+  {
     "id": "kettlebell-swing",
     "name": "Kettlebell-Swing",
     "en": "Kettlebell Swing",
@@ -1834,6 +3652,194 @@ export const LIBRARY_INDEX: LibraryIndexEntry[] = [
     "media": {
       "source": "workout-guide",
       "ref": "kettlebell-romanian-deadlift"
+    }
+  },
+  {
+    "id": "katze-kuh",
+    "name": "Katze-Kuh",
+    "en": "Cat-Cow Stretch",
+    "aliases": [
+      "Katzenbuckel"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "mobilitaet",
+    "pattern": "mobilitaet",
+    "muscles": {
+      "primary": [
+        "unterer-ruecken"
+      ],
+      "secondary": [
+        "oberer-ruecken"
+      ]
+    },
+    "loads": [
+      "handgelenk"
+    ],
+    "level": "einsteiger",
+    "restSec": 30,
+    "noWeight": true,
+    "mode": "hold",
+    "holdSec": 30,
+    "media": {
+      "source": "workout-guide",
+      "ref": "cat-cow-stretch"
+    }
+  },
+  {
+    "id": "hueftbeuger-dehnung",
+    "name": "Hüftbeuger-Dehnung kniend",
+    "en": "Kneeling Hip Flexor Stretch",
+    "aliases": [
+      "Hüftbeuger dehnen"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "mobilitaet",
+    "pattern": "mobilitaet",
+    "muscles": {
+      "primary": [
+        "quadrizeps"
+      ],
+      "secondary": [
+        "gesaess"
+      ]
+    },
+    "loads": [
+      "knie"
+    ],
+    "level": "einsteiger",
+    "restSec": 30,
+    "noWeight": true,
+    "mode": "hold",
+    "holdSec": 30,
+    "media": {
+      "source": "workout-guide",
+      "ref": "kneeling-hip-flexor-stretch"
+    }
+  },
+  {
+    "id": "brustdehnung-tuer",
+    "name": "Brustdehnung im Türrahmen",
+    "en": "Doorway Chest Stretch",
+    "aliases": [
+      "Türrahmen-Dehnung"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "mobilitaet",
+    "pattern": "mobilitaet",
+    "muscles": {
+      "primary": [
+        "brust"
+      ],
+      "secondary": [
+        "schulter-vorne"
+      ]
+    },
+    "loads": [
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "restSec": 30,
+    "noWeight": true,
+    "mode": "hold",
+    "holdSec": 30,
+    "media": {
+      "source": "workout-guide",
+      "ref": "doorway-chest-stretch"
+    }
+  },
+  {
+    "id": "schulter-querdehnung",
+    "name": "Schulterdehnung quer",
+    "en": "Cross-Body Shoulder Stretch",
+    "aliases": [
+      "Querdehnung Schulter"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "mobilitaet",
+    "pattern": "mobilitaet",
+    "muscles": {
+      "primary": [
+        "schulter-hinten"
+      ],
+      "secondary": []
+    },
+    "loads": [
+      "schulter"
+    ],
+    "level": "einsteiger",
+    "restSec": 30,
+    "noWeight": true,
+    "mode": "hold",
+    "holdSec": 30,
+    "media": {
+      "source": "workout-guide",
+      "ref": "cross-body-shoulder-stretch"
+    }
+  },
+  {
+    "id": "weltbeste-dehnung",
+    "name": "World's Greatest Stretch",
+    "en": "World's Greatest Stretch",
+    "aliases": [
+      "Weltbeste Dehnung"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "mobilitaet",
+    "pattern": "mobilitaet",
+    "muscles": {
+      "primary": [
+        "gesaess"
+      ],
+      "secondary": [
+        "quadrizeps",
+        "beinbeuger",
+        "oberer-ruecken"
+      ]
+    },
+    "loads": [
+      "huefte",
+      "knie"
+    ],
+    "level": "einsteiger",
+    "restSec": 30,
+    "noWeight": true,
+    "mode": "hold",
+    "holdSec": 30,
+    "media": {
+      "source": "workout-guide",
+      "ref": "worlds-greatest-stretch"
+    }
+  },
+  {
+    "id": "kindhaltung",
+    "name": "Kindhaltung",
+    "en": "Child's Pose",
+    "aliases": [
+      "Child's Pose",
+      "Päckchen"
+    ],
+    "equipment": "koerpergewicht",
+    "category": "mobilitaet",
+    "pattern": "mobilitaet",
+    "muscles": {
+      "primary": [
+        "unterer-ruecken"
+      ],
+      "secondary": [
+        "lat"
+      ]
+    },
+    "loads": [
+      "knie"
+    ],
+    "level": "einsteiger",
+    "restSec": 30,
+    "noWeight": true,
+    "mode": "hold",
+    "holdSec": 30,
+    "media": {
+      "source": "workout-guide",
+      "ref": "childs-pose"
     }
   }
 ]
