@@ -13,7 +13,7 @@ describe('Rundreise: nichts geht verloren', () => {
     expect(migrateAppData(viaJson(full))).toEqual(full)
   })
 
-  it('Export → Prüfung → „Alles ersetzen“ ergibt dieselben Übungen, Vorlagen, Trainings und Einstellungen', () => {
+  it('Export → Prüfung → „Alles ersetzen“ ergibt dieselben Übungen, Vorlagen, Trainings, Programme, Schonungen und Einstellungen', () => {
     const full = fullAppData()
     const file = viaJson(buildBackup(full, '0.1.0'))
     const checked = validateBackup(file)
@@ -22,6 +22,8 @@ describe('Rundreise: nichts geht verloren', () => {
     expect(checked.backup.exercises).toEqual(full.exercises)
     expect(checked.backup.templates).toEqual(full.templates)
     expect(checked.backup.workouts).toEqual(full.workouts)
+    expect(checked.backup.programs).toEqual(full.programs)
+    expect(checked.backup.restrictions).toEqual(full.restrictions)
     expect(checked.backup.settings).toEqual(full.settings)
 
     const local = createSeedData('2026-09-01T00:00:00.000Z')
@@ -29,6 +31,8 @@ describe('Rundreise: nichts geht verloren', () => {
     expect(data.exercises).toEqual(full.exercises)
     expect(data.templates).toEqual(full.templates)
     expect(data.workouts).toEqual(full.workouts)
+    expect(data.programs).toEqual(full.programs)
+    expect(data.restrictions).toEqual(full.restrictions)
     expect(data.settings).toEqual(full.settings)
   })
 

@@ -121,3 +121,34 @@ describe('Import anwenden (F13, AK23, AK28)', () => {
     expect(r.data.timer).toBeNull()
   })
 })
+
+describe('Programme und Schonung in der Sicherung (Schema 9)', () => {
+  const AT = '2026-09-10T00:00:00.000Z'
+  const program = { id: 'prg-1', name: 'Ganzkörper A/B', goal: 'muskelaufbau' as const, sessionsPerWeek: 3, days: [{ id: 'd1', name: 'A', templateId: 'tpl-oberkoerper-fokus-schulter' }], createdAt: AT, updatedAt: AT }
+  const restriction = { id: 'rs-1', bodyParts: ['schulter' as const], muscles: [], createdAt: AT, updatedAt: AT }
+
+  it('ältere Sicherung ohne Programme ist gültig und ergibt leere Listen', () => {
+    const { programs: _p, restrictions: _r, ...old } = buildBackup(data, '0.1.0')
+    const r = validateBackup(JSON.parse(JSON.stringify({ ...old, schemaVersion: 8 })))
+    expect(r.ok).toBe(true)
+    if (!r.ok) return
+    expect(r.backup.programs).toEqual([])
+    expect(r.backup.restrictions).toEqual([])
+    expect(summarizeBackup(r.backup).programs).toBe(0)
+  })
+
+  it('lehnt „programs“ ab, wenn es keine Liste ist', () => {
+    const r = validateBackup({ ...JSON.parse(JSON.stringify(buildBackup(data, '0.1.0'))), programs: {} })
+    expect(r.ok).toBe(false)
+  })
+
+  it('Zusammenführen und Ersetzen übernehmen Programme und Schonungen', () => {
+    const file = buildBackup({ ...data, programs: [program], restrictions: [restriction] }, '0.1.0')
+    const merged = applyImport(data, file, 'merge')
+    expect(merged.data.programs).toEqual([program])
+    expect(merged.data.restrictions).toEqual([restriction])
+    expect(merged.added.programs).toBe(1)
+    const replaced = applyImport({ ...data, programs: [{ ...program, id: 'prg-alt' }] }, file, 'replace')
+    expect(replaced.data.programs.map((p) => p.id)).toEqual(['prg-1'])
+  })
+})

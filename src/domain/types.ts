@@ -1,8 +1,8 @@
 /** Datenmodell der App (SPEC.md Abschnitt 5). Alle Zeitstempel sind ISO-8601-Strings. */
 
-import type { Category, Equipment, MuscleSet, Pattern } from './taxonomy.ts'
+import type { BodyPart, Category, Equipment, Muscle, MuscleSet, Pattern } from './taxonomy.ts'
 
-export const SCHEMA_VERSION = 8 as const
+export const SCHEMA_VERSION = 9 as const
 
 export type ExerciseMode = 'reps' | 'hold'
 
@@ -48,6 +48,8 @@ export interface Exercise {
   muscles?: MuscleSet
   category?: Category
   pattern?: Pattern
+  /** Eigene belastete Körperbereiche (fürs Schonen); überschreibt die Bibliothek. */
+  loads?: BodyPart[]
   archived: boolean
   createdAt: string
   updatedAt: string
@@ -56,12 +58,52 @@ export interface Exercise {
 export interface TemplateEntry {
   exerciseId: string
   sets: number
+  /** Zielbereich der Wiederholungen (z. B. 8–12); fehlt → kein Ziel. */
+  repMin?: number
+  repMax?: number
+  /** Pause in Sekunden für diese Übung in dieser Vorlage; fehlt → Pause der Übung. */
+  restSec?: number
+  note?: string
 }
 
 export interface Template {
   id: string
   name: string
   entries: TemplateEntry[]
+  /** Gesetzt bei Tages-Vorlagen eines Programms (erscheinen dann nicht in der Vorlagen-Liste). */
+  programId?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type ProgramGoal = 'muskelaufbau' | 'fitness'
+
+export interface ProgramDay {
+  id: string
+  name: string
+  templateId: string
+}
+
+/** Trainingsprogramm: Folge von Tagen, jeder Tag ist eine eigene Vorlage. Immer die Kopie des Nutzers. */
+export interface Program {
+  id: string
+  name: string
+  goal: ProgramGoal
+  sessionsPerWeek: number
+  days: ProgramDay[]
+  /** Herkunft: ID eines mitgelieferten Programms oder eines duplizierten Programms. */
+  copiedFrom?: string
+  createdAt: string
+  updatedAt: string
+}
+
+/** Vorübergehend geschonte Körperbereiche und Muskeln, optional bis einschließlich `until` (JJJJ-MM-TT). */
+export interface Restriction {
+  id: string
+  bodyParts: BodyPart[]
+  muscles: Muscle[]
+  note?: string
+  until?: string
   createdAt: string
   updatedAt: string
 }
@@ -90,6 +132,10 @@ export interface HoldState {
 
 export interface WorkoutEntry {
   exerciseId: string
+  /** Beim Start aus der Vorlage kopiert (spätere Änderungen der Vorlage ändern die Historie nicht). */
+  repMin?: number
+  repMax?: number
+  restSec?: number
   note?: string
   sets: WorkoutSet[]
   hold?: HoldState
@@ -103,6 +149,8 @@ export interface Workout {
   finishedAt?: string
   status: WorkoutStatus
   templateId?: string
+  programId?: string
+  programDayId?: string
   note?: string
   entries: WorkoutEntry[]
   updatedAt: string
@@ -129,6 +177,10 @@ export interface Settings {
   weightStep: number
   /** Erscheinungsbild; 'system' folgt dem Gerät. */
   theme: ThemeSetting
+  /** Aktives Programm für „Nächstes Training“; fehlt → keins. */
+  activeProgramId?: string
+  /** Trainings pro Woche als Ziel. */
+  weeklyGoal: number
 }
 
 export interface Meta {
@@ -145,6 +197,8 @@ export interface AppData {
   exercises: Exercise[]
   templates: Template[]
   workouts: Workout[]
+  programs: Program[]
+  restrictions: Restriction[]
   settings: Settings
   timer: TimerState | null
   meta: Meta
@@ -158,6 +212,8 @@ export interface Backup {
   exercises: Exercise[]
   templates: Template[]
   workouts: Workout[]
+  programs: Program[]
+  restrictions: Restriction[]
   settings: Settings
 }
 
@@ -169,6 +225,7 @@ export const DEFAULT_SETTINGS: Settings = {
   keepScreenOn: true,
   weightStep: 2.5,
   theme: 'system',
+  weeklyGoal: 3,
 }
 
 export const BACKUP_APP_ID = 'personal-fitness-app'

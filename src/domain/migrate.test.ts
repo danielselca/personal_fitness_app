@@ -176,3 +176,31 @@ describe('Migration Schema 7 → 8 (Übungsbibliothek)', () => {
     expect(out.workouts).toEqual([workout])
   })
 })
+
+describe('Migration Schema 8 → 9 (Programme, Schonung)', () => {
+  const AT = '2026-09-01T00:00:00.000Z'
+  const v8 = (): Record<string, unknown> => {
+    const { programs: _p, restrictions: _r, ...d } = createSeedData(AT) as unknown as Record<string, unknown>
+    const { weeklyGoal: _w, ...settings } = d.settings as Record<string, unknown>
+    return { ...d, schemaVersion: 8, settings }
+  }
+
+  it('migrierter Seed entspricht einem frisch angelegten: leere Listen, Wochenziel 3, kein aktives Programm', () => {
+    const out = migrateAppData(v8())
+    expect(out).toEqual(createSeedData(AT))
+    expect(out.programs).toEqual([])
+    expect(out.restrictions).toEqual([])
+    expect(out.settings.weeklyGoal).toBe(3)
+    expect(out.settings.activeProgramId).toBeUndefined()
+  })
+
+  it('lässt Übungen, Vorlagen und Trainings unverändert', () => {
+    const d = v8()
+    const workout = { id: 'wo-1', startedAt: AT, finishedAt: AT, status: 'done', templateId: SEED_TEMPLATE_ID, updatedAt: AT, entries: [{ exerciseId: 'ex-lat-zug', sets: [{ id: 's1', weightKg: 45, reps: 10, done: true }] }] }
+    d.workouts = [workout]
+    const out = migrateAppData(structuredClone(d))
+    expect(out.workouts).toEqual([workout])
+    expect(out.exercises).toEqual(d.exercises)
+    expect(out.templates).toEqual(d.templates)
+  })
+})

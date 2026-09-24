@@ -1,6 +1,18 @@
 import { migrateAppData } from './migrate.ts'
-import { isBool, isIso, isNum, isObj, isStr, normalizeExercise, normalizeTemplate, normalizeWorkout } from './normalize.ts'
-import { BACKUP_APP_ID, SCHEMA_VERSION, type AppData, type Backup, type Exercise, type Template, type Workout } from './types.ts'
+import {
+  isBool,
+  isIso,
+  isNum,
+  isObj,
+  isStr,
+  normalizeExercise,
+  normalizeList,
+  normalizeProgram,
+  normalizeRestriction,
+  normalizeTemplate,
+  normalizeWorkout,
+} from './normalize.ts'
+import { BACKUP_APP_ID, SCHEMA_VERSION, type AppData, type Backup, type Exercise, type Program, type Restriction, type Template, type Workout } from './types.ts'
 
 /** Export (F12): vollständige Datenstruktur mit Version und Zeitstempel. */
 export function buildBackup(data: AppData, appVersion: string, now = new Date()): Backup {
@@ -12,6 +24,8 @@ export function buildBackup(data: AppData, appVersion: string, now = new Date())
     exercises: data.exercises,
     templates: data.templates,
     workouts: data.workouts,
+    programs: data.programs,
+    restrictions: data.restrictions,
     settings: data.settings,
   }
 }
@@ -88,6 +102,10 @@ export function validateBackup(raw: unknown): ValidationResult {
     })
   })
 
+  // Programme und Schonung gibt es erst ab Schema 9; in älteren Sicherungen fehlen sie.
+  for (const key of ['programs', 'restrictions'] as const) {
+    if (raw[key] !== undefined && !Array.isArray(raw[key])) errors.push(`Feld „${key}“ ist keine Liste.`)
+  }
   if (raw.settings !== undefined && !isObj(raw.settings)) errors.push('Feld „settings“ ist kein Objekt.')
   if (errors.length) return { ok: false, errors: errors.slice(0, 12) }
 
@@ -97,6 +115,8 @@ export function validateBackup(raw: unknown): ValidationResult {
     exercises: exercises.map((e) => normalizeExercise(e as Record<string, unknown>)),
     templates: templates.map((t) => normalizeTemplate(t as Record<string, unknown>)),
     workouts: workouts.map((w) => normalizeWorkout(w as Record<string, unknown>)),
+    programs: normalizeList(raw.programs, normalizeProgram),
+    restrictions: normalizeList(raw.restrictions, normalizeRestriction),
     settings: raw.settings ?? {},
   })
   const knownIds = new Set(migrated.exercises.map((e) => e.id))
@@ -115,6 +135,8 @@ export function validateBackup(raw: unknown): ValidationResult {
       exercises: migrated.exercises,
       templates: migrated.templates,
       workouts: migrated.workouts,
+      programs: migrated.programs,
+      restrictions: migrated.restrictions,
       settings: migrated.settings,
     },
   }
@@ -124,11 +146,18 @@ export interface ImportSummary {
   exercises: number
   templates: number
   workouts: number
+  programs: number
   exportedAt: string
 }
 
 export function summarizeBackup(b: Backup): ImportSummary {
-  return { exercises: b.exercises.length, templates: b.templates.length, workouts: b.workouts.length, exportedAt: b.exportedAt }
+  return {
+    exercises: b.exercises.length,
+    templates: b.templates.length,
+    workouts: b.workouts.length,
+    programs: b.programs.length,
+    exportedAt: b.exportedAt,
+  }
 }
 
 export type ImportMode = 'merge' | 'replace'
@@ -150,10 +179,18 @@ function mergeById<T extends { id: string; updatedAt: string }>(local: T[], inco
   return { items: Array.from(map.values()), added, updated }
 }
 
+export interface ImportCounts {
+  exercises: number
+  templates: number
+  workouts: number
+  programs: number
+  restrictions: number
+}
+
 export interface ImportResult {
   data: AppData
-  added: { exercises: number; templates: number; workouts: number }
-  updated: { exercises: number; templates: number; workouts: number }
+  added: ImportCounts
+  updated: ImportCounts
   skippedActiveWorkout: boolean
 }
 
@@ -170,11 +207,19 @@ export function applyImport(local: AppData, backup: Backup, mode: ImportMode): I
         exercises: backup.exercises,
         templates: backup.templates,
         workouts: backup.workouts,
+        programs: backup.programs,
+        restrictions: backup.restrictions,
         settings: { ...local.settings, ...backup.settings },
         timer: null,
       },
-      added: { exercises: backup.exercises.length, templates: backup.templates.length, workouts: backup.workouts.length },
-      updated: { exercises: 0, templates: 0, workouts: 0 },
+      added: {
+        exercises: backup.exercises.length,
+        templates: backup.templates.length,
+        workouts: backup.workouts.length,
+        programs: backup.programs.length,
+        restrictions: backup.restrictions.length,
+      },
+      updated: { exercises: 0, templates: 0, workouts: 0, programs: 0, restrictions: 0 },
       skippedActiveWorkout: false,
     }
   }
@@ -190,10 +235,12 @@ export function applyImport(local: AppData, backup: Backup, mode: ImportMode): I
     return true
   })
   const wo = mergeById<Workout>(local.workouts, incomingWorkouts)
+  const pr = mergeById<Program>(local.programs, backup.programs)
+  const rs = mergeById<Restriction>(local.restrictions, backup.restrictions)
   return {
-    data: { ...local, exercises: ex.items, templates: tp.items, workouts: wo.items },
-    added: { exercises: ex.added, templates: tp.added, workouts: wo.added },
-    updated: { exercises: ex.updated, templates: tp.updated, workouts: wo.updated },
+    data: { ...local, exercises: ex.items, templates: tp.items, workouts: wo.items, programs: pr.items, restrictions: rs.items },
+    added: { exercises: ex.added, templates: tp.added, workouts: wo.added, programs: pr.added, restrictions: rs.added },
+    updated: { exercises: ex.updated, templates: tp.updated, workouts: wo.updated, programs: pr.updated, restrictions: rs.updated },
     skippedActiveWorkout,
   }
 }
