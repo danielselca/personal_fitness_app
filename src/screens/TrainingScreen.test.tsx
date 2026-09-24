@@ -450,7 +450,9 @@ describe('Übungsauswahl mit Bibliothek (Schritt 17)', () => {
     fireEvent.change(within(dialog).getByLabelText('Übung suchen'), { target: { value: 'face' } })
     // Face Pull ist mit „Facepulls“ verknüpft → nur die eigene Übung, kein Doppel aus der Bibliothek
     expect(within(dialog).getByRole('button', { name: 'Facepulls' })).toBeTruthy()
-    expect(within(dialog).queryByRole('list', { name: 'Aus der Bibliothek' })).toBeNull()
+    const libFace = within(dialog).getByRole('list', { name: 'Aus der Bibliothek' })
+    expect(within(libFace).queryByRole('button', { name: 'Face Pull' })).toBeNull()
+    expect(within(libFace).getByRole('button', { name: 'Face Pull mit Band' })).toBeTruthy()
 
     fireEvent.change(within(dialog).getByLabelText('Übung suchen'), { target: { value: 'swing' } })
     addFromPicker(['Kettlebell-Swing'])

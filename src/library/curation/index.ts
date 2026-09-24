@@ -3,6 +3,7 @@ import { ARME } from './arme.ts'
 import { BEINE } from './beine.ts'
 import { BRUST } from './brust.ts'
 import { KETTLEBELL } from './kettlebell.ts'
+import { MOBILITAET } from './mobilitaet.ts'
 import { RUECKEN } from './ruecken.ts'
 import { RUMPF } from './rumpf.ts'
 import { SCHULTERN } from './schultern.ts'
@@ -12,4 +13,4 @@ import { SCHULTERN } from './schultern.ts'
  * `npm run library` in `index.generated.ts` (sofort geladen) und `details.generated.ts`
  * (Tipps/Fehler, nachgeladen) aufgeteilt.
  */
-export const CURATED: LibraryEntry[] = [...BRUST, ...RUECKEN, ...SCHULTERN, ...ARME, ...BEINE, ...RUMPF, ...KETTLEBELL]
+export const CURATED: LibraryEntry[] = [...BRUST, ...RUECKEN, ...SCHULTERN, ...ARME, ...BEINE, ...RUMPF, ...KETTLEBELL, ...MOBILITAET]

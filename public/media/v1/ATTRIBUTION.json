@@ -190,6 +190,172 @@
       "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
     }
   ],
+  "schraegbank-langhantel": [
+    {
+      "file": "ex/schraegbank-langhantel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-bench-press/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0043-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/schraegbank-langhantel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-bench-press/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/schraegbank-langhantel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-bench-press/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "negativbankdruecken": [
+    {
+      "file": "ex/negativbankdruecken-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/decline-bench-press/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0051-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/negativbankdruecken-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/decline-bench-press/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/negativbankdruecken-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/decline-bench-press/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "fliegende-kurzhantel": [
+    {
+      "file": "ex/fliegende-kurzhantel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-fly/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0056-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/fliegende-kurzhantel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-fly/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/fliegende-kurzhantel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-fly/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "kabel-fliegende-unten": [
+    {
+      "file": "ex/kabel-fliegende-unten-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-cable-fly/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0060-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kabel-fliegende-unten-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-cable-fly/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kabel-fliegende-unten-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-cable-fly/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "bankdruecken-multipresse": [
+    {
+      "file": "ex/bankdruecken-multipresse-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/smith-machine-bench-press/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0078-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/bankdruecken-multipresse-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/smith-machine-bench-press/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/bankdruecken-multipresse-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/smith-machine-bench-press/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "liegestuetz-erhoeht": [
+    {
+      "file": "ex/liegestuetz-erhoeht-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-push-up/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/liegestuetz-erhoeht-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-push-up/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/liegestuetz-erhoeht-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-push-up/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "liegestuetz-eng": [
+    {
+      "file": "ex/liegestuetz-eng-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/diamond-push-up/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/liegestuetz-eng-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/diamond-push-up/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/liegestuetz-eng-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/diamond-push-up/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
   "latzug-breit": [
     {
       "file": "ex/latzug-breit-1.svg",
@@ -443,6 +609,265 @@
       "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
     }
   ],
+  "langhantelrudern": [
+    {
+      "file": "ex/langhantelrudern-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/barbell-row/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0026-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/langhantelrudern-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/barbell-row/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/langhantelrudern-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/barbell-row/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "t-bar-rudern": [
+    {
+      "file": "ex/t-bar-rudern-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/t-bar-row/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0029-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/t-bar-rudern-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/t-bar-row/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/t-bar-rudern-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/t-bar-row/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "rudern-kurzhantel-beidarmig": [
+    {
+      "file": "ex/rudern-kurzhantel-beidarmig-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-bent-over-row/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/rudern-kurzhantel-beidarmig-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-bent-over-row/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/rudern-kurzhantel-beidarmig-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-bent-over-row/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "rudern-kabel-einarmig": [
+    {
+      "file": "ex/rudern-kabel-einarmig-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/single-arm-cable-row/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/rudern-kabel-einarmig-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/single-arm-cable-row/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/rudern-kabel-einarmig-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/single-arm-cable-row/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "latzug-gestreckte-arme": [
+    {
+      "file": "ex/latzug-gestreckte-arme-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/straight-arm-pulldown/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0092-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/latzug-gestreckte-arme-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/straight-arm-pulldown/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/latzug-gestreckte-arme-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/straight-arm-pulldown/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "klimmzug-untergriff": [
+    {
+      "file": "ex/klimmzug-untergriff-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/chin-up/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0090-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/klimmzug-untergriff-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/chin-up/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/klimmzug-untergriff-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/chin-up/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "klimmzug-neutral": [
+    {
+      "file": "ex/klimmzug-neutral-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/neutral-grip-pull-up/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0090-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/klimmzug-neutral-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/neutral-grip-pull-up/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/klimmzug-neutral-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/neutral-grip-pull-up/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "klimmzug-negativ": [
+    {
+      "file": "ex/klimmzug-negativ-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/negative-pull-up/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/klimmzug-negativ-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/negative-pull-up/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/klimmzug-negativ-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/negative-pull-up/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "schulterheben-kurzhantel": [
+    {
+      "file": "ex/schulterheben-kurzhantel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-shrug/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0005-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/schulterheben-kurzhantel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-shrug/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/schulterheben-kurzhantel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-shrug/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "face-pull-band": [
+    {
+      "file": "ex/face-pull-band-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/banded-face-pull/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/face-pull-band-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/banded-face-pull/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/face-pull-band-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/banded-face-pull/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "superman": [
+    {
+      "file": "ex/superman-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/superman/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/superman-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/superman/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/superman-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/superman/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
   "schulterpresse-maschine": [
     {
       "file": "ex/schulterpresse-maschine-1.svg",
@@ -629,6 +1054,192 @@
       "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
     }
   ],
+  "schulterdruecken-langhantel": [
+    {
+      "file": "ex/schulterdruecken-langhantel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/overhead-press/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/schulterdruecken-langhantel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/overhead-press/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/schulterdruecken-langhantel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/overhead-press/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "arnold-press": [
+    {
+      "file": "ex/arnold-press-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/arnold-press/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/arnold-press-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/arnold-press/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/arnold-press-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/arnold-press/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "aufrechtes-rudern": [
+    {
+      "file": "ex/aufrechtes-rudern-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/upright-row/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0014-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/aufrechtes-rudern-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/upright-row/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/aufrechtes-rudern-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/upright-row/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "seitheben-maschine": [
+    {
+      "file": "ex/seitheben-maschine-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/machine-lateral-raise/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/seitheben-maschine-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/machine-lateral-raise/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/seitheben-maschine-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/machine-lateral-raise/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "frontheben-kabel": [
+    {
+      "file": "ex/frontheben-kabel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-front-raise/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0008-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/frontheben-kabel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-front-raise/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/frontheben-kabel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-front-raise/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "reverse-fliegende-kabel": [
+    {
+      "file": "ex/reverse-fliegende-kabel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-rear-delt-fly/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/reverse-fliegende-kabel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-rear-delt-fly/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/reverse-fliegende-kabel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-rear-delt-fly/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "pike-liegestuetz": [
+    {
+      "file": "ex/pike-liegestuetz-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/pike-push-up/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/pike-liegestuetz-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/pike-push-up/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/pike-liegestuetz-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/pike-push-up/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "band-pull-apart": [
+    {
+      "file": "ex/band-pull-apart-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/band-pull-apart/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/band-pull-apart-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/band-pull-apart/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/band-pull-apart-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/band-pull-apart/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
   "bizepscurl-kurzhantel": [
     {
       "file": "ex/bizepscurl-kurzhantel-1.svg",
@@ -745,6 +1356,246 @@
       "creator": "Bryl Lim",
       "license": "CC BY-SA 4.0",
       "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/overhead-tricep-extension/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "kabel-curl": [
+    {
+      "file": "ex/kabel-curl-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-curl/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0212-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kabel-curl-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-curl/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kabel-curl-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-curl/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "scott-curl": [
+    {
+      "file": "ex/scott-curl-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/preacher-curl/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0236-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/scott-curl-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/preacher-curl/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/scott-curl-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/preacher-curl/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "konzentrations-curl": [
+    {
+      "file": "ex/konzentrations-curl-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/concentration-curl/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0220-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/konzentrations-curl-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/concentration-curl/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/konzentrations-curl-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/concentration-curl/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "schraegbank-curl": [
+    {
+      "file": "ex/schraegbank-curl-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-dumbbell-curl/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0214-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/schraegbank-curl-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-dumbbell-curl/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/schraegbank-curl-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/incline-dumbbell-curl/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "hammercurl-seil": [
+    {
+      "file": "ex/hammercurl-seil-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/rope-hammer-curl/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0216-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/hammercurl-seil-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/rope-hammer-curl/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/hammercurl-seil-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/rope-hammer-curl/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "trizepsdruecken-seil": [
+    {
+      "file": "ex/trizepsdruecken-seil-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/rope-tricep-pushdown/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0206-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/trizepsdruecken-seil-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/rope-tricep-pushdown/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/trizepsdruecken-seil-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/rope-tricep-pushdown/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "stirndruecken-langhantel": [
+    {
+      "file": "ex/stirndruecken-langhantel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/skull-crusher/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0183-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/stirndruecken-langhantel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/skull-crusher/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/stirndruecken-langhantel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/skull-crusher/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "trizeps-kickback": [
+    {
+      "file": "ex/trizeps-kickback-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/tricep-kickback/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0204-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/trizeps-kickback-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/tricep-kickback/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/trizeps-kickback-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/tricep-kickback/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "bankdruecken-eng": [
+    {
+      "file": "ex/bankdruecken-eng-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/close-grip-bench-press/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0049-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/bankdruecken-eng-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/close-grip-bench-press/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/bankdruecken-eng-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/close-grip-bench-press/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "dips-maschine-unterstuetzt": [
+    {
+      "file": "ex/dips-maschine-unterstuetzt-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/assisted-dip/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0171-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/dips-maschine-unterstuetzt-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/assisted-dip/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/dips-maschine-unterstuetzt-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/assisted-dip/frame-3.svg",
       "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
     }
   ],
@@ -1151,6 +2002,356 @@
       "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
     }
   ],
+  "frontkniebeuge": [
+    {
+      "file": "ex/frontkniebeuge-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/front-squat/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0138-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/frontkniebeuge-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/front-squat/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/frontkniebeuge-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/front-squat/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "sumo-kreuzheben": [
+    {
+      "file": "ex/sumo-kreuzheben-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/sumo-deadlift/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/sumo-kreuzheben-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/sumo-deadlift/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/sumo-kreuzheben-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/sumo-deadlift/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "rumaenisches-kreuzheben-kurzhantel": [
+    {
+      "file": "ex/rumaenisches-kreuzheben-kurzhantel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-romanian-deadlift/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/rumaenisches-kreuzheben-kurzhantel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-romanian-deadlift/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/rumaenisches-kreuzheben-kurzhantel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-romanian-deadlift/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "ausfallschritt-rueckwaerts": [
+    {
+      "file": "ex/ausfallschritt-rueckwaerts-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/reverse-lunge/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0129-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/ausfallschritt-rueckwaerts-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/reverse-lunge/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/ausfallschritt-rueckwaerts-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/reverse-lunge/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "split-squat": [
+    {
+      "file": "ex/split-squat-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/split-squat/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/split-squat-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/split-squat/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/split-squat-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/split-squat/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "ausfallschritt-seitlich": [
+    {
+      "file": "ex/ausfallschritt-seitlich-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-lateral-lunge/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/ausfallschritt-seitlich-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-lateral-lunge/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/ausfallschritt-seitlich-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/dumbbell-lateral-lunge/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "kniebeuge-multipresse": [
+    {
+      "file": "ex/kniebeuge-multipresse-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/smith-machine-squat/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0124-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kniebeuge-multipresse-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/smith-machine-squat/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kniebeuge-multipresse-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/smith-machine-squat/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "wadenheben-beinpresse": [
+    {
+      "file": "ex/wadenheben-beinpresse-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/leg-press-calf-raise/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0273-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/wadenheben-beinpresse-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/leg-press-calf-raise/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/wadenheben-beinpresse-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/leg-press-calf-raise/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "wadenheben-einbeinig": [
+    {
+      "file": "ex/wadenheben-einbeinig-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/single-leg-calf-raise/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/wadenheben-einbeinig-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/single-leg-calf-raise/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/wadenheben-einbeinig-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/single-leg-calf-raise/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "nordic-curl": [
+    {
+      "file": "ex/nordic-curl-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/nordic-hamstring-curl/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/nordic-curl-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/nordic-hamstring-curl/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/nordic-curl-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/nordic-hamstring-curl/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "kickback-kabel": [
+    {
+      "file": "ex/kickback-kabel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-kickback/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0112-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kickback-kabel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-kickback/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kickback-kabel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-kickback/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "abduktion-kabel": [
+    {
+      "file": "ex/abduktion-kabel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-standing-hip-abduction/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/abduktion-kabel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-standing-hip-abduction/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/abduktion-kabel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-standing-hip-abduction/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "kniebeuge-koerpergewicht": [
+    {
+      "file": "ex/kniebeuge-koerpergewicht-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/bodyweight-squat/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kniebeuge-koerpergewicht-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/bodyweight-squat/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kniebeuge-koerpergewicht-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/bodyweight-squat/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "beckenheben-einbeinig": [
+    {
+      "file": "ex/beckenheben-einbeinig-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/single-leg-glute-bridge/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/beckenheben-einbeinig-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/single-leg-glute-bridge/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/beckenheben-einbeinig-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/single-leg-glute-bridge/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "wandsitzen": [
+    {
+      "file": "ex/wandsitzen-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/wall-sit/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/wandsitzen-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/wall-sit/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/wandsitzen-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/wall-sit/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
   "unterarmstuetz": [
     {
       "file": "ex/unterarmstuetz-1.svg",
@@ -1361,6 +2562,193 @@
       "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
     }
   ],
+  "beinheben-liegend": [
+    {
+      "file": "ex/beinheben-liegend-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/lying-leg-raise/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/beinheben-liegend-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/lying-leg-raise/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/beinheben-liegend-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/lying-leg-raise/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "reverse-crunch": [
+    {
+      "file": "ex/reverse-crunch-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/reverse-crunch/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0287-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/reverse-crunch-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/reverse-crunch/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/reverse-crunch-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/reverse-crunch/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "russian-twist": [
+    {
+      "file": "ex/russian-twist-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/russian-twist/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/russian-twist-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/russian-twist/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/russian-twist-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/russian-twist/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "mountain-climber": [
+    {
+      "file": "ex/mountain-climber-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/mountain-climber/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/mountain-climber-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/mountain-climber/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/mountain-climber-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/mountain-climber/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "holzhacker-kabel": [
+    {
+      "file": "ex/holzhacker-kabel-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-woodchop/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/holzhacker-kabel-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-woodchop/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/holzhacker-kabel-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cable-woodchop/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "knieheben-haengend": [
+    {
+      "file": "ex/knieheben-haengend-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/hanging-knee-raise/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/knieheben-haengend-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/hanging-knee-raise/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/knieheben-haengend-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/hanging-knee-raise/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "ab-roller": [
+    {
+      "file": "ex/ab-roller-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/ab-wheel/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0285-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/ab-roller-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/ab-wheel/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/ab-roller-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/ab-wheel/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "fahrrad-crunch": [
+    {
+      "file": "ex/fahrrad-crunch-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/bicycle-crunch/frame-1.svg",
+      "basedOn": "Everkinetic: https://github.com/everkinetic/data/blob/main/dist/svg/0284-tension.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/fahrrad-crunch-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/bicycle-crunch/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/fahrrad-crunch-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/bicycle-crunch/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
   "kettlebell-swing": [
     {
       "file": "ex/kettlebell-swing-1.svg",
@@ -1404,6 +2792,144 @@
       "creator": "Bryl Lim",
       "license": "CC BY-SA 4.0",
       "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/kettlebell-romanian-deadlift/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "katze-kuh": [
+    {
+      "file": "ex/katze-kuh-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cat-cow-stretch/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/katze-kuh-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cat-cow-stretch/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/katze-kuh-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cat-cow-stretch/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "hueftbeuger-dehnung": [
+    {
+      "file": "ex/hueftbeuger-dehnung-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/kneeling-hip-flexor-stretch/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/hueftbeuger-dehnung-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/kneeling-hip-flexor-stretch/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/hueftbeuger-dehnung-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/kneeling-hip-flexor-stretch/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "brustdehnung-tuer": [
+    {
+      "file": "ex/brustdehnung-tuer-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/doorway-chest-stretch/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/brustdehnung-tuer-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/doorway-chest-stretch/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/brustdehnung-tuer-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/doorway-chest-stretch/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "schulter-querdehnung": [
+    {
+      "file": "ex/schulter-querdehnung-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cross-body-shoulder-stretch/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/schulter-querdehnung-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cross-body-shoulder-stretch/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/schulter-querdehnung-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/cross-body-shoulder-stretch/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "weltbeste-dehnung": [
+    {
+      "file": "ex/weltbeste-dehnung-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/worlds-greatest-stretch/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/weltbeste-dehnung-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/worlds-greatest-stretch/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/weltbeste-dehnung-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/worlds-greatest-stretch/frame-3.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    }
+  ],
+  "kindhaltung": [
+    {
+      "file": "ex/kindhaltung-1.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/childs-pose/frame-1.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kindhaltung-2.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/childs-pose/frame-2.svg",
+      "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
+    },
+    {
+      "file": "ex/kindhaltung-3.svg",
+      "creator": "Bryl Lim",
+      "license": "CC BY-SA 4.0",
+      "source": "https://github.com/bryllim/workout-guide/blob/aac599224bb9780305239607ef98540b7e0ce389/packages/workout-guide/assets/childs-pose/frame-3.svg",
       "changes": "Koordinaten auf ganze Pixel gerundet, Datei verkleinert (SVGO)."
     }
   ]

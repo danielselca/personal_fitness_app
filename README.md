@@ -47,7 +47,7 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 
 **Übungen und Bibliothek**
 
-- Tab **Übungen** → oben **Meine** (deine Übungen mit Verlauf) oder **Bibliothek** (60 Übungen mit Ausführungstipps und typischen Fehlern). Die Chips filtern nach Ausrüstung (Maschine, Seilzug, Freihantel, Kettlebell, Körpergewicht, Band, Calisthenics …) und Muskelgruppe; bei „Meine“ zeigt „Ohne Zuordnung“ Übungen ohne Angaben.
+- Tab **Übungen** → oben **Meine** (deine Übungen mit Verlauf) oder **Bibliothek** (125 Übungen mit Grafik, Ausführungstipps und typischen Fehlern, dazu Dehnungen). Die Chips filtern nach Ausrüstung (Maschine, Seilzug, Freihantel, Kettlebell, Körpergewicht, Band, Calisthenics …) und Muskelgruppe; bei „Meine“ zeigt „Ohne Zuordnung“ Übungen ohne Angaben.
 - In der Bibliothek holt **„Zu meinen Übungen“** eine Übung zu dir. Gibt es schon eine gleichnamige, fragt die App, ob sie verknüpft werden soll.
 - Bei deiner Übung: **„Mit Bibliothek verknüpfen“** zeigt danach Muskeln und Ausführungstipps (z. B. für Überzüge); **Bearbeiten → Zuordnung** legt Ausrüstung, Kategorie und Muskeln selbst fest.
 - Im Training filtert die Übungsauswahl nach Ausrüstung; bei Suche erscheinen zusätzlich Treffer **„Aus der Bibliothek“**, die beim Hinzufügen übernommen werden.

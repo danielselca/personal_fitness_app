@@ -29,9 +29,9 @@ describe('Bibliothek im Datenmodell', () => {
   })
 
   it('Suche findet deutsche, englische und alternative Namen', () => {
-    expect(ids(searchLibrary('leg press'))).toEqual(['beinpresse'])
+    expect(ids(searchLibrary('leg press'))).toEqual(['beinpresse', 'wadenheben-beinpresse'])
     expect(ids(searchLibrary('pec deck'))).toContain('butterfly-maschine')
-    expect(ids(searchLibrary('kniebeuge', { equipment: 'maschine' }))).toEqual(['hackenschmidt-kniebeuge'])
+    expect(ids(searchLibrary('kniebeuge', { equipment: 'maschine' }))).toEqual(['hackenschmidt-kniebeuge', 'kniebeuge-multipresse'])
   })
 
   it('Alternativen: gleiches Muster, ohne geschonte Bereiche', () => {
