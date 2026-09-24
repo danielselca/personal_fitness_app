@@ -271,5 +271,51 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     await expect(page.getByRole('dialog', { name: 'Tag bearbeiten' })).toBeVisible()
     await expect(tab(page, 'Training')).toHaveAttribute('aria-current', 'page')
   })
+
+  test('Mit Claude besprechen: Brief kopieren, Programmvorschlag einfügen und übernehmen (Schritt 22)', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+    await openApp(page)
+    await tab(page, 'Coach').click()
+    const card = page.getByRole('region', { name: 'Mit Claude besprechen' })
+    await card.getByRole('button', { name: 'Brief erstellen' }).click()
+    const brief = page.getByRole('dialog', { name: 'Mit Claude besprechen' })
+    await brief.getByLabel('Deine Frage').fill('Welches Programm passt zu 3 Tagen?')
+    await brief.getByText(/^Vorschau/).click()
+    await expect(brief.getByLabel('Vorschau des Briefs')).toContainText('Meine Frage: Welches Programm passt zu 3 Tagen?')
+    await page.screenshot({ path: 'test-results/shots/80-claude-brief.png' })
+    await brief.getByRole('button', { name: 'Kopieren' }).click()
+    await expect(brief.getByRole('status')).toContainText('Kopiert')
+    const copied = await page.evaluate(() => navigator.clipboard.readText())
+    expect(copied).toContain('"format": "fitness-app-programm/v1"')
+
+    await brief.getByRole('button', { name: 'Programm übernehmen …' }).click()
+    const imp = page.getByRole('dialog', { name: 'Programm von Claude übernehmen' })
+    const answer = [
+      'Gern! Mit 3 Tagen passt ein Ganzkörperplan:',
+      '```json',
+      JSON.stringify({
+        format: 'fitness-app-programm/v1', name: 'Ganzkörper Herbst', sessionsPerWeek: 3, goal: 'muskelaufbau',
+        days: [
+          { name: 'Herbst A', exercises: [{ id: 'ex-lat-zug', name: 'Lat-Zug', sets: 3, reps: [8, 12], restSec: 90 }, { library: 'beinpresse', name: 'Beinpresse', sets: 3, reps: [8, 12] }] },
+          { name: 'Herbst B', exercises: [{ name: 'Facepulls', sets: 3, reps: [12, 15] }, { name: 'Plank', sets: 3, holdSec: 40 }] },
+        ],
+      }, null, 2),
+      '```',
+    ].join('\n')
+    await imp.getByLabel('Antwort von Claude').fill(answer)
+    await imp.getByRole('button', { name: 'Prüfen' }).click()
+    const check = page.getByRole('dialog', { name: 'Programm prüfen' })
+    await expect(check.getByRole('region', { name: 'Tag Herbst A' })).toContainText('aus der Bibliothek')
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    expect(overflow).toBeLessThanOrEqual(0)
+    await page.screenshot({ path: 'test-results/shots/81-claude-import-preview.png' })
+    await check.getByRole('button', { name: 'Übernehmen' }).click()
+    await page.getByRole('dialog', { name: 'Programm übernommen' }).getByRole('button', { name: 'Zu den Programmen' }).click()
+
+    await expect(tab(page, 'Training')).toHaveAttribute('aria-current', 'page')
+    await expect(page.getByText('Ganzkörper Herbst', { exact: true })).toBeVisible()
+    await page.getByRole('button', { name: '‹ Training' }).click()
+    await expect(page.getByRole('region', { name: 'Programm Ganzkörper Herbst' }).getByRole('button', { name: /Nächstes: Herbst A/ })).toBeVisible()
+  })
 })
 

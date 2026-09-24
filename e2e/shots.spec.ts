@@ -193,3 +193,12 @@ test('Screenshots: Coach und Profil (hell/dunkel)', async ({ page }) => {
   await page.getByRole('heading', { name: 'Profil' }).scrollIntoViewIfNeeded()
   await page.screenshot({ path: `${OUT}/72-profile-dark.png` })
 })
+
+test('Screenshot: Mit Claude besprechen (dunkel)', async ({ page }) => {
+  await openApp(page)
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await tab(page, 'Coach').click()
+  await page.getByRole('region', { name: 'Mit Claude besprechen' }).getByRole('button', { name: 'Brief erstellen' }).click()
+  await page.getByRole('dialog', { name: 'Mit Claude besprechen' }).getByText(/^Vorschau/).click()
+  await page.screenshot({ path: `${OUT}/82-claude-brief-dark.png` })
+})

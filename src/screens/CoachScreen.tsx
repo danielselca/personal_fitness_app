@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useMemo, useState } from 'react'
 import { BodyMap } from '../components/BodyMap.tsx'
 import { WeekCheck } from '../components/WeekCheck.tsx'
 import { weekCheck } from '../domain/coach/hints.ts'
@@ -11,6 +11,10 @@ import { formatRelativeDay } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
 import { useNav } from '../store/navStore.ts'
 
+// Blätter erst beim Öffnen laden
+const ClaudeBriefSheet = lazy(() => import('../components/ClaudeBriefSheet.tsx'))
+const ProgramImportSheet = lazy(() => import('../components/ProgramImportSheet.tsx'))
+
 const TREND_ICON: Record<TrendKind, string> = { gesteigert: '↑', gleich: '→', weniger: '↓', stagniert: '⏸' }
 const TREND_LABEL: Record<TrendKind, string> = { gesteigert: 'gesteigert', gleich: 'gleich', weniger: 'weniger', stagniert: 'steht' }
 
@@ -22,6 +26,8 @@ const TREND_LABEL: Record<TrendKind, string> = { gesteigert: 'gesteigert', gleic
 export default function CoachScreen() {
   const data = useAppStore((s) => s.data)
   const setTab = useNav((s) => s.setTab)
+  const go = useNav((s) => s.go)
+  const [sheet, setSheet] = useState<'brief' | 'import' | null>(null)
   const now = useMemo(() => new Date(), [])
   const week = weekStatus(data.workouts, now, data.settings.weeklyGoal)
   const trends = useMemo(() => exerciseTrends(data.workouts, data.exercises).slice(0, 8), [data.workouts, data.exercises])
@@ -69,6 +75,19 @@ export default function CoachScreen() {
       <div style={{ marginTop: 12 }}>
         <WeekCheck check={check} offset={offset} onOffset={setOffset} />
       </div>
+
+      <section className="card claude-card" aria-label="Mit Claude besprechen" style={{ marginTop: 12 }}>
+        <strong style={{ display: 'block' }}>Mit Claude besprechen</strong>
+        <span className="row-sub" style={{ display: 'block' }}>Brief über dein Training an die Claude-App schicken – und Claudes Programmvorschlag hier übernehmen.</span>
+        <div className="btn-row" style={{ marginTop: 10 }}>
+          <button type="button" className="btn btn-primary btn-sm" onClick={() => setSheet('brief')}>Brief erstellen</button>
+          <button type="button" className="btn btn-sm" onClick={() => setSheet('import')}>Programm übernehmen …</button>
+        </div>
+      </section>
+      <Suspense fallback={null}>
+        {sheet === 'brief' && <ClaudeBriefSheet onClose={() => setSheet(null)} onImport={() => setSheet('import')} />}
+        {sheet === 'import' && <ProgramImportSheet onClose={() => setSheet(null)} onDone={(p) => go('training', { kind: 'programs', id: p.id })} />}
+      </Suspense>
 
       {check.workouts > 0 && (
         <>

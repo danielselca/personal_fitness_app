@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { InstallProgramSheet } from '../components/InstallProgramSheet.tsx'
 import { ProgramEditor } from '../components/ProgramEditor.tsx'
 import { GOAL_LABEL, recommendProgram } from '../domain/programs.ts'
@@ -10,6 +10,9 @@ import { useAppStore } from '../store/appStore.ts'
  * Programme: deine Programme (aktivieren, bearbeiten, duplizieren), Vorschläge der App zum
  * Übernehmen und ein leeres eigenes Programm. Programme sind ein Angebot – freies Training bleibt.
  */
+// Import-Blatt erst beim Öffnen laden
+const ProgramImportSheet = lazy(() => import('../components/ProgramImportSheet.tsx'))
+
 export function ProgramsView({ onBack }: { onBack: () => void }) {
   const data = useAppStore((s) => s.data)
   const setActive = useAppStore((s) => s.setActiveProgram)
@@ -18,6 +21,7 @@ export function ProgramsView({ onBack }: { onBack: () => void }) {
   const updateSettings = useAppStore((s) => s.updateSettings)
   const [installing, setInstalling] = useState<ProgramDefinition | null>(null)
   const [editing, setEditing] = useState<string | null>(null)
+  const [importing, setImporting] = useState(false)
   const activeId = data.settings.activeProgramId
   const weekly = data.settings.weeklyGoal
   const rec = recommendProgram(weekly)
@@ -86,6 +90,9 @@ export function ProgramsView({ onBack }: { onBack: () => void }) {
       >
         + Eigenes Programm
       </button>
+      <button type="button" className="btn btn-block" style={{ marginTop: 8 }} onClick={() => setImporting(true)}>
+        Programm von Claude einfügen …
+      </button>
 
       <h2 className="section-title">Vorschläge</h2>
       <ul className="list">
@@ -108,6 +115,11 @@ export function ProgramsView({ onBack }: { onBack: () => void }) {
       </p>
 
       {installing && <InstallProgramSheet def={installing} onClose={() => setInstalling(null)} onDone={onBack} />}
+      {importing && (
+        <Suspense fallback={null}>
+          <ProgramImportSheet onClose={() => setImporting(false)} />
+        </Suspense>
+      )}
       {editing && <ProgramEditor programId={editing} onClose={() => setEditing(null)} />}
     </>
   )

@@ -54,8 +54,6 @@ function programEntry(ex: Exercise, goal: ProgramGoal): TemplateEntry {
 export function installProgram(data: AppData, def: ProgramDefinition, opts: InstallOptions, at: string): { data: AppData; program: Program } {
   let exercises = data.exercises
   const physio = opts.physioBlock ? physioEntries(data) : []
-  const programId = newId('prg-')
-  const templates: Template[] = []
   const days = def.days.map((day) => {
     let entries: TemplateEntry[]
     const source = day.fromTemplate ? data.templates.find((t) => t.id === day.fromTemplate) : undefined
@@ -71,24 +69,33 @@ export function installProgram(data: AppData, def: ProgramDefinition, opts: Inst
       }
     }
     const withPhysio = [...physio.filter((p) => !entries.some((e) => e.exerciseId === p.exerciseId)), ...entries]
-    const unique = withPhysio.filter((e, i) => withPhysio.findIndex((x) => x.exerciseId === e.exerciseId) === i)
+    return { name: day.name, entries: withPhysio }
+  })
+  return createProgramData({ ...data, exercises }, { name: def.name, goal: opts.goal, sessionsPerWeek: def.sessionsPerWeek, copiedFrom: def.id }, days, at)
+}
+
+/**
+ * Gemeinsamer Kern fürs Anlegen (mitgelieferte Programme und Import von Claude): Programm mit je
+ * einer Tages-Vorlage pro Tag; doppelte Übungen innerhalb eines Tages werden zusammengefasst.
+ */
+export function createProgramData(
+  data: AppData,
+  head: Pick<Program, 'name' | 'goal' | 'sessionsPerWeek' | 'copiedFrom'>,
+  dayDefs: { name: string; entries: TemplateEntry[] }[],
+  at: string,
+): { data: AppData; program: Program } {
+  const programId = newId('prg-')
+  const templates: Template[] = []
+  const days = dayDefs.map((day) => {
+    const unique = day.entries.filter((e, i) => day.entries.findIndex((x) => x.exerciseId === e.exerciseId) === i)
     const template: Template = { id: newId('tpl-'), name: day.name, entries: unique, programId, createdAt: at, updatedAt: at }
     templates.push(template)
     return { id: newId('day-'), name: day.name, templateId: template.id }
   })
-  const program: Program = {
-    id: programId,
-    name: def.name,
-    goal: opts.goal,
-    sessionsPerWeek: def.sessionsPerWeek,
-    days,
-    copiedFrom: def.id,
-    createdAt: at,
-    updatedAt: at,
-  }
+  const program: Program = { id: programId, ...head, days, createdAt: at, updatedAt: at }
   return {
     program,
-    data: { ...data, exercises, templates: [...data.templates, ...templates], programs: [...data.programs, program] },
+    data: { ...data, templates: [...data.templates, ...templates], programs: [...data.programs, program] },
   }
 }
 

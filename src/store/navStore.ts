@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import type { TabId } from '../components/TabBar.tsx'
 
 /** Ziel innerhalb eines Tabs, z. B. Coach-Vorschlag → Vorlage im Editor öffnen. */
-export type NavTarget = { kind: 'template' | 'exercise' | 'library'; id: string }
+export type NavTarget = { kind: 'template' | 'exercise' | 'library' | 'programs'; id: string }
 
 /**
  * Aktiver Tab. Eigener Store, damit Bildschirme auf andere Tabs verweisen können (z. B. Coach → Übung).
