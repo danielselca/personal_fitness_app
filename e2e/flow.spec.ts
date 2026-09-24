@@ -7,7 +7,7 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     await page.screenshot({ path: 'test-results/shots/01-start.png' })
 
     // Start → Auswahl öffnet sich, Lat-Zug + Rudern hinzufügen
-    await page.getByRole('button', { name: 'Training starten' }).click()
+    await page.getByRole('button', { name: 'Freies Training' }).click()
     await addExercises(page, ['Lat-Zug', 'Rudern'])
     const lat = card(page, 'Lat-Zug')
     await expect(lat.getByTestId('source-line')).toHaveText(/Vorgabe: 4 × 10 × 45 kg/)
@@ -26,7 +26,7 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     await page.getByRole('button', { name: '+30 s' }).click()
     await expect(page.getByTestId('timer-remaining')).toHaveText(/1:5\d|2:0\d/)
     await page.getByRole('button', { name: 'Überspringen' }).click()
-    await expect(page.getByTestId('timer-idle')).toBeVisible()
+    await expect(page.getByTestId('timer')).toHaveCount(0)
 
     // Zweiter Satz mit Dezimaleingabe per Komma, dritter Satz per Punkt
     await lat.getByLabel('Satz 2 Gewicht').fill('47,5')
@@ -47,7 +47,7 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     await page.screenshot({ path: 'test-results/shots/04-summary.png' })
 
     // Nächstes Training zeigt „Letztes Mal“ je Satz
-    await page.getByRole('button', { name: 'Letztes Training wieder' }).click()
+    await page.getByRole('button', { name: 'Letztes wiederholen' }).click()
     const lat2 = card(page, 'Lat-Zug')
     await expect(lat2.getByTestId('source-line')).toHaveText(/Letztes Mal: heute · 3 Sätze/)
     await expect(lat2.getByTestId('set-3').locator('.set-last')).toHaveText('8 × 50')
@@ -71,7 +71,7 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
 
   test('Übung im Training neu anlegen (AK4b) und Katalog-Suche (AK3)', async ({ page }) => {
     await openApp(page)
-    await page.getByRole('button', { name: 'Training starten' }).click()
+    await page.getByRole('button', { name: 'Freies Training' }).click()
     const dialog = page.getByRole('dialog', { name: 'Übungen hinzufügen' })
     await dialog.getByLabel('Übung suchen').fill('Beinpresse')
     await dialog.getByRole('button', { name: '„Beinpresse“ als neue Übung anlegen' }).click()
@@ -89,7 +89,7 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
 
   test('Layout: keine horizontale Scrollleiste, Touchflächen ≥ 44 px, Eingaben ≥ 16 px (AK25)', async ({ page }) => {
     await openApp(page)
-    await page.getByRole('button', { name: 'Training starten' }).click()
+    await page.getByRole('button', { name: 'Freies Training' }).click()
     await addExercises(page, ['Lat-Zug'])
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(0)

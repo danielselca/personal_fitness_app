@@ -9,8 +9,9 @@ const PRESETS = [60, 90, 120]
 /**
  * Pausentimer-Leiste über der Tab-Leiste (F9). Restzeit aus gespeichertem Endzeitpunkt,
  * daher nach App-Wechsel korrekt (AK12). Signal nur im Vordergrund.
+ * Ohne laufenden Timer ist sie eingeklappt; die Auswahl erscheint nur, wenn `presetsOpen`.
  */
-export function TimerBar({ defaultSec }: { defaultSec: number }) {
+export function TimerBar({ defaultSec, presetsOpen, onClosePresets }: { defaultSec: number; presetsOpen: boolean; onClosePresets: () => void }) {
   const timer = useAppStore((s) => s.data.timer)
   const settings = useAppStore((s) => s.data.settings)
   const startTimer = useAppStore((s) => s.startTimer)
@@ -46,15 +47,24 @@ export function TimerBar({ defaultSec }: { defaultSec: number }) {
     if (Number.isInteger(n) && n >= 5 && n <= 900) {
       startTimer(n)
       setCustom(false)
+      onClosePresets()
     }
   }
 
   if (!timer) {
+    if (!presetsOpen) return null
     return (
       <div className="timerbar timerbar-idle" data-testid="timer-idle">
-        <span className="muted" style={{ fontSize: 14, flex: 'none' }}>Pause</span>
         {PRESETS.map((p) => (
-          <button type="button" key={p} className="btn btn-sm" onClick={() => startTimer(p)}>
+          <button
+            type="button"
+            key={p}
+            className="btn btn-sm"
+            onClick={() => {
+              startTimer(p)
+              onClosePresets()
+            }}
+          >
             {formatMmSs(p)}
           </button>
         ))}
@@ -68,6 +78,7 @@ export function TimerBar({ defaultSec }: { defaultSec: number }) {
             {formatMmSs(defaultSec)} ⋯
           </button>
         )}
+        <button type="button" className="btn btn-sm btn-icon timer-close" aria-label="Pausenauswahl schließen" onClick={onClosePresets}>✕</button>
       </div>
     )
   }

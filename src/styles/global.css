@@ -145,7 +145,16 @@ ul.list > li { display: block; }
 .template-row { display: flex; align-items: stretch; gap: 8px; }
 ul.list > li.template-row { display: flex; }
 .template-row > .card-tap { flex: 1; width: auto; min-width: 0; }
-.template-row > .btn-icon { min-width: var(--touch); }
+.template-card { display: flex; align-items: center; gap: 12px; padding: 14px 12px 14px 16px; }
+.template-name { display: block; font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+.play-btn {
+  flex: none; width: 48px; height: 48px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--primary); color: var(--primary-text); box-shadow: 0 6px 16px -6px var(--primary);
+}
+.play-btn svg { width: 20px; height: 20px; margin-left: 2px; }
+.template-row > .template-edit { align-self: center; width: var(--touch); min-width: var(--touch); border-radius: 50%; background: transparent; }
+
 .template-row .row-main { flex: 1; }
 
 /* ---------- Formulare ---------- */
@@ -230,20 +239,25 @@ ul.list > li.template-row { display: flex; }
 .chart-bar-label { fill: var(--text); font-size: 11px; font-weight: 700; font-family: var(--font); }
 
 /* ---------- Aktives Training: Kopf mit Kacheln ---------- */
-.workout-head { padding: 12px 12px 12px; margin-bottom: 10px; }
-.stat-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.stat-tile { background: var(--surface-2); border-radius: var(--radius-sm); padding: 8px 10px; min-width: 0; }
-.stat-tile .label { display: block; margin-bottom: 2px; }
-.stat-value { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
-.stat-value small { font-size: 13px; font-weight: 600; color: var(--text-2); letter-spacing: 0; }
-.workout-head-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+/* Eine kompakte Zeile, die beim Scrollen oben stehen bleibt */
+.workout-head {
+  position: sticky; top: calc(var(--safe-top) + 6px); z-index: 5;
+  padding: 6px 6px 8px 14px; margin-bottom: 10px;
+  box-shadow: var(--shadow-float);
+}
+.workout-head-row { display: flex; align-items: center; gap: 6px; }
+.workout-head-stats { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; column-gap: 12px; row-gap: 0; font-size: 13px; color: var(--text-2); }
+.workout-head-stats strong { color: var(--text); font-size: 17px; font-weight: 800; letter-spacing: -0.02em; }
+.head-btn { flex: none; width: 40px; min-width: 40px; min-height: 40px; border-radius: 50%; background: var(--surface-2); border-color: transparent; }
+.head-btn[aria-expanded="true"] { background: var(--primary-soft); color: var(--primary); }
+.workout-head .progress { margin: 6px 8px 0 0; height: 4px; }
 .progress { flex: 1; height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; }
 .progress-bar { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.2s; }
 .workout-stats { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 13px; color: var(--text-2); }
 .workout-stats strong { color: var(--text); font-size: 15px; }
 
 /* ---------- Übungskarten ---------- */
-.wcard { padding: 0; overflow: hidden; scroll-margin-top: 8px; }
+.wcard { padding: 0; overflow: hidden; scroll-margin-top: calc(var(--safe-top) + 80px); }
 .wcard-current { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary), var(--shadow); }
 .wcard-done .wcard-title { color: var(--text-2); }
 .wcard-head {
@@ -287,7 +301,7 @@ ul.list > li.template-row { display: flex; }
 .setrow {
   position: relative; border-radius: var(--radius-sm); padding: 5px 6px; border: 1.5px solid transparent;
   /* beim automatischen Scrollen oberhalb von Timer und Tab-Leiste bleiben */
-  scroll-margin-top: 8px;
+  scroll-margin-top: calc(var(--safe-top) + 80px);
   scroll-margin-bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + var(--safe-bottom) + 96px);
 }
 .setrow-current { background: var(--primary-soft); border-color: var(--primary); }
@@ -352,6 +366,7 @@ ul.list > li.sort-row { display: grid; }
 }
 .timerbar-idle { overflow-x: auto; }
 .timerbar-idle .btn { flex: none; }
+.timerbar-idle .timer-close { margin-left: auto; width: 34px; min-width: 34px; border-radius: 50%; }
 .timerbar .btn-sm { background: var(--surface-2); border-color: transparent; min-height: 34px; }
 .timer-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .timer-time { font-size: 28px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; color: var(--primary); }
@@ -369,6 +384,23 @@ ul.list > li.sort-row { display: grid; }
 .summary-grid div { background: var(--surface-2); border-radius: var(--radius-sm); padding: 10px 12px; }
 .summary-grid strong { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
 .summary-grid span { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-2); }
+
+.start-actions { margin-top: 10px; }
+.start-actions .btn { padding: 0 8px; font-size: 14px; white-space: nowrap; }
+
+/* Startseite: Woche Mo … So */
+.week-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.week-day { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.week-dot {
+  width: 30px; height: 30px; border-radius: 50%; background: var(--surface-2);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; color: var(--primary-text);
+}
+.week-day-on .week-dot { background: var(--primary); }
+.week-day-today .week-dot { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--primary); }
+.week-label { font-size: 11px; font-weight: 700; color: var(--text-2); }
+.week-day-today .week-label { color: var(--text); }
+.last-workout { margin: 4px 0 0; font-size: 13px; }
 
 /* Theme-Auswahl in den Einstellungen */
 .theme-segment { margin-bottom: 8px; }

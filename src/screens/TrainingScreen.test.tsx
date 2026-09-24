@@ -27,7 +27,7 @@ function addFromPicker(names: string[]) {
 describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
   it('Start ohne Historie: Lat-Zug mit 4 Plan-Sätzen, Abhaken startet Timer mit Übungspause 90 s', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     // Leeres Training → Auswahl offen
     addFromPicker(['Lat-Zug'])
     const c = card('Lat-Zug')
@@ -45,7 +45,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
 
   it('Nur Abgehaktes zählt; Abschluss ohne Sätze fragt nach Verwerfen (AK7)', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     addFromPicker(['Lat-Zug'])
     expect(screen.getByTestId('done-count').textContent).toBe('0')
     fireEvent.click(screen.getByRole('button', { name: 'Abschließen' }))
@@ -58,7 +58,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
   it('Dezimalgewicht per Eingabe und Stepper; Sätze hinzufügen/löschen/rückgängig (AK8, AK9)', () => {
     vi.useFakeTimers()
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     addFromPicker(['Lat-Zug'])
     const c = card('Lat-Zug')
     const w1 = within(c).getByLabelText('Satz 1 Gewicht')
@@ -98,7 +98,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
 
   it('Umsortieren, Entfernen, Notiz, Übung im Training anlegen (AK10, AK4b, F5)', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     addFromPicker(['Lat-Zug', 'Rudern'])
     expect(active().entries.map((e) => e.exerciseId)).toEqual(['ex-lat-zug', 'ex-rudern'])
     // Sortiermodus: kompakte Zeilen statt Karten, Pfeile nur dort
@@ -139,7 +139,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
 
   it('Nur die aktuelle Übung ist ausgeklappt; erledigte klappen zu und die nächste öffnet sich (Übersicht)', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     addFromPicker(['Rudern', 'Lat-Zug'])
     const rudern = card('Rudern')
     const lat = card('Lat-Zug')
@@ -172,7 +172,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
 
   it('Übung ohne Gewicht: nur Wdh.-Feld, kein kg-Stepper; Umschalten im Training; Anzeige „Wdh.“', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     addFromPicker(['Aufdehnen seitlich', 'Lat-Zug'])
     const ser = card('Aufdehnen seitlich')
     expect(within(ser).queryByLabelText('Satz 1 Gewicht')).toBeNull()
@@ -199,7 +199,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
 
   it('Abschluss speichert nur abgehakte Sätze, zeigt Zusammenfassung; nächstes Training zeigt Letztes Mal (AK6)', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     addFromPicker(['Lat-Zug'])
     let c = card('Lat-Zug')
     fireEvent.change(within(c).getByLabelText('Satz 3 Gewicht'), { target: { value: '47,5' } })
@@ -216,12 +216,25 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     expect(done.status).toBe('done')
     expect(done.entries[0].sets).toHaveLength(3)
 
-    fireEvent.click(screen.getByRole('button', { name: 'Letztes Training wiederholen' }))
+    // Startseite: Woche mit heutigem Trainingstag, letztes Training kurz zusammengefasst
+    const todayLabel = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][new Date().getDay()]
+    expect(screen.getByRole('img', { name: `Trainiert diese Woche: ${todayLabel}` })).toBeTruthy()
+    expect(screen.getByTestId('last-workout').textContent).toMatch(/^3 Sätze · 1.280 kg · \d+ min$/)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Letztes wiederholen' }))
     c = card('Lat-Zug')
     expect(within(c).getByTestId('source-line').textContent).toMatch(/Letztes Mal: heute · 3 Sätze/)
     expect(within(c).getByTestId('set-3').querySelector('.set-last')!.textContent).toBe('8 × 47,5')
     expect((within(c).getByLabelText('Satz 3 Gewicht') as HTMLInputElement).value).toBe('47,5')
     expect(within(c).getAllByTestId(/^set-/)).toHaveLength(3)
+  })
+
+  it('ohne Vorlagen ist „Training starten“ der Hauptknopf', () => {
+    appStore.setState({ data: { ...data(), templates: [] } })
+    render(<TrainingScreen />)
+    expect(screen.getByRole('button', { name: 'Training starten' }).className).toMatch(/btn-primary/)
+    expect(screen.queryByRole('button', { name: 'Freies Training' })).toBeNull()
+    expect(screen.getByRole('img', { name: 'Diese Woche noch nicht trainiert' })).toBeTruthy()
   })
 
   it('Vorlage startet 12 Übungen in Standard-Reihenfolge, erste ausgeklappt (AK24)', () => {
@@ -238,7 +251,7 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
 describe('Vorsortierung: ohne Gewicht zuerst', () => {
   it('Auswahl gruppiert ohne Gewicht zuerst und fügt in dieser Reihenfolge hinzu', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     const dialog = screen.getByRole('dialog', { name: 'Übungen hinzufügen' })
     const items = within(dialog).getAllByRole('listitem')
     expect(items[0].getAttribute('data-group')).toBe('Ohne Gewicht')
@@ -282,7 +295,7 @@ describe('Halteübung als Donut (Serratusstütz: 4 × 60 s, 60 s Pause)', () => 
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-09-13T10:00:00Z'))
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     addFromPicker(['Serratusstütz'])
     const c = card('Serratusstütz')
     const donut = within(c).getByTestId('hold-donut')
@@ -330,7 +343,7 @@ describe('Halteübung als Donut (Serratusstütz: 4 × 60 s, 60 s Pause)', () => 
 
   it('„Satz fertig“ beendet die Haltephase sofort; „− Satz“ entfernt den letzten offenen Satz', () => {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     addFromPicker(['Stütz auf Step'])
     const c = card('Stütz auf Step')
     fireEvent.click(within(c).getByRole('button', { name: 'Letzten offenen Satz entfernen' }))
@@ -348,13 +361,16 @@ describe('Halteübung als Donut (Serratusstütz: 4 × 60 s, 60 s Pause)', () => 
 describe('Timer (AK12, AK13)', () => {
   function startWithLat() {
     render(<TrainingScreen />)
-    fireEvent.click(screen.getByRole('button', { name: 'Training starten' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Freies Training' }))
     addFromPicker(['Lat-Zug'])
   }
 
   it('Presets, eigene Dauer, +30 s, Neu, Überspringen', () => {
     vi.useFakeTimers()
     startWithLat()
+    // eingeklappt, bis die Pausenauswahl im Kopf geöffnet wird
+    expect(screen.queryByTestId('timer-idle')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Pausentimer' }))
     fireEvent.click(within(screen.getByTestId('timer-idle')).getByRole('button', { name: '1:00' }))
     expect(data().timer?.durationSec).toBe(60)
     expect(screen.getByTestId('timer-remaining').textContent).toBe('1:00')
@@ -366,6 +382,11 @@ describe('Timer (AK12, AK13)', () => {
     expect(screen.getByTestId('timer-remaining').textContent).toBe('1:30')
     fireEvent.click(screen.getByRole('button', { name: 'Überspringen' }))
     expect(data().timer).toBeNull()
+    expect(screen.queryByTestId('timer-idle')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Pausentimer' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Pausenauswahl schließen' }))
+    expect(screen.queryByTestId('timer-idle')).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Pausentimer' }))
     fireEvent.click(screen.getByRole('button', { name: 'Eigene Dauer' }))
     fireEvent.change(screen.getByLabelText('Eigene Dauer in Sekunden'), { target: { value: '45' } })
     fireEvent.click(screen.getByRole('button', { name: 'Start' }))
@@ -375,6 +396,7 @@ describe('Timer (AK12, AK13)', () => {
   it('Restzeit folgt dem gespeicherten Endzeitpunkt, auch nach Zeitsprung; Ablauf zeigt „Pause vorbei“', () => {
     vi.useFakeTimers()
     startWithLat()
+    fireEvent.click(screen.getByRole('button', { name: 'Pausentimer' }))
     fireEvent.click(within(screen.getByTestId('timer-idle')).getByRole('button', { name: '1:30' }))
     // "App-Wechsel": 30 s vergehen ohne Ticks, dann Sichtbarkeitswechsel
     vi.setSystemTime(Date.now() + 30_000)

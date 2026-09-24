@@ -2,7 +2,7 @@ import { expect, type Page } from '@playwright/test'
 
 export async function openApp(page: Page) {
   await page.goto('./')
-  await expect(page.getByRole('button', { name: 'Training starten' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Freies Training' })).toBeVisible()
 }
 
 /** Übungen über die Auswahl ins Training holen. */

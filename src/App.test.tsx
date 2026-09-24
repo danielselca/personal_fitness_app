@@ -25,7 +25,7 @@ describe('App-Gerüst', () => {
   it('startet auf dem Tab Training', () => {
     render(<App />)
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Training')
-    expect(screen.getByRole('button', { name: 'Training starten' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Freies Training' })).toBeTruthy()
   })
 
   it('zeigt die vier Tabs in fester Reihenfolge', () => {

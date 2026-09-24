@@ -4,7 +4,7 @@ import { addExercises, card, openApp, waitForPrecache } from './helpers.ts'
 test.describe('Persistenz, Offline, Timer', () => {
   test('laufendes Training samt Eingaben und Timer überlebt ein Neuladen (AK11)', async ({ page }) => {
     await openApp(page)
-    await page.getByRole('button', { name: 'Training starten' }).click()
+    await page.getByRole('button', { name: 'Freies Training' }).click()
     await addExercises(page, ['Lat-Zug', 'Rudern'])
     const lat = card(page, 'Lat-Zug')
     await lat.getByLabel('Satz 1 Gewicht').fill('47,5')
@@ -29,7 +29,7 @@ test.describe('Persistenz, Offline, Timer', () => {
     await expect(lat2.getByRole('button', { name: 'Satz 1 zurücksetzen' })).toBeVisible()
     await expect(lat2.getByLabel('Satz 2 Gewicht')).toHaveValue('52,5')
     await expect(page.getByTestId('timer-remaining')).toHaveText(/1:5\d|1:4\d/)
-    await expect(page.getByRole('button', { name: 'Training starten' })).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Freies Training' })).toHaveCount(0)
   })
 
   test('App funktioniert offline nach dem ersten Laden (AK1)', async ({ page, context }) => {
@@ -37,7 +37,7 @@ test.describe('Persistenz, Offline, Timer', () => {
     await waitForPrecache(page)
     await context.setOffline(true)
     await page.reload()
-    await expect(page.getByRole('button', { name: 'Training starten' })).toBeVisible({ timeout: 15_000 })
+    await expect(page.getByRole('button', { name: 'Freies Training' })).toBeVisible({ timeout: 15_000 })
     await page.getByRole('button', { name: 'Übungen' }).click()
     await expect(page.getByRole('listitem')).toHaveCount(21)
     await context.setOffline(false)
@@ -46,8 +46,9 @@ test.describe('Persistenz, Offline, Timer', () => {
   test('Restzeit folgt dem gespeicherten Endzeitpunkt über einen Sichtbarkeitswechsel (AK12)', async ({ page }) => {
     await openApp(page)
     await page.clock.install()
-    await page.getByRole('button', { name: 'Training starten' }).click()
+    await page.getByRole('button', { name: 'Freies Training' }).click()
     await addExercises(page, ['Lat-Zug'])
+    await page.getByRole('button', { name: 'Pausentimer' }).click()
     await page.getByTestId('timer-idle').getByRole('button', { name: '1:30' }).click()
     await expect(page.getByTestId('timer-remaining')).toHaveText('1:30')
     // „App verlassen“: Zeit läuft 30 s weiter, ohne dass Takt-Ticks laufen
@@ -57,6 +58,6 @@ test.describe('Persistenz, Offline, Timer', () => {
     await page.clock.fastForward(65_000)
     await expect(page.getByTestId('timer-remaining')).toHaveText('Pause vorbei')
     await page.getByRole('button', { name: 'OK' }).click()
-    await expect(page.getByTestId('timer-idle')).toBeVisible()
+    await expect(page.getByTestId('timer')).toHaveCount(0)
   })
 })

@@ -18,6 +18,7 @@ Stand je Umsetzungsschritt aus SPEC.md Abschnitt 9.
 | 12 Erscheinungsbild (Feedback 2026-09-13) | erledigt | Tokens neu (Orange-Akzent, Anthrazit/Off-White), Kopf mit Datum, Tab-Pille, Kacheln im Trainingskopf, Timer als schwebende Karte, Hell/Dunkel/System-Schalter (`settings.theme`) |
 | 13 Halteübungen (Feedback 2026-09-13) | erledigt | `Exercise.mode='hold'`, Donut mit Arbeits-/Pausenstücken und Countdown, automatischer Phasenwechsel mit Signal, Endzeitpunkte persistent (`WorkoutEntry.hold`), Schema 6; 107 Unit-, 11 E2E-Tests |
 | 14 Handhabung im Training (UX-Durchsicht 2026-09-24) | erledigt | Aktuelle Übung rückt nach Abschluss der vorigen automatisch nach oben, aktueller Satz bleibt über Timer/Tab-Leiste sichtbar; Haken des aktuellen Satzes gefüllt als Hauptaktion; Papierkorb neben den Steppern entfernt (Löschen nur unter „Bearbeiten“); Spalte „Zuletzt“ entfällt ohne frühere Werte; lange Übungsnamen zweizeilig statt abgeschnitten; Einzahl/Mehrzahl („1 Satz“); Stift-Symbol statt Emoji; überflüssige Pausenzeile im Abschluss entfernt |
+| 15 Kopf, Pausenleiste, Startseite (UX-Durchsicht 2026-09-24) | erledigt | Trainingskopf als eine Zeile (Übung · Sätze · Minuten, Balken), bleibt beim Scrollen oben; Sortieren und Pausenauswahl als Symbole im Kopf; Pausenleiste nur bei laufendem Timer oder auf Wunsch (mit ✕); Startseite: Vorlagen mit Start-Knopf und „zuletzt …“, darunter „Freies Training“/„Letztes wiederholen“, Wochenleiste Mo–So und letztes Training in Kurzform; 112 Unit-, 11 E2E-Tests |
 
 ## Abnahmekriterien – Nachweis
 

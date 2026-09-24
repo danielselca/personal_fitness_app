@@ -1,5 +1,5 @@
 import type { Workout, WorkoutSet } from './types.ts'
-import { isoWeekKey, lastWeeks } from './weeks.ts'
+import { isoWeekKey, lastWeeks, startOfIsoWeek } from './weeks.ts'
 
 /** Volumen = Σ Gewicht × Wdh. über abgehakte Sätze; ohne Gewicht zählt 0 kg (SPEC 5). */
 export function setVolume(s: WorkoutSet): number {
@@ -34,6 +34,18 @@ export function workoutsPerWeek(workouts: Workout[], now: Date, count = 12): { k
     if (tally.has(key)) tally.set(key, tally.get(key)! + 1)
   }
   return weeks.map((w) => ({ ...w, count: tally.get(w.key)! }))
+}
+
+/** Trainingstage der Woche von `now` (Mo … So, lokale Zeit): true, wenn an dem Tag ein Training abgeschlossen wurde. */
+export function trainingDaysOfWeek(workouts: Workout[], now: Date): boolean[] {
+  const start = startOfIsoWeek(now).getTime()
+  const days = Array<boolean>(7).fill(false)
+  for (const w of finishedWorkouts(workouts)) {
+    const d = new Date(w.finishedAt!)
+    const idx = Math.floor((new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime() - start) / 86400000 + 0.5)
+    if (idx >= 0 && idx < 7) days[idx] = true
+  }
+  return days
 }
 
 export interface WeightPoint {

@@ -8,7 +8,7 @@ import { TimerBar } from '../components/TimerBar.tsx'
 import { WorkoutExerciseCard } from '../components/WorkoutExerciseCard.tsx'
 import { currentEntryId, entryState } from '../domain/progress.ts'
 import { backupFileName, buildBackup } from '../domain/backup.ts'
-import { doneSetCount, finishedWorkouts, workoutDurationMin, workoutVolume, workoutsPerWeek } from '../domain/stats.ts'
+import { doneSetCount, finishedWorkouts, trainingDaysOfWeek, workoutDurationMin, workoutVolume, workoutsPerWeek } from '../domain/stats.ts'
 import type { Template, Workout, WorkoutSet } from '../domain/types.ts'
 import { useNow } from '../hooks/useNow.ts'
 import { useWakeLock } from '../hooks/useWakeLock.ts'
@@ -37,6 +37,9 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
   const finished = useMemo(() => finishedWorkouts(data.workouts), [data.workouts])
   const thisWeek = workoutsPerWeek(data.workouts, new Date(), 1)[0].count
   const lastWorkout = finished[0] ?? null
+  const now = new Date()
+  const days = trainingDaysOfWeek(data.workouts, now)
+  const todayIdx = (now.getDay() + 6) % 7
   const exerciseName = (id: string) => data.exercises.find((e) => e.id === id)?.name ?? 'Unbekannt'
 
   const start = (opts?: Parameters<typeof startWorkout>[0]) => {
@@ -82,46 +85,88 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
         />
       )}
 
-      <button type="button" className="btn btn-primary btn-block" onClick={() => start()}>
-        Training starten
-      </button>
-      {lastWorkout && (
-        <button type="button" className="btn btn-block" style={{ marginTop: 10 }} onClick={() => start({ repeatLast: true })}>
-          Letztes Training wiederholen
-        </button>
-      )}
-
-      {data.templates.length > 0 && (
+      {data.templates.length > 0 ? (
         <>
           <h2 className="section-title">Vorlagen</h2>
           <ul className="list">
-            {data.templates.map((t) => (
-              <li key={t.id} className="template-row">
-                <button type="button" className="card card-tap row" style={{ flex: 1 }} aria-label={`Vorlage ${t.name} starten`} onClick={() => start({ templateId: t.id })}>
-                  <span className="row-main">
-                    <span className="row-title ellipsis" style={{ display: 'block' }}>{t.name}</span>
-                    <span className="row-sub">{count(t.entries.length, 'Übung', 'Übungen')} · {t.entries.map((e) => exerciseName(e.exerciseId)).slice(0, 3).join(', ')}{t.entries.length > 3 ? ' …' : ''}</span>
-                  </span>
-                  <span className="muted" aria-hidden="true">›</span>
-                </button>
-                <button type="button" className="btn btn-icon" aria-label={`${t.name} bearbeiten`} onClick={() => setEditTemplate(t)}><PencilIcon /></button>
-              </li>
-            ))}
+            {data.templates.map((t) => {
+              const lastOfTemplate = finished.find((w) => w.templateId === t.id)
+              return (
+                <li key={t.id} className="template-row">
+                  <button type="button" className="card card-tap template-card" aria-label={`Vorlage ${t.name} starten`} onClick={() => start({ templateId: t.id })}>
+                    <span className="row-main">
+                      <span className="template-name ellipsis">{t.name}</span>
+                      <span className="row-sub" style={{ display: 'block' }}>
+                        {count(t.entries.length, 'Übung', 'Übungen')}
+                        {lastOfTemplate ? ` · zuletzt ${formatRelativeDay(lastOfTemplate.finishedAt!)}` : ''}
+                      </span>
+                      <span className="row-sub ellipsis" style={{ display: 'block' }}>{t.entries.map((e) => exerciseName(e.exerciseId)).join(', ')}</span>
+                    </span>
+                    <span className="play-btn" aria-hidden="true"><PlayIcon /></span>
+                  </button>
+                  <button type="button" className="btn btn-icon template-edit" aria-label={`${t.name} bearbeiten`} onClick={() => setEditTemplate(t)}><PencilIcon /></button>
+                </li>
+              )
+            })}
           </ul>
+          <div className="btn-row start-actions">
+            <button type="button" className="btn" onClick={() => start()}>Freies Training</button>
+            {lastWorkout && (
+              <button type="button" className="btn" onClick={() => start({ repeatLast: true })}>Letztes wiederholen</button>
+            )}
+          </div>
+        </>
+      ) : (
+        <>
+          <button type="button" className="btn btn-primary btn-block" onClick={() => start()}>
+            Training starten
+          </button>
+          {lastWorkout && (
+            <button type="button" className="btn btn-block" style={{ marginTop: 10 }} onClick={() => start({ repeatLast: true })}>
+              Letztes Training wiederholen
+            </button>
+          )}
         </>
       )}
 
       <h2 className="section-title">Diese Woche</h2>
       <div className="card">
-        <div className="workout-stats">
+        <WeekStrip days={days} today={todayIdx} />
+        <div className="workout-stats" style={{ marginTop: 12 }}>
           <span><strong>{thisWeek}</strong> Training{thisWeek === 1 ? '' : 's'}</span>
           {lastWorkout && <span>Zuletzt <strong>{formatRelativeDay(lastWorkout.finishedAt!)}</strong></span>}
         </div>
-        {!lastWorkout && (
-          <p className="muted" style={{ margin: '8px 0 0' }}>Noch kein Training abgeschlossen. Starte oben dein erstes.</p>
+        {lastWorkout ? (
+          <p className="muted last-workout" data-testid="last-workout">
+            {[
+              lastWorkout.templateId ? data.templates.find((t) => t.id === lastWorkout.templateId)?.name : null,
+              count(doneSetCount(lastWorkout), 'Satz', 'Sätze'),
+              workoutVolume(lastWorkout) > 0 ? formatVolume(workoutVolume(lastWorkout)) : null,
+              workoutDurationMin(lastWorkout) !== null ? `${workoutDurationMin(lastWorkout)} min` : null,
+            ].filter(Boolean).join(' · ')}
+          </p>
+        ) : (
+          <p className="muted" style={{ margin: '8px 0 0' }}>Noch kein Training abgeschlossen. Tippe oben eine Vorlage an oder starte frei.</p>
         )}
       </div>
     </>
+  )
+}
+
+const WEEKDAYS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+
+/** Mo … So als Punktreihe: gefüllt = trainiert, Ring = heute. */
+function WeekStrip({ days, today }: { days: boolean[]; today: number }) {
+  const trained = WEEKDAYS.filter((_, i) => days[i])
+  return (
+    <div className="week-strip" role="img" aria-label={trained.length ? `Trainiert diese Woche: ${trained.join(', ')}` : 'Diese Woche noch nicht trainiert'}>
+      {WEEKDAYS.map((d, i) => (
+        <span key={d} className={`week-day ${days[i] ? 'week-day-on' : ''} ${i === today ? 'week-day-today' : ''}`}>
+          <span className="week-dot">{days[i] ? '✓' : ''}</span>
+          <span className="week-label">{d}</span>
+        </span>
+      ))}
+    </div>
   )
 }
 
@@ -161,6 +206,8 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
   const [finishing, setFinishing] = useState(false)
   const [confirmDiscard, setConfirmDiscard] = useState(false)
   const [sorting, setSorting] = useState(false)
+  // Pausenauswahl (1:00/1:30/2:00/eigene) nur auf Wunsch; der Timer startet ohnehin beim Abhaken
+  const [presetsOpen, setPresetsOpen] = useState(false)
   const [undo, setUndo] = useState<{ exerciseId: string; set: WorkoutSet; index: number } | null>(null)
   const now = useNow(30_000)
   useWakeLock(settings.keepScreenOn)
@@ -200,32 +247,30 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
   }
 
   return (
-    <div className="content-with-timer">
+    <div className={timer || presetsOpen ? 'content-with-timer' : undefined}>
       <div className="workout-head card">
-        <div className="stat-tiles">
-          <div className="stat-tile" data-testid="exercise-pos">
-            <span className="label">Übung</span>
-            <span className="stat-value">{workout.entries.length > 0 ? currentPos : 0}<small>/{workout.entries.length}</small></span>
-          </div>
-          <div className="stat-tile">
-            <span className="label">Sätze</span>
-            <span className="stat-value"><span data-testid="done-count">{done}</span><small>/{total}</small></span>
-          </div>
-          <div className="stat-tile">
-            <span className="label">Minuten</span>
-            <span className="stat-value">{elapsedMin}</span>
-          </div>
-        </div>
         <div className="workout-head-row">
-          <div className="progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-label="Fortschritt">
-            <div className="progress-bar" style={{ width: `${progress}%` }} />
-          </div>
-          <span className="label num">{progress} %</span>
-          {workout.entries.length > 1 && (
-            <button type="button" className={`btn btn-sm ${sorting ? 'btn-primary' : ''}`} aria-pressed={sorting} onClick={() => setSorting(!sorting)}>
-              {sorting ? 'Fertig' : 'Sortieren'}
+          <span className="workout-head-stats num">
+            <span data-testid="exercise-pos">Übung <strong>{workout.entries.length > 0 ? currentPos : 0}</strong>/{workout.entries.length}</span>
+            <span><strong data-testid="done-count">{done}</strong>/{total} Sätze</span>
+            <span><strong>{elapsedMin}</strong> min</span>
+          </span>
+          {!timer && !sorting && (
+            <button type="button" className="btn btn-icon head-btn" aria-label="Pausentimer" aria-expanded={presetsOpen} onClick={() => setPresetsOpen(!presetsOpen)}>
+              <TimerIcon />
             </button>
           )}
+          {workout.entries.length > 1 &&
+            (sorting ? (
+              <button type="button" className="btn btn-sm btn-primary" aria-pressed onClick={() => setSorting(false)}>Fertig</button>
+            ) : (
+              <button type="button" className="btn btn-icon head-btn" aria-label="Sortieren" aria-pressed={false} onClick={() => setSorting(true)}>
+                <SortIcon />
+              </button>
+            ))}
+        </div>
+        <div className="progress" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-label="Fortschritt">
+          <div className="progress-bar" style={{ width: `${progress}%` }} />
         </div>
       </div>
 
@@ -287,7 +332,7 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
         </button>
       </div>
 
-      <TimerBar defaultSec={settings.defaultRestSec} />
+      <TimerBar defaultSec={settings.defaultRestSec} presetsOpen={presetsOpen} onClosePresets={() => setPresetsOpen(false)} />
       {timer && <div style={{ height: 8 }} />}
 
       {undo && (
@@ -354,11 +399,36 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
   )
 }
 
+function PlayIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true" fill="currentColor">
+      <path d="M7 4.5v11a.8.8 0 0 0 1.2.7l8.6-5.5a.8.8 0 0 0 0-1.4L8.2 3.8A.8.8 0 0 0 7 4.5z" />
+    </svg>
+  )
+}
+
 function PencilIcon() {
   return (
     <svg className="arrow-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M13.5 3.5l3 3L7 16H4v-3z" />
       <path d="M11.5 5.5l3 3" />
+    </svg>
+  )
+}
+
+function TimerIcon() {
+  return (
+    <svg className="arrow-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="10" cy="11" r="6.5" />
+      <path d="M10 7.5V11l2.2 1.6M8 2.5h4" />
+    </svg>
+  )
+}
+
+function SortIcon() {
+  return (
+    <svg className="arrow-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6.5 16V4M3.5 7l3-3 3 3M13.5 4v12M10.5 13l3 3 3-3" />
     </svg>
   )
 }
