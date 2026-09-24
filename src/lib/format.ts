@@ -90,3 +90,8 @@ export function formatRelativeDay(iso: string, now = new Date()): string {
 export function formatVolume(kg: number): string {
   return `${new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 }).format(kg)} kg`
 }
+
+/** Anzahl mit passender Form: count(1, 'Satz', 'Sätze') → "1 Satz", count(3, …) → "3 Sätze" */
+export function count(n: number, one: string, many: string): string {
+  return `${n} ${n === 1 ? one : many}`
+}

@@ -4,7 +4,7 @@ import { ConfirmDialog } from '../components/Sheet.tsx'
 import { SaveTemplateSheet } from '../components/TemplateEditor.tsx'
 import { doneSetCount, finishedWorkouts, workoutDurationMin, workoutVolume } from '../domain/stats.ts'
 import type { Workout } from '../domain/types.ts'
-import { formatDate, formatNumber, formatTime, formatVolume } from '../lib/format.ts'
+import { count, formatDate, formatNumber, formatTime, formatVolume } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
 import { StatsView } from './StatsView.tsx'
 
@@ -44,7 +44,7 @@ function WorkoutList({ onSelect }: { onSelect: (id: string) => void }) {
             <span className="row-main">
               <span className="row-title" style={{ display: 'block' }}>{formatDate(w.finishedAt!)} · {formatTime(w.startedAt)}</span>
               <span className="row-sub ellipsis" style={{ display: 'block' }}>{w.entries.map((e) => nameOf(e.exerciseId)).join(', ')}</span>
-              <span className="row-sub num">{w.entries.length} Übungen · {doneSetCount(w)} Sätze · {formatVolume(workoutVolume(w))} · {workoutDurationMin(w)} min</span>
+              <span className="row-sub num">{count(w.entries.length, 'Übung', 'Übungen')} · {count(doneSetCount(w), 'Satz', 'Sätze')} · {formatVolume(workoutVolume(w))} · {workoutDurationMin(w)} min</span>
             </span>
             <span className="muted" aria-hidden="true">›</span>
           </button>

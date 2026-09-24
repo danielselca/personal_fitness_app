@@ -14,7 +14,7 @@ import { useNow } from '../hooks/useNow.ts'
 import { useWakeLock } from '../hooks/useWakeLock.ts'
 import { unlockAudio } from '../lib/audio.ts'
 import { downloadJson } from '../lib/download.ts'
-import { formatMmSs, formatRelativeDay, formatVolume } from '../lib/format.ts'
+import { count, formatRelativeDay, formatVolume } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
 
 export function TrainingScreen() {
@@ -100,11 +100,11 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
                 <button type="button" className="card card-tap row" style={{ flex: 1 }} aria-label={`Vorlage ${t.name} starten`} onClick={() => start({ templateId: t.id })}>
                   <span className="row-main">
                     <span className="row-title ellipsis" style={{ display: 'block' }}>{t.name}</span>
-                    <span className="row-sub">{t.entries.length} Übungen · {t.entries.map((e) => exerciseName(e.exerciseId)).slice(0, 3).join(', ')}{t.entries.length > 3 ? ' …' : ''}</span>
+                    <span className="row-sub">{count(t.entries.length, 'Übung', 'Übungen')} · {t.entries.map((e) => exerciseName(e.exerciseId)).slice(0, 3).join(', ')}{t.entries.length > 3 ? ' …' : ''}</span>
                   </span>
                   <span className="muted" aria-hidden="true">›</span>
                 </button>
-                <button type="button" className="btn btn-icon" aria-label={`${t.name} bearbeiten`} onClick={() => setEditTemplate(t)}>✎</button>
+                <button type="button" className="btn btn-icon" aria-label={`${t.name} bearbeiten`} onClick={() => setEditTemplate(t)}><PencilIcon /></button>
               </li>
             ))}
           </ul>
@@ -334,7 +334,6 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
           {workout.entries.some((e) => e.sets.some((s) => !s.done)) && (
             <p className="muted" style={{ fontSize: 14 }}>Nicht abgehakte Sätze werden verworfen.</p>
           )}
-          <p className="muted" style={{ fontSize: 14 }}>Pause aktuell: {formatMmSs(settings.defaultRestSec)} min Standard.</p>
         </Sheet>
       )}
 
@@ -352,6 +351,15 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
         />
       )}
     </div>
+  )
+}
+
+function PencilIcon() {
+  return (
+    <svg className="arrow-icon" viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M13.5 3.5l3 3L7 16H4v-3z" />
+      <path d="M11.5 5.5l3 3" />
+    </svg>
   )
 }
 

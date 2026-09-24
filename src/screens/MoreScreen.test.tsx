@@ -73,7 +73,7 @@ describe('Sicherung (AK21–AK23, AK27)', () => {
     other.workouts = [doneWorkout('w-local', '2026-09-03T10:00:00Z'), doneWorkout('w-new', '2026-09-05T10:00:00Z')]
     await importFile(JSON.stringify(buildBackup(other, '0.1.0', new Date('2026-09-06T08:00:00Z'))))
     await waitFor(() => expect(screen.getByTestId('import-preview')).toBeTruthy())
-    expect(screen.getByTestId('import-preview').textContent).toMatch(/21 Übungen · 1 Vorlagen · 2 Trainings/)
+    expect(screen.getByTestId('import-preview').textContent).toMatch(/21 Übungen · 1 Vorlage · 2 Trainings/)
     fireEvent.click(screen.getByRole('button', { name: 'Zusammenführen' }))
     expect(appStore.getState().data.workouts.map((w) => w.id).sort()).toEqual(['w-local', 'w-new'])
     expect(screen.getByRole('status').textContent).toMatch(/1 Trainings neu/)
