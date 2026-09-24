@@ -1,8 +1,9 @@
-export type TabId = 'training' | 'exercises' | 'history' | 'more'
+export type TabId = 'training' | 'exercises' | 'coach' | 'history' | 'more'
 
 const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: 'training', label: 'Training', icon: <DumbbellIcon /> },
   { id: 'exercises', label: 'Übungen', icon: <ListIcon /> },
+  { id: 'coach', label: 'Coach', icon: <CoachIcon /> },
   { id: 'history', label: 'Verlauf', icon: <ClockIcon /> },
   { id: 'more', label: 'Mehr', icon: <MoreIcon /> },
 ]
@@ -40,6 +41,14 @@ function ListIcon() {
       <circle cx="4" cy="6" r="1" fill="currentColor" />
       <circle cx="4" cy="12" r="1" fill="currentColor" />
       <circle cx="4" cy="18" r="1" fill="currentColor" />
+    </svg>
+  )
+}
+function CoachIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 17l5-5 4 4 8-8" />
+      <path d="M15 8h5v5" />
     </svg>
   )
 }

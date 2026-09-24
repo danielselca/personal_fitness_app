@@ -94,7 +94,7 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     await addExercises(page, ['Lat-Zug'])
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBeLessThanOrEqual(0)
-    for (const name of ['Training', 'Übungen', 'Verlauf', 'Mehr'] as const) {
+    for (const name of ['Training', 'Übungen', 'Coach', 'Verlauf', 'Mehr'] as const) {
       const box = await tab(page, name).boundingBox()
       expect(box!.height).toBeGreaterThanOrEqual(44)
     }

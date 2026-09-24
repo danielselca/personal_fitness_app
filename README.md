@@ -34,6 +34,12 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 - Unter **Programme** lässt sich jedes Programm **duplizieren** und frei **bearbeiten** (Name, Ziel, Tage umbenennen/sortieren/hinzufügen/entfernen, je Tag die Übungen) – z. B. „Ganzkörper ohne Schulter“. Auch ein **eigenes Programm** ganz ohne Vorgabe ist möglich. Die Vorschläge bleiben unverändert zum erneuten Übernehmen.
 - **Vorlagen-Editor** (Stift an der Vorlage, „+ Neue Vorlage“): Übungen hinzufügen (auch aus der Bibliothek), je Übung Sätze, **Wdh. von–bis** und **Pause**, sortieren, entfernen, **duplizieren**.
 
+**Coach**
+
+- In Programmen und Vorlagen mit Wdh.-Bereich trägt der Coach die nächste Steigerung ein und sagt warum, z. B. **„↑ 47,5 kg – letztes Mal 3 × 12 × 45 kg“** oder „+1 Wdh. je Satz“. **„Wie letztes Mal“** setzt zurück. Freies Training bleibt unverändert; abschaltbar unter Mehr → Einstellungen.
+- Beim Abschließen optional **„Wie war's?“** (leicht / passend / schwer) – „schwer“ hält das Gewicht, „leicht“ steigert früher. Neue **Bestwerte** stehen in der Zusammenfassung und im Übungsdetail (inkl. geschätztem 1RM).
+- Tab **Coach**: Wochenziel als Ring, Serie in Wochen, nächstes Programm-Training, Fortschritt je Übung, letzte Bestwerte, geschonte Bereiche. **Mehr → Profil**: Ziel, Erfahrung, Körpergewicht mit Verlauf.
+
 **Ausführung mit Grafik**
 
 - Übungen aus der Bibliothek (und deine verknüpften) zeigen eine **animierte Grafik** der Bewegung. Im Training öffnet **„Ausführung“** auf der Übungskarte Grafik, Tipps, typische Fehler und Muskeln.
@@ -87,7 +93,7 @@ Der Basis-Pfad ist auf `/personal_fitness_app/` eingestellt (GitHub Pages). Loka
 - `src/domain/` reine Logik: Typen, Seed-Katalog, Taxonomie, Bibliothekszugriff, Vorschläge, Statistik, ISO-Wochen, Sicherung, Migration
 - `src/library/` Übungsbibliothek: Quellen in `curation/`, daraus erzeugt `npm run library` die Dateien `*.generated.ts`
 - `src/store/` Zustand-Store und Persistenz (IndexedDB, Fallback localStorage)
-- `src/screens/` die vier Tabs, `src/components/` Bausteine, `src/hooks/` Wake Lock und Takt
+- `src/screens/` die fünf Tabs, `src/components/` Bausteine, `src/hooks/` Wake Lock und Takt
 - `e2e/` Playwright-Tests, `scripts/` Icon-Generator
 
 ## Deployment

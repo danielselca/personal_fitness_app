@@ -161,3 +161,28 @@ test('Screenshots: Grafiken und Ausführung (hell/dunkel)', async ({ page }) => 
   await page.waitForTimeout(800)
   await page.screenshot({ path: `${OUT}/55-everkinetic-dark.png` })
 })
+
+test('Screenshots: Coach und Profil (hell/dunkel)', async ({ page }) => {
+  await openApp(page)
+  // zwei Einheiten Lat-Zug, damit Fortschritt und Bestwert sichtbar sind
+  for (const kg of ['45', '50']) {
+    await page.getByRole('button', { name: /Freies Training|Training starten/ }).first().click()
+    await addExercises(page, ['Lat-Zug'])
+    const lat = card(page, 'Lat-Zug')
+    await lat.getByLabel('Satz 1 Gewicht').fill(kg)
+    await lat.getByRole('button', { name: 'Satz 1 abhaken' }).click()
+    await page.getByRole('button', { name: 'Abschließen' }).click()
+    await page.getByRole('dialog', { name: 'Training abschließen' }).getByRole('button', { name: 'Abschließen' }).click()
+    await page.getByRole('button', { name: 'OK' }).click()
+  }
+  await tab(page, 'Coach').click()
+  await page.getByRole('list', { name: 'Fortschritt je Übung' }).waitFor()
+  await page.screenshot({ path: `${OUT}/70-coach-light.png` })
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await page.screenshot({ path: `${OUT}/71-coach-dark.png` })
+  await tab(page, 'Mehr').click()
+  await page.getByLabel('Körpergewicht heute').fill('82,4')
+  await page.getByRole('button', { name: 'Eintragen' }).click()
+  await page.getByRole('heading', { name: 'Profil' }).scrollIntoViewIfNeeded()
+  await page.screenshot({ path: `${OUT}/72-profile-dark.png` })
+})

@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { TabBar, type TabId } from './components/TabBar.tsx'
 import { UpdatePrompt } from './pwa/UpdatePrompt.tsx'
 import { TrainingScreen } from './screens/TrainingScreen.tsx'
@@ -9,9 +10,13 @@ import { formatDate } from './lib/format.ts'
 import { useAppStore } from './store/appStore.ts'
 import { useNav } from './store/navStore.ts'
 
+// Coach erst beim Öffnen laden (kleiner Start)
+const CoachScreen = lazy(() => import('./screens/CoachScreen.tsx'))
+
 const TITLES: Record<TabId, string> = {
   training: 'Training',
   exercises: 'Übungen',
+  coach: 'Coach',
   history: 'Verlauf',
   more: 'Mehr',
 }
@@ -55,6 +60,11 @@ export function App() {
           <>
             {tab === 'training' && <TrainingScreen />}
             {tab === 'exercises' && <ExercisesScreen />}
+            {tab === 'coach' && (
+              <Suspense fallback={<p className="muted" role="status">Lade Coach …</p>}>
+                <CoachScreen />
+              </Suspense>
+            )}
             {tab === 'history' && <HistoryScreen />}
             {tab === 'more' && <MoreScreen />}
           </>
