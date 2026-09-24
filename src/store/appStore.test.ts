@@ -251,3 +251,54 @@ describe('Store: Übungen aus der Bibliothek (Schritt 17)', () => {
     expect(created).toMatchObject({ status: 'created', exercise: { name: 'Beinpresse (Bibliothek)' } })
   })
 })
+
+describe('Store: Programme (Schritt 18)', () => {
+  it('übernehmen aktiviert das Programm; Start eines Tages kopiert Satzzahl, Zielbereich und Pause', async () => {
+    const { store } = await freshStore()
+    const p = store.getState().installProgram('builtin-ganzkoerper', { goal: 'muskelaufbau', physioBlock: false })!
+    expect(store.getState().data.settings.activeProgramId).toBe(p.id)
+    const dayA = p.days[0]
+    // Pause in der Vorlage setzen
+    const t = store.getState().data.templates.find((x) => x.id === dayA.templateId)!
+    store.getState().updateTemplate(t.id, { entries: t.entries.map((e) => (e.exerciseId === 'ex-lat-zug' ? { ...e, restSec: 120 } : e)) })
+    const w = store.getState().startWorkout({ programId: p.id, dayId: dayA.id })
+    expect(w).toMatchObject({ programId: p.id, programDayId: dayA.id, templateId: dayA.templateId })
+    const lat = w.entries.find((e) => e.exerciseId === 'ex-lat-zug')!
+    expect(lat).toMatchObject({ repMin: 8, repMax: 12, restSec: 120 })
+    expect(lat.sets).toHaveLength(3)
+    // Vorlage später ändern → laufendes/abgeschlossenes Training bleibt
+    store.getState().updateTemplate(t.id, { entries: [] })
+    expect(store.getState().activeWorkout()!.entries.find((e) => e.exerciseId === 'ex-lat-zug')?.restSec).toBe(120)
+  })
+
+  it('Tage hinzufügen, umbenennen (auch die Vorlage), entfernen; duplizieren und löschen', async () => {
+    const { store } = await freshStore()
+    const s = () => store.getState()
+    const p = s().createProgram('  Mein Plan ')
+    expect(p.name).toBe('Mein Plan')
+    const day = s().addProgramDay(p.id, '')!
+    expect(day.name).toBe('Tag 1')
+    const tpl = () => s().data.templates.find((t) => t.id === day.templateId)
+    expect(tpl()).toMatchObject({ programId: p.id, entries: [] })
+    s().updateProgram(p.id, { days: [{ ...day, name: 'Beine' }], sessionsPerWeek: 2 })
+    expect(tpl()?.name).toBe('Beine')
+    expect(s().data.programs[0].sessionsPerWeek).toBe(2)
+    const copy = s().duplicateProgram(p.id)!
+    expect(copy.days[0].templateId).not.toBe(day.templateId)
+    s().removeProgramDay(p.id, day.id)
+    expect(tpl()).toBeUndefined()
+    expect(s().data.programs.find((x) => x.id === p.id)!.days).toEqual([])
+    s().setActiveProgram(copy.id)
+    s().deleteProgram(copy.id)
+    expect(s().data.settings.activeProgramId).toBeUndefined()
+    expect(s().data.templates.some((t) => t.programId === copy.id)).toBe(false)
+  })
+
+  it('Vorlage leer anlegen und duplizieren', async () => {
+    const { store } = await freshStore()
+    const t = store.getState().createTemplate('Beine zuhause')
+    expect(t.entries).toEqual([])
+    const c = store.getState().duplicateTemplate(t.id)!
+    expect(c.name).toBe('Beine zuhause (Kopie)')
+  })
+})

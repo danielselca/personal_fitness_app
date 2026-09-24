@@ -8,6 +8,7 @@ import { TimerBar } from '../components/TimerBar.tsx'
 import { WorkoutExerciseCard } from '../components/WorkoutExerciseCard.tsx'
 import { currentEntryId, entryState } from '../domain/progress.ts'
 import { backupFileName, buildBackup } from '../domain/backup.ts'
+import { restSecFor } from '../domain/hold.ts'
 import { doneSetCount, finishedWorkouts, trainingDaysOfWeek, workoutDurationMin, workoutVolume, workoutsPerWeek } from '../domain/stats.ts'
 import type { Template, Workout, WorkoutSet } from '../domain/types.ts'
 import { useNow } from '../hooks/useNow.ts'
@@ -238,7 +239,8 @@ function ActiveWorkout({ workout, onFinished }: { workout: Workout; onFinished: 
     if (!settings.autoStartTimer) return
     const ex = exById.get(exerciseId)
     if (ex?.mode === 'hold') return
-    startTimer(ex?.defaultRestSec ?? settings.defaultRestSec, exerciseId)
+    const entry = workout.entries.find((e) => e.exerciseId === exerciseId)
+    startTimer(ex ? restSecFor(ex, settings, entry) : settings.defaultRestSec, exerciseId)
   }
 
   const finish = () => {

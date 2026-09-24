@@ -31,7 +31,7 @@ export function HoldDonut({ exercise, entry }: { exercise: Exercise; entry: Work
   const running = !!hold && hold.pausedRemainingSec === undefined
   const now = useNow(250, running)
   const holdSec = holdSecFor(exercise)
-  const restSec = restSecFor(exercise, settings)
+  const restSec = restSecFor(exercise, settings, entry)
   const signalRef = useRef(0)
 
   // Abgelaufene Phasen nachziehen und signalisieren
