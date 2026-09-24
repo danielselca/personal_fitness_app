@@ -228,4 +228,48 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     await lat2.getByRole('button', { name: 'Wie letztes Mal' }).click()
     await expect(lat2.getByLabel('Satz 1 Gewicht')).toHaveValue('45')
   })
+
+  test('Coach II: Wochencheck mit Ampeln, Vorschlag öffnet den Programm-Tag, Muskelkarte (Schritt 21)', async ({ page }) => {
+    await openApp(page)
+    await page.getByRole('button', { name: /^Programme/ }).click()
+    await page.getByRole('radiogroup', { name: 'Trainings pro Woche' }).getByRole('radio', { name: '2×' }).click()
+    await page.getByRole('listitem', { name: 'Vorschlag Ganzkörper A/B' }).getByRole('button', { name: 'Übernehmen …' }).click()
+    await page.getByRole('dialog', { name: 'Ganzkörper A/B übernehmen' }).getByRole('button', { name: 'Übernehmen und aktivieren' }).click()
+    const hero = page.getByRole('region', { name: 'Programm Ganzkörper A/B' })
+    // zweimal Ganzkörper A, jeweils nur Lat-Zug → Wochenziel 2 erreicht, Brust fehlt
+    for (const first of [true, false]) {
+      if (first) await hero.getByRole('button', { name: /Nächstes: Ganzkörper A/ }).click()
+      else {
+        await hero.getByRole('button', { name: 'Anderen Tag wählen' }).click()
+        await page.getByRole('button', { name: 'Ganzkörper A starten' }).click()
+      }
+      const lat = card(page, 'Lat-Zug')
+      await lat.getByRole('button', { expanded: false }).click()
+      for (const i of [1, 2, 3]) {
+        await lat.getByLabel(`Satz ${i} Wiederholungen`).fill('10')
+        await lat.getByRole('button', { name: `Satz ${i} abhaken` }).click()
+      }
+      await page.getByRole('button', { name: 'Abschließen' }).click()
+      await page.getByRole('dialog', { name: 'Training abschließen' }).getByRole('button', { name: 'Abschließen' }).click()
+      await page.getByRole('button', { name: 'OK' }).click()
+    }
+
+    await tab(page, 'Coach').click()
+    const check = page.getByRole('region', { name: 'Wochencheck' })
+    await expect(check.getByRole('radio', { name: 'Diese Woche' })).toBeChecked()
+    const lights = check.getByRole('list', { name: 'Ampeln' })
+    await expect(lights).toContainText('2 von 2 Trainings')
+    await expect(lights).toContainText('Brust 0')
+    await expect(page.getByRole('img', { name: /Muskelkarte: \d+ Muskeln trainiert/ })).toBeVisible()
+    await lights.getByText('Volumen & Balance').click()
+    await expect(check.getByRole('list', { name: 'Sätze je Muskelgruppe' })).toBeVisible()
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    expect(overflow).toBeLessThanOrEqual(0)
+    await check.screenshot({ path: 'test-results/shots/73-week-check.png' })
+
+    await check.getByRole('list', { name: 'Vorschläge für nächste Woche' }).getByRole('button', { name: /^Ganzkörper A: \+ 1 Satz Brustpresse/ }).click()
+    await expect(page.getByRole('dialog', { name: 'Tag bearbeiten' })).toBeVisible()
+    await expect(tab(page, 'Training')).toHaveAttribute('aria-current', 'page')
+  })
 })
+

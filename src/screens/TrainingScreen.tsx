@@ -23,6 +23,7 @@ import { unlockAudio } from '../lib/audio.ts'
 import { downloadJson } from '../lib/download.ts'
 import { count, formatRelativeDay, formatVolume } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
+import { initialTarget, useNav } from '../store/navStore.ts'
 import { ProgramsView } from './ProgramsView.tsx'
 
 export function TrainingScreen() {
@@ -41,7 +42,10 @@ function StartScreen({ justFinished, onDismissSummary }: { justFinished: Workout
   const createTemplate = useAppStore((s) => s.createTemplate)
   const [showPrograms, setShowPrograms] = useState(false)
   const [reminderDismissed, setReminderDismissed] = useState(false)
-  const [editTemplate, setEditTemplate] = useState<Template | null>(null)
+  // Sprung aus dem Coach: Vorlage direkt im Editor öffnen
+  const [editTemplate, setEditTemplate] = useState<Template | null>(() => data.templates.find((t) => t.id === initialTarget('template')) ?? null)
+  const clearTarget = useNav((s) => s.clearTarget)
+  useEffect(() => clearTarget(), [clearTarget])
   const [newTemplateId, setNewTemplateId] = useState<string | null>(null)
   const [saveTemplate, setSaveTemplate] = useState(false)
   const [savedName, setSavedName] = useState<string | null>(null)

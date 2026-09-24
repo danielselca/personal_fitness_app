@@ -591,3 +591,61 @@ ul.list > li.trend-row { display: flex; }
 .trend-row[data-kind="gesteigert"] .trend-icon { background: var(--success-soft); color: var(--success); }
 .trend-row[data-kind="weniger"] .trend-icon { background: var(--danger-soft); color: var(--danger); }
 .trend-row[data-kind="stagniert"] .trend-icon { background: var(--warning-soft); color: var(--warning); }
+
+/* ---------- Coach II: Wochencheck und Muskelkarte (Schritt 21) ---------- */
+.week-check .segment { margin: 8px 0 12px; }
+.wc-title { font-size: 17px; margin: 0; flex: 1; min-width: 0; }
+.wc-overall { flex: none; font-size: 14px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--surface-2); }
+.wc-overall[data-overall="gut"] { background: var(--success-soft); color: var(--success); }
+.wc-overall[data-overall="okay"] { background: var(--warning-soft); color: var(--warning); }
+.wc-overall[data-overall="ausbaufaehig"] { background: var(--danger-soft); color: var(--danger); }
+.wc-lights { list-style: none; margin: 0; padding: 0; }
+.wc-lights > li + li { border-top: 1px solid var(--border); }
+.wc-light { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; min-height: var(--touch); }
+summary.wc-light { cursor: pointer; list-style: none; }
+summary.wc-light::-webkit-details-marker { display: none; }
+summary.wc-light::after { content: '›'; color: var(--text-3); margin-left: auto; transition: transform 0.15s; }
+.wc-details[open] > summary.wc-light::after { transform: rotate(90deg); }
+.wc-dot { flex: none; width: 14px; height: 14px; margin-top: 3px; border-radius: 50%; background: var(--text-3); }
+.wc-dot[data-level="gruen"] { background: var(--success); }
+.wc-dot[data-level="gelb"] { background: var(--warning); }
+.wc-dot[data-level="rot"] { background: var(--danger); }
+.wc-more { padding: 0 0 10px 24px; }
+.wc-fine { font-size: 13px; margin: 6px 0 0; }
+.wc-note { font-size: 13px; margin: 8px 0 0; padding: 6px 10px; border-radius: var(--radius-xs); background: var(--surface-2); }
+.wc-sub { font-size: 15px; margin: 14px 0 6px; }
+.wc-suggestions { margin: 0; padding: 0; list-style: none; counter-reset: wc; }
+.wc-suggestions > li { counter-increment: wc; }
+.wc-suggestion {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: var(--touch); padding: 8px 10px; margin-top: 6px;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); text-align: left; font: inherit; color: inherit;
+}
+.wc-suggestion::before { content: counter(wc); flex: none; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; background: var(--primary-soft); color: var(--primary); }
+.vol-bars { list-style: none; margin: 0; padding: 0; }
+.vol-bars li { display: grid; grid-template-columns: 84px 1fr 56px; align-items: center; gap: 8px; font-size: 13px; padding: 3px 0; }
+.vol-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vol-num { text-align: right; font-variant-numeric: tabular-nums; }
+.vol-track { position: relative; height: 10px; border-radius: 5px; background: var(--surface-2); overflow: hidden; }
+.vol-zone { position: absolute; top: 0; bottom: 0; background: var(--success-soft); }
+.vol-fill { position: absolute; left: 0; top: 3px; bottom: 3px; border-radius: 3px; background: var(--map-target); }
+.vol-bars li[data-status="unter"] .vol-fill { background: var(--map-under); }
+.vol-bars li[data-status="ueber"] .vol-fill { background: var(--map-over); }
+.vol-bars li[data-status="geschont"] { color: var(--text-2); }
+.bm-svg { display: block; width: 100%; max-width: 360px; margin: 0 auto; }
+.bm-body { fill: var(--surface-2); stroke: var(--border-strong); stroke-width: 0.8; }
+.bm-muscle { cursor: pointer; stroke: var(--surface); stroke-width: 0.8; fill: var(--map-none); }
+.bm-muscle[data-status="unter"], .bm-swatch[data-status="unter"] { fill: var(--map-under); }
+.bm-muscle[data-status="ziel"], .bm-swatch[data-status="ziel"] { fill: var(--map-target); }
+.bm-muscle[data-status="ueber"], .bm-swatch[data-status="ueber"] { fill: var(--map-over); }
+.bm-muscle[data-status="trainiert"], .bm-swatch[data-status="trainiert"] { fill: var(--map-trained); }
+.bm-muscle[data-status="geschont"], .bm-swatch[data-status="geschont"] { fill: url(#bm-hatch); }
+.bm-swatch { fill: var(--map-none); }
+.bm-muscle[data-selected] { stroke: var(--text); stroke-width: 1.4; }
+.bm-hatch-bg { fill: var(--map-none); }
+.bm-hatch-line { stroke: var(--text-2); stroke-width: 1.4; }
+.bm-caption { font-size: 9px; fill: var(--text-2); }
+.bm-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; list-style: none; margin: 8px 0 0; padding: 0; font-size: 12px; color: var(--text-2); }
+.bm-legend li { display: inline-flex; align-items: center; gap: 5px; }
+.bm-info { margin-top: 10px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--surface-2); font-size: 14px; }
+.bm-list { list-style: none; margin: 6px 0 0; padding: 0; font-size: 13px; }
+.bm-list li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; }

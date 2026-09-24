@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ExerciseForm } from '../components/ExerciseForm.tsx'
 import { ExerciseMedia } from '../components/ExerciseMedia.tsx'
 import { FilterChips } from '../components/FilterChips.tsx'
@@ -21,13 +21,17 @@ import { matchesQuery } from '../domain/search.ts'
 import type { Exercise } from '../domain/types.ts'
 import { formatDate, formatKg, formatMmSs, formatNumber, formatSetFor } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
+import { initialTarget, useNav } from '../store/navStore.ts'
 import { LibraryDetail, LibraryList } from './LibraryView.tsx'
 
 type View = 'meine' | 'bibliothek'
 
 export function ExercisesScreen() {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [libraryId, setLibraryId] = useState<string | null>(null)
+  // Sprung aus dem Coach: Übung oder Bibliothekseintrag direkt öffnen
+  const [selectedId, setSelectedId] = useState<string | null>(() => initialTarget('exercise'))
+  const [libraryId, setLibraryId] = useState<string | null>(() => initialTarget('library'))
+  const clearTarget = useNav((s) => s.clearTarget)
+  useEffect(() => clearTarget(), [clearTarget])
   const [view, setView] = useState<View>('meine')
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<LibraryFilter>({})
