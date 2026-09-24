@@ -1,0 +1,13 @@
+Bewegungsgrafiken in diesem Ordner
+
+Lizenz: Creative Commons Namensnennung – Weitergabe unter gleichen Bedingungen 4.0 International
+(CC BY-SA 4.0), https://creativecommons.org/licenses/by-sa/4.0/deed.de
+
+Quellen:
+- Workout Guide von Bryl Lim, https://github.com/bryllim/workout-guide
+  (Stand aac599224bb9780305239607ef98540b7e0ce389), CC BY-SA 4.0; teils nach Everkinetic.
+- Everkinetic, https://github.com/everkinetic/data (Stand 446bb9a3d0c3beb6b84f7c9d77dfc8af707a2ab6), CC BY-SA 4.0.
+
+Änderungen: Koordinaten gerundet und Dateien verkleinert; bei Everkinetic Hintergrund und
+Füllflächen entfernt und Linien einfarbig. Die veränderten Grafiken stehen ebenfalls unter
+CC BY-SA 4.0. Urheber, Quelle und Änderungen je Datei: ATTRIBUTION.json.
