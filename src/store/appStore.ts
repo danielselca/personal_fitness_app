@@ -17,7 +17,7 @@ import {
   installProgram as installProgramData,
   type InstallOptions,
 } from '../domain/programs.ts'
-import type { AppData, Backup, Exercise, Program, ProgramDay, Settings, Template, TemplateEntry, Workout, WorkoutEntry, WorkoutSet } from '../domain/types.ts'
+import type { AppData, Backup, Exercise, Program, ProgramDay, Restriction, Settings, Template, TemplateEntry, Workout, WorkoutEntry, WorkoutSet } from '../domain/types.ts'
 import { idbStorage, type DataStorage } from './persistence.ts'
 
 export type ExerciseInput = Omit<Exercise, 'id' | 'createdAt' | 'updatedAt' | 'archived' | 'aliases'> & {
@@ -62,6 +62,13 @@ export interface AppStore {
   startWorkout(opts?: StartOptions): Workout
   addExerciseToWorkout(exerciseId: string): void
   removeExerciseFromWorkout(exerciseId: string): void
+  /**
+   * Übung im laufenden Training tauschen: gleiche Position und Satzzahl, Werte aus dem Verlauf der
+   * neuen Übung. Nur ohne abgehakte Sätze und wenn die neue Übung noch nicht im Training ist.
+   */
+  replaceExerciseInWorkout(oldId: string, newId: string): boolean
+  /** Übung in einer Vorlage tauschen (Sätze und Wdh.-Bereich bleiben). */
+  replaceExerciseInTemplate(templateId: string, oldId: string, newId: string): void
   moveWorkoutEntry(exerciseId: string, direction: -1 | 1): void
   moveWorkoutEntryToEnd(exerciseId: string, end: 'top' | 'bottom'): void
   /** Übungen ohne Gewicht nach vorn, Reihenfolge sonst unverändert. */
@@ -119,6 +126,10 @@ export interface AppStore {
   duplicateProgram(id: string): Program | null
   deleteProgram(id: string): void
   setActiveProgram(id: string | undefined): void
+
+  // Körperbereiche schonen
+  addRestriction(input: Pick<Restriction, 'bodyParts' | 'muscles' | 'note' | 'until'>): Restriction | null
+  removeRestriction(id: string): void
   markBackupDone(): void
   importBackup(backup: Backup, mode: ImportMode): ImportResult
   markHintSeen(id: string): void
@@ -327,6 +338,33 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
         const entry = buildEntry(d, exerciseId, { excludeWorkoutId: active.id })
         if (!entry) return
         updateActive((w) => ({ ...w, entries: [...w.entries, entry] }))
+      },
+
+      replaceExerciseInWorkout(oldId, newId) {
+        const d = get().data
+        const active = get().activeWorkout()
+        const old = active?.entries.find((e) => e.exerciseId === oldId)
+        if (!active || !old || old.sets.some((s) => s.done) || active.entries.some((e) => e.exerciseId === newId)) return false
+        const built = buildEntry(d, newId, { targetSets: old.sets.length, excludeWorkoutId: active.id })
+        if (!built) return false
+        // Zielbereich bleibt (gleiche Aufgabe), die Pause kommt von der neuen Übung
+        const entry: WorkoutEntry = { ...built, ...(old.repMin !== undefined && old.repMax !== undefined ? { repMin: old.repMin, repMax: old.repMax } : {}) }
+        updateActive((w) => ({ ...w, entries: w.entries.map((e) => (e.exerciseId === oldId ? entry : e)) }))
+        return true
+      },
+
+      replaceExerciseInTemplate(templateId, oldId, newId) {
+        const t = get().data.templates.find((x) => x.id === templateId)
+        if (!t || !t.entries.some((e) => e.exerciseId === oldId)) return
+        const entries = t.entries.some((e) => e.exerciseId === newId)
+          ? t.entries.filter((e) => e.exerciseId !== oldId)
+          : t.entries.map((e) => {
+              if (e.exerciseId !== oldId) return e
+              // Pause gehörte zur alten Übung; die neue nimmt ihre eigene
+              const { restSec: _rest, ...kept } = e
+              return { ...kept, exerciseId: newId }
+            })
+        get().updateTemplate(templateId, { entries })
       },
 
       removeExerciseFromWorkout(exerciseId) {
@@ -637,6 +675,26 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
 
       setActiveProgram(id) {
         update((d) => ({ ...d, settings: { ...d.settings, activeProgramId: id } }))
+      },
+
+      addRestriction(input) {
+        if (input.bodyParts.length === 0 && input.muscles.length === 0) return null
+        const at = nowIso()
+        const r: Restriction = {
+          id: newId('rs-'),
+          bodyParts: input.bodyParts,
+          muscles: input.muscles,
+          note: input.note?.trim() || undefined,
+          until: input.until || undefined,
+          createdAt: at,
+          updatedAt: at,
+        }
+        update((d) => ({ ...d, restrictions: [...d.restrictions, r] }))
+        return r
+      },
+
+      removeRestriction(id) {
+        update((d) => ({ ...d, restrictions: d.restrictions.filter((r) => r.id !== id) }))
       },
 
       markBackupDone() {

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { nextProgramDay, recommendProgram } from '../domain/programs.ts'
+import { activeRestrictions, dayKey, templateHitCount } from '../domain/restrictions.ts'
 import type { AppData, Program } from '../domain/types.ts'
 import { count } from '../lib/format.ts'
 import { Sheet } from './Sheet.tsx'
@@ -38,6 +39,7 @@ export function ProgramHero({
   }
   const next = nextProgramDay(program, data.workouts)
   const template = next && data.templates.find((t) => t.id === next.templateId)
+  const hits = template ? templateHitCount(template, data.exercises, activeRestrictions(data.restrictions, dayKey())) : 0
   return (
     <section className="card program-hero" aria-label={`Programm ${program.name}`}>
       <div className="program-hero-top">
@@ -58,6 +60,7 @@ export function ProgramHero({
               <strong>{thisWeek}/{data.settings.weeklyGoal}</strong> diese Woche
             </span>
             {template && <span>{count(template.entries.length, 'Übung', 'Übungen')}</span>}
+            {template && hits > 0 && <span className="restrict-hint">⚠ {hits} geschont</span>}
             {program.days.length > 1 && (
               <button type="button" className="btn btn-sm btn-link" onClick={() => setChoosing(true)}>
                 Anderen Tag wählen

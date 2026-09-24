@@ -57,7 +57,7 @@ export function exerciseMeta(ex: Exercise): ExerciseMeta {
     category: ex.category ?? lib?.category,
     pattern: ex.pattern ?? lib?.pattern,
     muscles: ex.muscles ?? lib?.muscles ?? { primary: [], secondary: [] },
-    loads: lib?.loads ?? [],
+    loads: ex.loads ?? lib?.loads ?? [],
     level: lib?.level,
     tags: lib?.tags ?? [],
     library: lib,

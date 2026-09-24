@@ -34,6 +34,11 @@ Anforderungen und Abnahmekriterien: [SPEC.md](SPEC.md) · Stand der Umsetzung: [
 - Unter **Programme** lässt sich jedes Programm **duplizieren** und frei **bearbeiten** (Name, Ziel, Tage umbenennen/sortieren/hinzufügen/entfernen, je Tag die Übungen) – z. B. „Ganzkörper ohne Schulter“. Auch ein **eigenes Programm** ganz ohne Vorgabe ist möglich. Die Vorschläge bleiben unverändert zum erneuten Übernehmen.
 - **Vorlagen-Editor** (Stift an der Vorlage, „+ Neue Vorlage“): Übungen hinzufügen (auch aus der Bibliothek), je Übung Sätze, **Wdh. von–bis** und **Pause**, sortieren, entfernen, **duplizieren**.
 
+**Übung tauschen und Körperbereiche schonen**
+
+- Gerät besetzt oder etwas zwickt? Im Training bei der Übung **Bearbeiten → Übung tauschen**: Vorschläge für dieselben Muskeln, erst deine Übungen, dann aus der Bibliothek, mit Ausrüstungs-Chips und Suche; **„Nur heute“** oder **„Auch in der Vorlage“**. Im Vorlagen-Editor tauscht ⇄ eine Übung dauerhaft.
+- **Mehr → Körperbereiche schonen**: z. B. Schulter wählen, optional bis zu einem Datum und mit Notiz. Betroffene Übungen sind im Training markiert („⚠ Belastet Schulter“) mit **Alternative**, **Heute auslassen** oder **Trotzdem**; Vorlagen und Programm zeigen „⚠ 4 geschont“. Kein Ersatz für ärztlichen oder physiotherapeutischen Rat.
+
 **Übungen und Bibliothek**
 
 - Tab **Übungen** → oben **Meine** (deine Übungen mit Verlauf) oder **Bibliothek** (60 Übungen mit Ausführungstipps und typischen Fehlern). Die Chips filtern nach Ausrüstung (Maschine, Seilzug, Freihantel, Kettlebell, Körpergewicht, Band, Calisthenics …) und Muskelgruppe; bei „Meine“ zeigt „Ohne Zuordnung“ Übungen ohne Angaben.

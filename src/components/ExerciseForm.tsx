@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { libraryEntry } from '../domain/library.ts'
-import { CATEGORIES, CATEGORY_LABEL, EQUIPMENT, EQUIPMENT_LABEL, MUSCLES, MUSCLE_INFO, isCategory, isEquipment, type Muscle, type MuscleSet } from '../domain/taxonomy.ts'
+import { BODY_PARTS, BODY_PART_LABEL, CATEGORIES, CATEGORY_LABEL, EQUIPMENT, EQUIPMENT_LABEL, MUSCLES, MUSCLE_INFO, isCategory, isEquipment, type BodyPart, type Muscle, type MuscleSet } from '../domain/taxonomy.ts'
 import type { Exercise } from '../domain/types.ts'
 import { formatNumber, parseWeight } from '../lib/format.ts'
 import { Sheet } from './Sheet.tsx'
@@ -41,9 +41,13 @@ export function ExerciseForm({
   const [category, setCategory] = useState(initial?.category ?? '')
   // undefined: keine eigenen Muskeln (Werte der Bibliothek gelten, falls verknüpft)
   const [muscles, setMuscles] = useState<MuscleSet | undefined>(initial?.muscles)
+  // undefined: belastete Bereiche der Bibliothek (falls verknüpft)
+  const [loads, setLoads] = useState<BodyPart[] | undefined>(initial?.loads)
   const [error, setError] = useState<string | null>(null)
   const lib = libraryEntry(initial?.libraryId)
   const shownMuscles = muscles ?? lib?.muscles ?? { primary: [], secondary: [] }
+  const shownLoads = loads ?? lib?.loads ?? []
+  const toggleLoad = (b: BodyPart) => setLoads(shownLoads.includes(b) ? shownLoads.filter((x) => x !== b) : BODY_PARTS.filter((x) => x === b || shownLoads.includes(x)))
   const toggleMuscle = (kind: keyof MuscleSet, m: Muscle) => {
     const without = { primary: shownMuscles.primary.filter((x) => x !== m), secondary: shownMuscles.secondary.filter((x) => x !== m) }
     if (shownMuscles[kind].includes(m)) return setMuscles(without)
@@ -84,6 +88,7 @@ export function ExerciseForm({
       equipment: isEquipment(equipment) ? equipment : undefined,
       category: isCategory(category) ? category : undefined,
       muscles: muscles && (muscles.primary.length > 0 || muscles.secondary.length > 0) ? muscles : undefined,
+      loads: loads && loads.length > 0 ? loads : undefined,
     })
     if (err) setError(err)
   }
@@ -154,8 +159,8 @@ export function ExerciseForm({
           <span>Hinweis</span>
           <input className="input" value={hint} onChange={(e) => setHint(e.target.value)} placeholder="z. B. Gewicht pro Hantel" />
         </label>
-        <details className="form-section" open={!!(initial?.equipment || initial?.category || initial?.muscles)}>
-          <summary>Zuordnung (Ausrüstung, Muskeln)</summary>
+        <details className="form-section" open={!!(initial?.equipment || initial?.category || initial?.muscles || initial?.loads)}>
+          <summary>Zuordnung (Ausrüstung, Muskeln, Bereiche)</summary>
           {lib && <p className="muted" style={{ fontSize: 13, margin: '0 0 10px' }}>Verknüpft mit „{lib.name}“. Leere Felder übernehmen die Werte der Bibliothek.</p>}
           <div className="btn-row" style={{ gap: 12 }}>
             <label className="field" style={{ flex: 1 }}>
@@ -188,6 +193,21 @@ export function ExerciseForm({
           {lib && muscles && (
             <button type="button" className="btn btn-sm" onClick={() => setMuscles(undefined)}>
               Muskeln wie Bibliothek
+            </button>
+          )}
+          <div className="field" style={{ marginTop: 12 }}>
+            <span>Belastete Bereiche (fürs Schonen)</span>
+            <div className="chip-wrap" role="group" aria-label="Belastete Bereiche">
+              {BODY_PARTS.map((b) => (
+                <button key={b} type="button" className="chip" aria-pressed={shownLoads.includes(b)} onClick={() => toggleLoad(b)}>
+                  {BODY_PART_LABEL[b]}
+                </button>
+              ))}
+            </div>
+          </div>
+          {lib && loads && (
+            <button type="button" className="btn btn-sm" onClick={() => setLoads(undefined)}>
+              Bereiche wie Bibliothek
             </button>
           )}
         </details>

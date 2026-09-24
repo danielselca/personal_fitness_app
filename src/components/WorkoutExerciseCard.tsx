@@ -23,6 +23,9 @@ export function WorkoutExerciseCard({
   onToggle,
   onSetDone,
   onDeleteSet,
+  restrictionHits = [],
+  onSwap,
+  onDismissHits,
 }: {
   exercise: Exercise
   entry: WorkoutEntry
@@ -34,6 +37,10 @@ export function WorkoutExerciseCard({
   onToggle: () => void
   onSetDone: (set: WorkoutSet) => void
   onDeleteSet: (set: WorkoutSet, index: number) => void
+  /** Geschonte Bereiche, die diese Übung belastet (leer = kein Hinweis). */
+  restrictionHits?: string[]
+  onSwap?: () => void
+  onDismissHits?: () => void
 }) {
   const workouts = useAppStore((s) => s.data.workouts)
   const settings = useAppStore((s) => s.data.settings)
@@ -81,7 +88,7 @@ export function WorkoutExerciseCard({
   const collapsedLine =
     state === 'done'
       ? `${count(doneCount, 'Satz', 'Sätze')} erledigt${lastDone ? ` · ${formatSetFor(exercise.mode, lastDone.reps!, noWeight ? null : lastDone.weightKg, true)}` : ''}`
-      : `${doneCount}/${entry.sets.length} Sätze${lastDone ? ` · zuletzt ${formatSetFor(exercise.mode, lastDone.reps!, noWeight ? null : lastDone.weightKg, true)}` : ''}`
+      : `${restrictionHits.length ? '⚠ geschont · ' : ''}${doneCount}/${entry.sets.length} Sätze${lastDone ? ` · zuletzt ${formatSetFor(exercise.mode, lastDone.reps!, noWeight ? null : lastDone.weightKg, true)}` : ''}`
 
   return (
     <section ref={cardRef} className={`card wcard wcard-${state} ${expanded ? 'wcard-open' : ''}`} aria-label={exercise.name} data-state={state}>
@@ -106,6 +113,16 @@ export function WorkoutExerciseCard({
 
       {expanded && (
         <div className="wcard-body">
+          {restrictionHits.length > 0 && (
+            <div className="restrict-banner" role="note">
+              <span>⚠ Belastet {restrictionHits.join(', ')} – geschont</span>
+              <div className="btn-row">
+                {onSwap && doneCount === 0 && <button type="button" className="btn btn-sm" onClick={onSwap}>Alternative</button>}
+                <button type="button" className="btn btn-sm" onClick={() => remove(exercise.id)}>Heute auslassen</button>
+                {onDismissHits && <button type="button" className="btn btn-sm btn-link" onClick={onDismissHits}>Trotzdem</button>}
+              </div>
+            </div>
+          )}
           {exercise.hint && <p className="muted wcard-hint ellipsis" title={exercise.hint}>{exercise.hint}</p>}
 
           {hold ? (
@@ -161,6 +178,11 @@ export function WorkoutExerciseCard({
                   onClick={() => updateExercise(exercise.id, { noWeight: !noWeight })}
                 >
                   {noWeight ? '✓ Ohne Gewicht' : 'Ohne Gewicht'}
+                </button>
+              )}
+              {onSwap && doneCount === 0 && (
+                <button type="button" className="btn btn-sm" aria-label={`${exercise.name} tauschen`} onClick={onSwap}>
+                  Übung tauschen
                 </button>
               )}
               <button type="button" className="btn btn-sm btn-danger-text" aria-label={`${exercise.name} entfernen`} onClick={() => remove(exercise.id)}>

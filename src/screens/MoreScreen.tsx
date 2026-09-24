@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { BackupReminder } from '../components/BackupReminder.tsx'
+import { RestrictionsSection } from '../components/RestrictionsSection.tsx'
 import { ConfirmDialog } from '../components/Sheet.tsx'
 import { Toggle } from '../components/Toggle.tsx'
 import { backupFileName, buildBackup, summarizeBackup, validateBackup, type ImportResult } from '../domain/backup.ts'
@@ -15,6 +16,7 @@ export function MoreScreen() {
   return (
     <>
       <BackupSection />
+      <RestrictionsSection />
       <SettingsSection />
       <HintsSection />
       <div className="card">

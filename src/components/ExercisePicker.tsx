@@ -3,6 +3,7 @@ import { EQUIPMENT_FILTER_OPTIONS, exerciseMeta, exerciseSearchTexts, matchesFil
 import { noWeightFirst, sortForPicker } from '../domain/progress.ts'
 import { matchesQuery } from '../domain/search.ts'
 import { normalizeName } from '../domain/suggestions.ts'
+import { activeRestrictions, dayKey, exerciseHits } from '../domain/restrictions.ts'
 import { EQUIPMENT_LABEL } from '../domain/taxonomy.ts'
 import { appStore, useAppStore } from '../store/appStore.ts'
 import { FilterChips } from './FilterChips.tsx'
@@ -22,6 +23,8 @@ export function ExercisePicker({ excludeIds, onAdd, onClose }: { excludeIds: str
   const setArchived = useAppStore((s) => s.setExerciseArchived)
   const [query, setQuery] = useState('')
   const [equipment, setEquipment] = useState<EquipmentFilter | undefined>()
+  const restrictions = useAppStore((s) => s.data.restrictions)
+  const active = useMemo(() => activeRestrictions(restrictions, dayKey()), [restrictions])
   const [selected, setSelected] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
 
@@ -97,6 +100,8 @@ export function ExercisePicker({ excludeIds, onAdd, onClose }: { excludeIds: str
       <ul className="list" style={{ marginTop: 8 }}>
         {list.map((e, i) => {
           const on = selected.includes(e.id)
+          const hits = exerciseHits(e, active)
+          const sub = [e.machineNo && `Gerät ${e.machineNo}`, e.mode === 'hold' ? `Halten ${e.holdSec ?? 60} s` : q && e.noWeight && 'ohne Gewicht', hits.length > 0 && `⚠ ${hits.join(', ')}`].filter(Boolean).join(' · ')
           const groupStart = !q && (i === 0 || !!list[i - 1].noWeight !== !!e.noWeight)
           return (
             <li key={e.id} className={groupStart ? 'picker-group' : undefined} data-group={groupStart ? (e.noWeight ? 'Ohne Gewicht' : 'Mit Gewicht') : undefined}>
@@ -104,15 +109,13 @@ export function ExercisePicker({ excludeIds, onAdd, onClose }: { excludeIds: str
                 type="button"
                 aria-pressed={on}
                 aria-label={e.name}
-                aria-describedby={e.machineNo || (q && e.noWeight) || e.mode === 'hold' ? `pick-sub-${e.id}` : undefined}
+                aria-describedby={sub ? `pick-sub-${e.id}` : undefined}
                 className={`card card-tap row picker-row ${on ? 'picker-on' : ''}`}
                 onClick={() => toggle(e.id)}
               >
                 <span className="row-main">
                   <span className="row-title ellipsis" style={{ display: 'block' }}>{e.name}</span>
-                  {(e.machineNo || (q && e.noWeight) || e.mode === 'hold') && (
-                    <span className="row-sub" id={`pick-sub-${e.id}`}>{[e.machineNo && `Gerät ${e.machineNo}`, e.mode === 'hold' ? `Halten ${e.holdSec ?? 60} s` : q && e.noWeight && 'ohne Gewicht'].filter(Boolean).join(' · ')}</span>
-                  )}
+                  {sub && <span className="row-sub" id={`pick-sub-${e.id}`}>{sub}</span>}
                 </span>
                 <span className={`check-mark ${on ? 'check-on' : ''}`} aria-hidden="true">{on ? '✓' : ''}</span>
               </button>
