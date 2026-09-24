@@ -1,4 +1,4 @@
-import { SCHEMA_VERSION, type AppData, type Exercise, type Meta, type Program, type ProgramDay, type Restriction, type Settings, type Template, type TemplateEntry, type TimerState, type Workout, type WorkoutEntry, type WorkoutSet } from '../domain/types.ts'
+import { SCHEMA_VERSION, type AppData, type BodyLogEntry, type Exercise, type Meta, type Program, type ProgramDay, type Restriction, type Settings, type Template, type TemplateEntry, type TimerState, type Workout, type WorkoutEntry, type WorkoutSet } from '../domain/types.ts'
 
 /**
  * Vollständig befüllte Daten für Rundreise-Tests: jedes optionale Feld ist gesetzt.
@@ -67,6 +67,8 @@ const workoutEntryFull: Omit<Required<WorkoutEntry>, 'hold'> = {
   repMax: 12,
   restSec: 75,
   note: 'Griff eng',
+  rating: 'schwer',
+  coach: { kind: 'gewicht', note: '↑ 22,5 kg – letztes Mal 4 × 12' },
   sets: [setFull, { id: 'set-2', weightKg: null, reps: 12, done: true, doneAt: '2026-09-21T09:08:00.000Z' }],
 }
 
@@ -93,7 +95,11 @@ const settingsFull: Required<Settings> = {
   theme: 'dark',
   activeProgramId: 'prg-voll',
   weeklyGoal: 4,
+  coachProgression: false,
+  profile: { goal: 'fitness', experience: 'fortgeschritten' },
 }
+
+const bodyLogFull: Required<BodyLogEntry> = { id: 'bw-1', date: '2026-09-20', weightKg: 82.4, createdAt: AT, updatedAt: LATER }
 
 const dayFull: Required<ProgramDay> = { id: 'day-a', name: 'Tag A', templateId: templateFull.id }
 
@@ -141,6 +147,7 @@ export function fullAppData(): Required<AppData> {
     workouts: [workoutFull],
     programs: [programFull],
     restrictions: [restrictionFull],
+    bodyLog: [bodyLogFull],
     settings: settingsFull,
     timer: timerFull,
     meta: metaFull,

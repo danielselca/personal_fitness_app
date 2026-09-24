@@ -1,5 +1,5 @@
 import { applySeedLibrary, AUFDEHNEN_PLAN, buildStandardEntries, HOLD_SEED, LEGACY_KOPFHEBEN_NAME, LEGACY_TEMPLATE_NAME, SEED_HINTS, SEED_NO_WEIGHT_IDS, SEED_TEMPLATE_ID, SEED_TEMPLATE_NAME } from './seed.ts'
-import { normalizeList, normalizeMeta, normalizeProgram, normalizeRestriction, normalizeSettings, normalizeTimer } from './normalize.ts'
+import { normalizeBodyLog, normalizeList, normalizeMeta, normalizeProgram, normalizeRestriction, normalizeSettings, normalizeTimer } from './normalize.ts'
 import { SCHEMA_VERSION, type AppData, type Exercise, type Template, type Workout } from './types.ts'
 
 /**
@@ -101,6 +101,8 @@ const MIGRATIONS: Record<number, (d: Record<string, unknown>) => Record<string, 
   // 8 → 9: Programme und Schonung. Neue Listen starten leer, neue Einstellungen mit Standardwerten
   // (über die Normalisierer); kein Programm wird aktiviert.
   8: (d) => ({ ...d, schemaVersion: 9 }),
+  // 9 → 10: Coach I. Körpergewicht-Liste leer, Steigerungsvorschläge an (über die Normalisierer).
+  9: (d) => ({ ...d, schemaVersion: 10 }),
 }
 
 /** Seed-Halteübung auf eine bestehende Übung anwenden, sofern der Nutzer die Art nicht selbst gesetzt hat. */
@@ -148,6 +150,7 @@ const NORMALIZERS: Normalizers = {
   workouts: (v) => (Array.isArray(v) ? (v as AppData['workouts']) : []),
   programs: (v) => normalizeList(v, normalizeProgram),
   restrictions: (v) => normalizeList(v, normalizeRestriction),
+  bodyLog: (v) => normalizeList(v, normalizeBodyLog),
   settings: normalizeSettings,
   timer: normalizeTimer,
   meta: normalizeMeta,

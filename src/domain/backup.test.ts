@@ -128,12 +128,13 @@ describe('Programme und Schonung in der Sicherung (Schema 9)', () => {
   const restriction = { id: 'rs-1', bodyParts: ['schulter' as const], muscles: [], createdAt: AT, updatedAt: AT }
 
   it('ältere Sicherung ohne Programme ist gültig und ergibt leere Listen', () => {
-    const { programs: _p, restrictions: _r, ...old } = buildBackup(data, '0.1.0')
+    const { programs: _p, restrictions: _r, bodyLog: _b, ...old } = buildBackup(data, '0.1.0')
     const r = validateBackup(JSON.parse(JSON.stringify({ ...old, schemaVersion: 8 })))
     expect(r.ok).toBe(true)
     if (!r.ok) return
     expect(r.backup.programs).toEqual([])
     expect(r.backup.restrictions).toEqual([])
+    expect(r.backup.bodyLog).toEqual([])
     expect(summarizeBackup(r.backup).programs).toBe(0)
   })
 
@@ -143,8 +144,10 @@ describe('Programme und Schonung in der Sicherung (Schema 9)', () => {
   })
 
   it('Zusammenführen und Ersetzen übernehmen Programme und Schonungen', () => {
-    const file = buildBackup({ ...data, programs: [program], restrictions: [restriction] }, '0.1.0')
+    const weight = { id: 'bw-1', date: '2026-09-10', weightKg: 82, createdAt: AT, updatedAt: AT }
+    const file = buildBackup({ ...data, programs: [program], restrictions: [restriction], bodyLog: [weight] }, '0.1.0')
     const merged = applyImport(data, file, 'merge')
+    expect(merged.data.bodyLog).toEqual([weight])
     expect(merged.data.programs).toEqual([program])
     expect(merged.data.restrictions).toEqual([restriction])
     expect(merged.added.programs).toBe(1)

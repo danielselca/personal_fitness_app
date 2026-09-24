@@ -1,8 +1,13 @@
-import { isBodyPart, isCategory, isEquipment, isMuscle, isPattern, type MuscleSet } from './taxonomy.ts'
+import { LEVELS, isBodyPart, isCategory, isEquipment, isMuscle, isPattern, type Level, type MuscleSet } from './taxonomy.ts'
 import {
   DEFAULT_SETTINGS,
   type Exercise,
+  COACH_KINDS,
+  type BodyLogEntry,
+  type CoachKind,
+  type EntryRating,
   type Meta,
+  type Profile,
   type Program,
   type ProgramDay,
   type Restriction,
@@ -44,6 +49,27 @@ export function normalizeSettings(v: unknown): Settings {
     theme: THEMES.includes(s.theme as ThemeSetting) ? (s.theme as ThemeSetting) : d.theme,
     activeProgramId: isStr(s.activeProgramId) && s.activeProgramId ? s.activeProgramId : undefined,
     weeklyGoal: intIn(s.weeklyGoal, 1, 14) ? s.weeklyGoal : d.weeklyGoal,
+    coachProgression: isBool(s.coachProgression) ? s.coachProgression : d.coachProgression,
+    profile: normalizeProfile(s.profile),
+  }
+}
+
+function normalizeProfile(v: unknown): Profile | undefined {
+  if (!isObj(v)) return undefined
+  return {
+    goal: v.goal === 'fitness' ? 'fitness' : 'muskelaufbau',
+    experience: LEVELS.includes(v.experience as Level) ? (v.experience as Level) : 'einsteiger',
+  }
+}
+
+const RATINGS: EntryRating[] = ['leicht', 'passend', 'schwer']
+
+/** Bewertung und Coach-Hinweis eines Trainingseintrags. */
+function entryCoach(en: Record<string, unknown>): { rating?: EntryRating; coach?: { kind: CoachKind; note: string } } {
+  const c = en.coach
+  return {
+    rating: RATINGS.includes(en.rating as EntryRating) ? (en.rating as EntryRating) : undefined,
+    coach: isObj(c) && COACH_KINDS.includes(c.kind as CoachKind) && isStr(c.note) ? { kind: c.kind as CoachKind, note: c.note } : undefined,
   }
 }
 
@@ -151,6 +177,7 @@ export function normalizeWorkout(w: Record<string, unknown>): Workout {
       exerciseId: en.exerciseId as string,
       ...entryTarget(en),
       note: isStr(en.note) ? en.note : undefined,
+      ...entryCoach(en),
       sets: (en.sets as Record<string, unknown>[]).map((s) => ({
         id: s.id as string,
         weightKg: (s.weightKg as number | null | undefined) ?? null,
@@ -199,4 +226,11 @@ export function normalizeRestriction(v: unknown): Restriction | null {
 /** Liste aus einer Sicherung: ungültige Einträge fallen weg. */
 export function normalizeList<T>(v: unknown, fn: (x: unknown) => T | null): T[] {
   return Array.isArray(v) ? v.map(fn).filter((x): x is T => x !== null) : []
+}
+
+/** Körpergewicht aus einer Sicherung; null, wenn ungültig. */
+export function normalizeBodyLog(v: unknown): BodyLogEntry | null {
+  if (!isObj(v) || !isStr(v.id) || !isStr(v.date) || !/^\d{4}-\d{2}-\d{2}$/.test(v.date) || !isNum(v.weightKg) || v.weightKg <= 0 || v.weightKg > 500) return null
+  const at = isIso(v.createdAt) ? v.createdAt : new Date(0).toISOString()
+  return { id: v.id, date: v.date, weightKg: v.weightKg, createdAt: at, updatedAt: isIso(v.updatedAt) ? v.updatedAt : at }
 }

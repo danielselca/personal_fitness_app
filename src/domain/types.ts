@@ -1,8 +1,8 @@
 /** Datenmodell der App (SPEC.md Abschnitt 5). Alle Zeitstempel sind ISO-8601-Strings. */
 
-import type { BodyPart, Category, Equipment, Muscle, MuscleSet, Pattern } from './taxonomy.ts'
+import type { BodyPart, Category, Equipment, Level, Muscle, MuscleSet, Pattern } from './taxonomy.ts'
 
-export const SCHEMA_VERSION = 9 as const
+export const SCHEMA_VERSION = 10 as const
 
 export type ExerciseMode = 'reps' | 'hold'
 
@@ -130,6 +130,19 @@ export interface HoldState {
   pausedRemainingSec?: number
 }
 
+/** „Wie war's?“ nach dem Training; beeinflusst die nächste Steigerung. */
+export type EntryRating = 'leicht' | 'passend' | 'schwer'
+
+export const COACH_KINDS = ['gewicht', 'wdh', 'satz', 'variante', 'halten', 'gleich', 'pause', 'geschont', 'wiedereinstieg', 'erstes-mal'] as const
+export type CoachKind = (typeof COACH_KINDS)[number]
+
+/** Steigerungsvorschlag des Coachs, mit dem ein Trainingseintrag vorbelegt wurde. */
+export interface CoachNote {
+  kind: CoachKind
+  /** Kurzer, begründeter Hinweis, z. B. „↑ 47,5 kg – letztes Mal 3 × 12“. */
+  note: string
+}
+
 export interface WorkoutEntry {
   exerciseId: string
   /** Beim Start aus der Vorlage kopiert (spätere Änderungen der Vorlage ändern die Historie nicht). */
@@ -137,6 +150,8 @@ export interface WorkoutEntry {
   repMax?: number
   restSec?: number
   note?: string
+  rating?: EntryRating
+  coach?: CoachNote
   sets: WorkoutSet[]
   hold?: HoldState
 }
@@ -181,6 +196,24 @@ export interface Settings {
   activeProgramId?: string
   /** Trainings pro Woche als Ziel. */
   weeklyGoal: number
+  /** Steigerungsvorschläge des Coachs in Vorlagen/Programmen mit Zielbereich. */
+  coachProgression: boolean
+  /** Profil für den Coach (Schritt 20b). */
+  profile?: Profile
+}
+
+export interface Profile {
+  goal: ProgramGoal
+  experience: Level
+}
+
+/** Körpergewicht an einem Tag (JJJJ-MM-TT). */
+export interface BodyLogEntry {
+  id: string
+  date: string
+  weightKg: number
+  createdAt: string
+  updatedAt: string
 }
 
 export interface Meta {
@@ -199,6 +232,7 @@ export interface AppData {
   workouts: Workout[]
   programs: Program[]
   restrictions: Restriction[]
+  bodyLog: BodyLogEntry[]
   settings: Settings
   timer: TimerState | null
   meta: Meta
@@ -214,6 +248,7 @@ export interface Backup {
   workouts: Workout[]
   programs: Program[]
   restrictions: Restriction[]
+  bodyLog: BodyLogEntry[]
   settings: Settings
 }
 
@@ -226,6 +261,7 @@ export const DEFAULT_SETTINGS: Settings = {
   weightStep: 2.5,
   theme: 'system',
   weeklyGoal: 3,
+  coachProgression: true,
 }
 
 export const BACKUP_APP_ID = 'personal-fitness-app'
