@@ -41,7 +41,7 @@ test.describe('Sicherung', () => {
     await expect(b.getByText('Noch kein Training abgeschlossen')).toBeVisible()
     await b.getByRole('button', { name: 'Mehr' }).click()
     await b.getByLabel('Sicherungsdatei wählen').setInputFiles(path!)
-    await expect(b.getByTestId('import-preview')).toContainText('21 Übungen · 1 Vorlagen · 1 Trainings')
+    await expect(b.getByTestId('import-preview')).toContainText('21 Übungen · 1 Vorlage · 1 Training')
     await b.getByRole('button', { name: 'Alles ersetzen' }).click()
     const [preBackup] = await Promise.all([b.waitForEvent('download'), b.getByRole('alertdialog').getByRole('button', { name: 'Ersetzen' }).click()])
     expect(preBackup.suggestedFilename()).toMatch(/-vor-import\.json$/)

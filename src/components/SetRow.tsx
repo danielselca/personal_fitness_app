@@ -7,7 +7,7 @@ export interface SetRowProps {
   set: WorkoutSet
   last?: { weightKg: number | null; reps: number } | null
   current: boolean
-  /** Bearbeiten-Modus der Karte: Haken wird zum Löschen-Button, Stepper ausgeblendet. */
+  /** Bearbeiten-Modus der Karte: Haken wird zum Löschen-Button, Stepper ausgeblendet. Nur hier wird gelöscht. */
   editing: boolean
   /** Übung ohne Gewichtsangabe: nur Wiederholungen. */
   noWeight: boolean
@@ -91,7 +91,6 @@ export function SetRow({ index, set, last, current, editing, noWeight, weightSte
             <button type="button" className="btn" aria-label="Eine Wiederholung weniger" onClick={() => stepReps(-1)}>−1</button>
             <button type="button" className="btn" aria-label="Eine Wiederholung mehr" onClick={() => stepReps(1)}>+1</button>
           </div>
-          <button type="button" className="btn btn-icon set-delete" aria-label={`Satz ${index} löschen`} onClick={onDelete}>🗑</button>
         </div>
       )}
     </div>

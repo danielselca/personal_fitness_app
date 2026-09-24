@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatKg, formatNumber, parseReps, parseWeight } from './format.ts'
+import { count, formatKg, formatNumber, parseReps, parseWeight } from './format.ts'
 
 describe('formatKg', () => {
   it('formatiert deutsch mit Komma', () => {
@@ -43,5 +43,13 @@ describe('parseReps', () => {
     expect(parseReps('0')).toBeNaN()
     expect(parseReps('2.5')).toBeNaN()
     expect(parseReps('')).toBeNull()
+  })
+})
+
+describe('count', () => {
+  it('Einzahl nur bei genau 1', () => {
+    expect(count(1, 'Satz', 'Sätze')).toBe('1 Satz')
+    expect(count(0, 'Satz', 'Sätze')).toBe('0 Sätze')
+    expect(count(3, 'Übung', 'Übungen')).toBe('3 Übungen')
   })
 })

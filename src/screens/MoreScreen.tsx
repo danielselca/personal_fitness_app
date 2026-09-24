@@ -5,7 +5,7 @@ import { Toggle } from '../components/Toggle.tsx'
 import { backupFileName, buildBackup, summarizeBackup, validateBackup, type ImportResult } from '../domain/backup.ts'
 import type { Backup } from '../domain/types.ts'
 import { downloadJson, readFileText } from '../lib/download.ts'
-import { formatDateTime, formatNumber, parseWeight } from '../lib/format.ts'
+import { count, formatDateTime, formatNumber, parseWeight } from '../lib/format.ts'
 import { useAppStore } from '../store/appStore.ts'
 
 const canVibrate = typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function'
@@ -199,7 +199,7 @@ export function BackupSection() {
               <strong>Datei geprüft.</strong> Exportiert am {formatDateTime(preview.exportedAt)}.
             </p>
             <p className="muted" style={{ margin: '0 0 8px', fontSize: 15 }}>
-              {preview.exercises} Übungen · {preview.templates} Vorlagen · {preview.workouts} Trainings
+              {count(preview.exercises, 'Übung', 'Übungen')} · {count(preview.templates, 'Vorlage', 'Vorlagen')} · {count(preview.workouts, 'Training', 'Trainings')}
             </p>
             {stage.kind === 'preview' && stage.warnings.length > 0 && (
               <p className="muted" style={{ fontSize: 14 }}>{stage.warnings.join(' ')}</p>

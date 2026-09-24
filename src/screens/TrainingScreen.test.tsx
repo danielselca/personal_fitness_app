@@ -78,6 +78,10 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     expect(active().entries[0].sets).toHaveLength(5)
     expect(active().entries[0].sets[4]).toMatchObject({ weightKg: 45, reps: 10 })
 
+    // Löschen nur im Bearbeiten-Modus (kein Papierkorb neben den Steppern), Haken dort ausgeblendet
+    expect(within(c).queryByRole('button', { name: 'Satz 1 löschen' })).toBeNull()
+    fireEvent.click(within(c).getByRole('button', { name: 'Lat-Zug: Sätze bearbeiten' }))
+    expect(within(c).queryByRole('button', { name: 'Satz 1 abhaken' })).toBeNull()
     fireEvent.click(within(c).getByRole('button', { name: 'Satz 1 löschen' }))
     expect(active().entries[0].sets).toHaveLength(4)
     fireEvent.click(screen.getByRole('button', { name: 'Rückgängig' }))
@@ -86,10 +90,6 @@ describe('Kernablauf (AK5, AK7, AK9, AK10, AK13)', () => {
     fireEvent.click(within(c).getByRole('button', { name: 'Satz 1 löschen' }))
     act(() => vi.advanceTimersByTime(5100))
     expect(screen.queryByRole('button', { name: 'Rückgängig' })).toBeNull()
-
-    // Bearbeiten-Modus: nicht aktuelle Sätze löschen, Haken ausgeblendet
-    fireEvent.click(within(c).getByRole('button', { name: 'Lat-Zug: Sätze bearbeiten' }))
-    expect(within(c).queryByRole('button', { name: 'Satz 1 abhaken' })).toBeNull()
     fireEvent.click(within(c).getByRole('button', { name: 'Satz 3 löschen' }))
     expect(active().entries[0].sets).toHaveLength(3)
     fireEvent.click(within(c).getByRole('button', { name: 'Lat-Zug: Bearbeiten beenden' }))
