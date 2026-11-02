@@ -1,3 +1,4 @@
+import { MAX_COUNT, MAX_KG } from './limits.ts'
 import { migrateAppData } from './migrate.ts'
 import {
   isBool,
@@ -39,6 +40,19 @@ export function backupFileName(now = new Date()): string {
   return `fitness-backup-${y}-${m}-${d}.json`
 }
 
+const isKg = (v: unknown): v is number => isNum(v) && v >= 0 && v <= MAX_KG
+const isCount = (v: unknown): v is number => isNum(v) && Number.isInteger(v) && v >= 0 && v <= MAX_COUNT
+
+function firstDuplicateId(list: unknown[]): string | null {
+  const seen = new Set<string>()
+  for (const x of list) {
+    if (!isObj(x) || !isStr(x.id)) continue
+    if (seen.has(x.id)) return x.id
+    seen.add(x.id)
+  }
+  return null
+}
+
 export type ValidationResult = { ok: true; backup: Backup; warnings: string[] } | { ok: false; errors: string[] }
 
 /** Import-Validierung (F13, AK22): Struktur, Typen, Version. Ungültig → Fehlerliste, nichts wird geändert. */
@@ -48,6 +62,7 @@ export function validateBackup(raw: unknown): ValidationResult {
   if (!isObj(raw)) return { ok: false, errors: ['Die Datei enthält kein JSON-Objekt.'] }
   if (raw.app !== BACKUP_APP_ID) errors.push('Die Datei stammt nicht aus dieser App (Feld „app“ fehlt oder ist falsch).')
   if (!isNum(raw.schemaVersion)) errors.push('Feld „schemaVersion“ fehlt.')
+  else if (!Number.isInteger(raw.schemaVersion) || raw.schemaVersion < 1) errors.push(`Feld „schemaVersion“ ist ungültig (${raw.schemaVersion}).`)
   else if (raw.schemaVersion > SCHEMA_VERSION) {
     errors.push(`Die Datei stammt aus einer neueren App-Version (Schema ${raw.schemaVersion}, unterstützt bis ${SCHEMA_VERSION}).`)
   }
@@ -65,7 +80,7 @@ export function validateBackup(raw: unknown): ValidationResult {
     if (e.archived !== undefined && !isBool(e.archived)) errors.push(`Übung ${i + 1}: „archived“ ist kein Wahrheitswert.`)
     if (e.planTarget !== undefined && e.planTarget !== null) {
       const p = e.planTarget
-      if (!isObj(p) || !isNum(p.sets) || !isNum(p.reps) || !(p.weightKg === null || isNum(p.weightKg))) {
+      if (!isObj(p) || !isCount(p.sets) || !isCount(p.reps) || !(p.weightKg === null || isKg(p.weightKg))) {
         errors.push(`Übung ${i + 1}: „planTarget“ ist ungültig.`)
       }
     }
@@ -79,7 +94,7 @@ export function validateBackup(raw: unknown): ValidationResult {
     if (!Array.isArray(t.entries)) errors.push(`Vorlage ${i + 1}: „entries“ fehlt.`)
     else {
       ;(t.entries as unknown[]).forEach((en, j) => {
-        if (!isObj(en) || !isStr(en.exerciseId) || !isNum(en.sets)) errors.push(`Vorlage ${i + 1}, Eintrag ${j + 1}: ungültig.`)
+        if (!isObj(en) || !isStr(en.exerciseId) || !isCount(en.sets)) errors.push(`Vorlage ${i + 1}, Eintrag ${j + 1}: ungültig.`)
       })
     }
   })
@@ -98,8 +113,8 @@ export function validateBackup(raw: unknown): ValidationResult {
       }
       ;(en.sets as unknown[]).forEach((s, k) => {
         if (!isObj(s) || !isStr(s.id) || !isBool(s.done)) return errors.push(`Training ${i + 1}, Übung ${j + 1}, Satz ${k + 1}: ungültig.`)
-        if (!(s.weightKg === null || s.weightKg === undefined || isNum(s.weightKg))) errors.push(`Training ${i + 1}, Übung ${j + 1}, Satz ${k + 1}: Gewicht ungültig.`)
-        if (!(s.reps === null || s.reps === undefined || (isNum(s.reps) && Number.isInteger(s.reps)))) errors.push(`Training ${i + 1}, Übung ${j + 1}, Satz ${k + 1}: Wdh. ungültig.`)
+        if (!(s.weightKg === null || s.weightKg === undefined || isKg(s.weightKg))) errors.push(`Training ${i + 1}, Übung ${j + 1}, Satz ${k + 1}: Gewicht ungültig.`)
+        if (!(s.reps === null || s.reps === undefined || isCount(s.reps))) errors.push(`Training ${i + 1}, Übung ${j + 1}, Satz ${k + 1}: Wdh. ungültig.`)
       })
     })
   })
@@ -109,6 +124,10 @@ export function validateBackup(raw: unknown): ValidationResult {
     if (raw[key] !== undefined && !Array.isArray(raw[key])) errors.push(`Feld „${key}“ ist keine Liste.`)
   }
   if (raw.settings !== undefined && !isObj(raw.settings)) errors.push('Feld „settings“ ist kein Objekt.')
+  for (const [key, label] of [['exercises', 'Übung'], ['templates', 'Vorlage'], ['workouts', 'Training']] as const) {
+    const dup = firstDuplicateId(raw[key] as unknown[])
+    if (dup) errors.push(`${label}-ID „${dup}“ kommt doppelt vor.`)
+  }
   if (errors.length) return { ok: false, errors: errors.slice(0, 12) }
 
   // Fehlende optionale Felder ergänzen, Schema anheben

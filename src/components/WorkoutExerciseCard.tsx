@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { HOLD_STEP_SEC } from '../domain/coach/progression.ts'
 import { holdSecFor, isHold } from '../domain/hold.ts'
 import { mediaForExercise } from '../domain/media.ts'
 import { entryState } from '../domain/progress.ts'
@@ -54,6 +55,7 @@ export function WorkoutExerciseCard({
   const setEntryNote = useAppStore((s) => s.setEntryNote)
   const updateExercise = useAppStore((s) => s.updateExercise)
   const applyLastValues = useAppStore((s) => s.applyLastValues)
+  const acceptHoldStep = useAppStore((s) => s.acceptHoldStep)
   const remove = useAppStore((s) => s.removeExerciseFromWorkout)
   const [noteOpen, setNoteOpen] = useState(!!entry.note)
   const [editing, setEditing] = useState(false)
@@ -133,14 +135,8 @@ export function WorkoutExerciseCard({
             <div className="coach-hint" data-kind={entry.coach.kind} role="note" aria-label="Coach">
               <span className="coach-hint-text">{entry.coach.note}</span>
               {entry.coach.kind === 'halten' ? (
-                <button
-                  type="button"
-                  className="btn btn-sm"
-                  onClick={() => {
-                    updateExercise(exercise.id, { holdSec: (exercise.holdSec ?? 60) + 5 })
-                  }}
-                >
-                  Auf {(exercise.holdSec ?? 60) + 5} s erhöhen
+                <button type="button" className="btn btn-sm" onClick={() => acceptHoldStep(exercise.id)}>
+                  Auf {holdSecFor(exercise) + HOLD_STEP_SEC} s erhöhen
                 </button>
               ) : (
                 last && entry.coach.kind !== 'erstes-mal' && entry.coach.kind !== 'geschont' && doneCount < entry.sets.length && (

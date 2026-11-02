@@ -53,3 +53,12 @@ describe('count', () => {
     expect(count(3, 'Übung', 'Übungen')).toBe('3 Übungen')
   })
 })
+
+describe('Obergrenzen (passend zur Import-Prüfung)', () => {
+  it('Gewicht über 1000 kg und Wdh. über 10 000 sind ungültig', () => {
+    expect(parseWeight('1000')).toBe(1000)
+    expect(parseWeight('1000,5')).toBeNaN()
+    expect(parseReps('10000')).toBe(10000)
+    expect(parseReps('10001')).toBeNaN()
+  })
+})

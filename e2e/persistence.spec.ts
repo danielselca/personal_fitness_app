@@ -33,7 +33,8 @@ test.describe('Persistenz, Offline, Timer', () => {
     await expect(page.getByRole('button', { name: 'Freies Training' })).toHaveCount(0)
   })
 
-  test('App funktioniert offline nach dem ersten Laden (AK1)', async ({ page, context }) => {
+  test('App funktioniert offline nach dem ersten Laden (AK1)', async ({ page, context, browserName }) => {
+    test.skip(browserName === 'webkit', 'Playwright-WebKit kann mit Service Worker nicht offline neu laden')
     await openApp(page)
     await waitForPrecache(page)
     await context.setOffline(true)
@@ -62,7 +63,8 @@ test.describe('Persistenz, Offline, Timer', () => {
     await expect(page.getByTestId('timer')).toHaveCount(0)
   })
 
-  test('Grafiken: nicht im Precache, einmal gesehen oder vorgeladen offline verfügbar (Schritt 19)', async ({ page, context }) => {
+  test('Grafiken: nicht im Precache, einmal gesehen oder vorgeladen offline verfügbar (Schritt 19)', async ({ page, context, browserName }) => {
+    test.skip(browserName === 'webkit', 'Playwright-WebKit kann mit Service Worker nicht offline neu laden')
     await openApp(page)
     await waitForPrecache(page)
     const precached = await page.evaluate(async () => {

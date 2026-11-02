@@ -155,3 +155,46 @@ describe('Programme und Schonung in der Sicherung (Schema 9)', () => {
     expect(replaced.data.programs.map((p) => p.id)).toEqual(['prg-1'])
   })
 })
+
+describe('Import-Validierung: Wertebereiche und IDs', () => {
+  const base = () => JSON.parse(JSON.stringify(buildBackup(data, '0.1.0'))) as Record<string, any>
+  const set = (extra: Record<string, unknown>) => ({ id: 's1', done: true, weightKg: 40, reps: 10, ...extra })
+  const withSet = (extra: Record<string, unknown>) => {
+    const b = base()
+    const at = '2026-09-01T10:00:00.000Z'
+    b.workouts = [{ id: 'w1', startedAt: at, finishedAt: at, updatedAt: at, status: 'done', entries: [{ exerciseId: b.exercises[0].id, sets: [set(extra)] }] }]
+    return b
+  }
+  const errorsOf = (raw: unknown) => {
+    const r = validateBackup(raw)
+    return r.ok ? [] : r.errors
+  }
+
+  it('lehnt negative oder unsinnige Gewichte und Wiederholungen ab', () => {
+    expect(errorsOf(withSet({}))).toEqual([])
+    expect(errorsOf(withSet({ weightKg: -5 })).join(' ')).toMatch(/Gewicht ungültig/)
+    expect(errorsOf(withSet({ weightKg: 5000 })).join(' ')).toMatch(/Gewicht ungültig/)
+    expect(errorsOf(withSet({ reps: -1 })).join(' ')).toMatch(/Wdh\. ungültig/)
+    expect(errorsOf(withSet({ reps: 2.5 })).join(' ')).toMatch(/Wdh\. ungültig/)
+  })
+
+  it('lehnt ungültige Schema-Versionen ab', () => {
+    for (const v of [0, -1, 2.5]) {
+      const b = base()
+      b.schemaVersion = v
+      expect(errorsOf(b).join(' ')).toMatch(/schemaVersion/)
+    }
+  })
+
+  it('lehnt doppelte IDs ab', () => {
+    const b = base()
+    b.exercises = [b.exercises[0], { ...b.exercises[1], id: b.exercises[0].id }]
+    expect(errorsOf(b).join(' ')).toMatch(/kommt doppelt vor/)
+  })
+
+  it('lehnt Vorlagen mit negativer Satzzahl ab', () => {
+    const b = base()
+    b.templates[0].entries[0].sets = -3
+    expect(errorsOf(b).join(' ')).toMatch(/Vorlage 1, Eintrag 1/)
+  })
+})

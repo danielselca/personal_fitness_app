@@ -1,4 +1,5 @@
 /** Zahlformatierung und -parsing für die deutsche Oberfläche (N1, AK8). */
+import { MAX_COUNT, MAX_KG } from '../domain/limits.ts'
 
 const kgFormatter = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 2 })
 
@@ -22,7 +23,8 @@ export function parseWeight(input: string): number | null {
   const cleaned = input.trim().toLowerCase().replace(/kg$/, '').trim().replace(',', '.')
   if (cleaned === '') return null
   if (!/^\d+(\.\d{0,2})?$/.test(cleaned)) return Number.NaN
-  return Math.round(Number(cleaned) * 100) / 100
+  const kg = Math.round(Number(cleaned) * 100) / 100
+  return kg <= MAX_KG ? kg : Number.NaN
 }
 
 /**
@@ -46,7 +48,7 @@ export function parseReps(input: string): number | null {
   if (cleaned === '') return null
   if (!/^\d+$/.test(cleaned)) return Number.NaN
   const n = Number(cleaned)
-  return n >= 1 ? n : Number.NaN
+  return n >= 1 && n <= MAX_COUNT ? n : Number.NaN
 }
 
 const dateFormatter = new Intl.DateTimeFormat('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' })

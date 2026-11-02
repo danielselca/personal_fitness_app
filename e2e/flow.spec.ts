@@ -272,7 +272,8 @@ test.describe('Kernablauf in mobiler Ansicht (375 px)', () => {
     await expect(tab(page, 'Training')).toHaveAttribute('aria-current', 'page')
   })
 
-  test('Mit Claude besprechen: Brief kopieren, Programmvorschlag einfügen und übernehmen (Schritt 22)', async ({ page, context }) => {
+  test('Mit Claude besprechen: Brief kopieren, Programmvorschlag einfügen und übernehmen (Schritt 22)', async ({ page, context, browserName }) => {
+    test.skip(browserName === 'webkit', 'Playwright-WebKit vergibt keine Zwischenablage-Rechte')
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
     await openApp(page)
     await tab(page, 'Coach').click()

@@ -25,7 +25,11 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
-  projects: [{ name: 'mobile-chromium', use: { browserName: 'chromium' } }],
+  projects: [
+    { name: 'mobile-chromium', use: { browserName: 'chromium' } },
+    // Safari-Engine: kommt dem iPhone am nächsten (ersetzt den Test am Gerät nicht)
+    { name: 'mobile-webkit', use: { browserName: 'webkit' } },
+  ],
   webServer: {
     command: 'npm run build && npx vite preview --port 4173 --strictPort',
     url: BASE,

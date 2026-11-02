@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { buildBackup } from '../domain/backup.ts'
 import { createSeedData } from '../domain/seed.ts'
 import { createAppStore } from './appStore.ts'
@@ -340,5 +340,87 @@ describe('Store: Übung tauschen und Schonen (Schritt 18b)', () => {
     expect(r).toMatchObject({ bodyParts: ['schulter'], note: 'links', until: '2026-10-15' })
     s().removeRestriction(r.id)
     expect(s().data.restrictions).toEqual([])
+  })
+})
+
+describe('Store: Speicherfehler sichtbar', () => {
+  afterEach(() => vi.useRealTimers())
+
+  it('meldet einen Fehler erst nach zweitem Fehlversuch und löscht ihn nach erfolgreichem Speichern', async () => {
+    vi.useFakeTimers()
+    const storage = memoryStorage()
+    let failures = 0
+    const realSave = storage.save
+    storage.save = async (d) => {
+      if (failures > 0) {
+        failures--
+        throw new Error('QuotaExceededError')
+      }
+      return realSave(d)
+    }
+    const store = createAppStore(storage)
+    await store.getState().hydrate()
+    await store.getState().flush()
+
+    // ein einzelner Fehler wird still wiederholt
+    failures = 1
+    store.getState().updateSettings({ weightStep: 2.5 })
+    await vi.advanceTimersByTimeAsync(600)
+    await store.getState().flush()
+    expect(store.getState().saveError).toBeNull()
+
+    // zwei Fehler hintereinander → sichtbar
+    failures = 2
+    store.getState().updateSettings({ weightStep: 1 })
+    await vi.advanceTimersByTimeAsync(600)
+    await store.getState().flush()
+    expect(store.getState().saveError).toBe('QuotaExceededError')
+
+    // „Erneut“ speichert den aktuellen Stand und löscht den Hinweis
+    await store.getState().retrySave()
+    expect(store.getState().saveError).toBeNull()
+    expect((storage.current as { settings: { weightStep: number } }).settings.weightStep).toBe(1)
+  })
+})
+
+describe('Store: Haltezeit-Steigerung übernehmen', () => {
+  it('erhöht einmalig um 5 s, passt offene Sätze und Hinweis an; Timer nutzt die neue Dauer', async () => {
+    const { store } = await freshStore()
+    const s = () => store.getState()
+    const ex = s().data.exercises.find((e) => e.mode === 'hold')!
+    const base = ex.holdSec ?? 60
+    s().startWorkout({ exerciseIds: [ex.id] })
+    const w = s().activeWorkout()!
+    const doneId = w.entries[0].sets[0].id
+    store.setState({
+      data: {
+        ...s().data,
+        workouts: s().data.workouts.map((x) =>
+          x.id !== w.id
+            ? x
+            : {
+                ...x,
+                entries: x.entries.map((e) => ({
+                  ...e,
+                  coach: { kind: 'halten' as const, note: 'Alle Sätze gehalten' },
+                  sets: e.sets.map((st, i) => (i === 0 ? { ...st, reps: base, done: true } : { ...st, reps: base })),
+                })),
+              },
+        ),
+      },
+    })
+
+    s().acceptHoldStep(ex.id)
+    s().acceptHoldStep(ex.id) // zweites Tippen ändert nichts mehr
+
+    const e = s().activeWorkout()!.entries[0]
+    expect(s().data.exercises.find((x) => x.id === ex.id)!.holdSec).toBe(base + 5)
+    expect(e.coach).toEqual({ kind: 'gleich', note: `Neu: ${e.sets.length} × ${base + 5} s halten` })
+    expect(e.sets.find((st) => st.id === doneId)!.reps).toBe(base) // erledigter Satz bleibt
+    expect(e.sets.filter((st) => !st.done).every((st) => st.reps === base + 5)).toBe(true)
+
+    // Countdown startet mit der neuen Dauer
+    s().startHold(ex.id)
+    expect(s().activeWorkout()!.entries[0].hold?.durationSec).toBe(base + 5)
   })
 })

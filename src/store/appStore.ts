@@ -8,7 +8,7 @@ import { migrateAppData } from '../domain/migrate.ts'
 import { advanceHold, holdSecFor, pauseHold, restSecFor, resumeHold, startHold } from '../domain/hold.ts'
 import { noWeightFirst } from '../domain/progress.ts'
 import { createSeedData } from '../domain/seed.ts'
-import { progressionFor, type ProgressionTarget } from '../domain/coach/progression.ts'
+import { HOLD_STEP_SEC, progressionFor, type ProgressionTarget } from '../domain/coach/progression.ts'
 import { lastValuesFor, normalizeName, suggestSets } from '../domain/suggestions.ts'
 import {
   builtinProgram,
@@ -47,6 +47,10 @@ export interface AppStore {
   data: AppData
   hydrated: boolean
   loadError: string | null
+  /** Letzter Speicherfehler (nach erneutem Versuch); null = alles gespeichert. */
+  saveError: string | null
+  /** Aktuellen Stand erneut speichern (nach Speicherfehler). */
+  retrySave(): Promise<void>
   hydrate(): Promise<void>
   flush(): Promise<void>
 
@@ -83,6 +87,8 @@ export interface AppStore {
   setEntryNote(exerciseId: string, note: string): void
   /** „Wie letztes Mal“: offene Sätze auf die Werte der letzten Einheit setzen (Coach-Hinweis entfällt). */
   applyLastValues(exerciseId: string): void
+  /** Coach-Vorschlag „halten“ übernehmen: Haltedauer +5 s, offene Sätze und Hinweis passen sich an. */
+  acceptHoldStep(exerciseId: string): void
   /** „Wie war's?“ – leicht / passend / schwer (undefined löscht). */
   setEntryRating(exerciseId: string, rating: EntryRating | undefined): void
   // Halteübungen (Donut): Ablauf Arbeit → Pause → … je Übung
@@ -154,11 +160,33 @@ export interface AppStore {
   replaceData(data: AppData): void
 }
 
+/** Wartezeit vor dem zweiten Speicherversuch. */
+export const SAVE_RETRY_MS = 500
+
 export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
   let saving: Promise<void> | null = null
   let pending: AppData | null = null
 
-  /** Sofort speichern; laufende Schreibvorgänge werden zusammengefasst (F6). */
+  let reportSave: (error: string | null) => void = () => {}
+
+  /** Einmal schreiben, bei Fehler kurz warten und ein zweites Mal versuchen. */
+  async function saveWithRetry(data: AppData): Promise<string | null> {
+    try {
+      await storage.save(data)
+      return null
+    } catch {
+      await new Promise((r) => setTimeout(r, SAVE_RETRY_MS))
+      try {
+        await storage.save(data)
+        return null
+      } catch (err) {
+        console.error('Speichern fehlgeschlagen', err)
+        return err instanceof Error ? err.message : String(err)
+      }
+    }
+  }
+
+  /** Sofort speichern; laufende Schreibvorgänge werden zusammengefasst (F6). Fehler landen in `saveError`. */
   function persist(data: AppData) {
     pending = data
     if (saving) return
@@ -166,11 +194,7 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
       while (pending) {
         const next = pending
         pending = null
-        try {
-          await storage.save(next)
-        } catch (err) {
-          console.error('Speichern fehlgeschlagen', err)
-        }
+        reportSave(await saveWithRetry(next))
       }
       saving = null
     }
@@ -178,6 +202,9 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
   }
 
   const store = createStore<AppStore>()((set, get) => {
+    reportSave = (error) => {
+      if (get().saveError !== error) set({ saveError: error })
+    }
     const update = (fn: (d: AppData) => AppData) => {
       const next = fn(get().data)
       set({ data: next })
@@ -226,6 +253,7 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
       data: createSeedData(),
       hydrated: false,
       loadError: null,
+      saveError: null,
 
       async hydrate() {
         try {
@@ -243,6 +271,11 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
       },
 
       async flush() {
+        while (saving) await saving
+      },
+
+      async retrySave() {
+        persist(get().data)
         while (saving) await saving
       },
 
@@ -486,6 +519,37 @@ export function createAppStore(storage: DataStorage): StoreApi<AppStore> {
 
       setEntryNote(exerciseId, note) {
         updateEntry(exerciseId, (e) => ({ ...e, note: note.trim() ? note : undefined }))
+      },
+
+      acceptHoldStep(exerciseId) {
+        const d = get().data
+        const active = get().activeWorkout()
+        const ex = d.exercises.find((e) => e.id === exerciseId)
+        const entry = active?.entries.find((e) => e.exerciseId === exerciseId)
+        if (!ex || !entry || entry.coach?.kind !== 'halten') return
+        const sec = holdSecFor(ex) + HOLD_STEP_SEC
+        const at = nowIso()
+        update((dd) => ({
+          ...dd,
+          exercises: dd.exercises.map((e) => (e.id === exerciseId ? { ...e, holdSec: sec, updatedAt: at } : e)),
+          workouts: dd.workouts.map((w) =>
+            w.status !== 'active'
+              ? w
+              : {
+                  ...w,
+                  updatedAt: at,
+                  entries: w.entries.map((e) =>
+                    e.exerciseId !== exerciseId
+                      ? e
+                      : {
+                          ...e,
+                          coach: { kind: 'gleich', note: `Neu: ${e.sets.length} × ${sec} s halten` },
+                          sets: e.sets.map((st) => (st.done ? st : { ...st, reps: sec })),
+                        },
+                  ),
+                },
+          ),
+        }))
       },
 
       applyLastValues(exerciseId) {

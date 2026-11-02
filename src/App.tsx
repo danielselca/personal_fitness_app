@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { TabBar, type TabId } from './components/TabBar.tsx'
+import { SaveErrorBanner } from './components/SaveErrorBanner.tsx'
 import { UpdatePrompt } from './pwa/UpdatePrompt.tsx'
 import { TrainingScreen } from './screens/TrainingScreen.tsx'
 import { ExercisesScreen } from './screens/ExercisesScreen.tsx'
@@ -58,6 +59,7 @@ export function App() {
         )}
         {hydrated && !loadError && (
           <>
+            <SaveErrorBanner />
             {tab === 'training' && <TrainingScreen />}
             {tab === 'exercises' && <ExercisesScreen />}
             {tab === 'coach' && (
